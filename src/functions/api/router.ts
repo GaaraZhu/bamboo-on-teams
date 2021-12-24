@@ -23,7 +23,7 @@ export const verifyHMAC = (
   request: Request,
   response: Response,
   next: () => void
-) => {
+): void => {
   const auth = request.headers["authorization"];
   // Calculate HMAC on the message we've received using the shared secret
   const msgBuf = Buffer.from(request.body, "utf8");

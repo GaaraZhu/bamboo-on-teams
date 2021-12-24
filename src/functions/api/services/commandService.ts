@@ -26,7 +26,7 @@ export class CommandService {
           message: usage,
         };
       }
-      return new BuildAction(service, branch);
+      return new BuildAction(service!, branch!);
     }
 
     throw {
@@ -34,15 +34,21 @@ export class CommandService {
     };
   }
 
-  private async extractArg(argName: string, args: string[]): Promise<string> {
+  private async extractArg(
+    argName: string,
+    args: string[]
+  ): Promise<string | undefined> {
     const argNameInUppercase = argName.toUpperCase();
-    const argsInUppercase = args.map((a) => a.toUpperCase());
-    return argsInUppercase
-      .find(
-        (a) =>
-          a.startsWith(argNameInUppercase) ||
-          a.toUpperCase().startsWith("-" + argNameInUppercase)
-      )
-      ?.split("=")[1]!;
+    const argsInUppercase = args.map((a) => a.toUpperCase().replace(" ", ""));
+    const keyAndValue = argsInUppercase.find(
+      (a) =>
+        a.startsWith("-" + argNameInUppercase) ||
+        a.toUpperCase().startsWith("--" + argNameInUppercase)
+    );
+    if (!keyAndValue) {
+      return undefined;
+    }
+
+    return keyAndValue.includes("=") ? keyAndValue.split("=")[1] : undefined;
   }
 }
