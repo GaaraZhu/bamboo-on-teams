@@ -38,17 +38,13 @@ export class CommandService {
     argName: string,
     args: string[]
   ): Promise<string | undefined> {
-    const argNameInUppercase = argName.toUpperCase();
+    const argPrefix = "-" + argName.toUpperCase() + "=";
+    const argPrefixWithTwoDashes = "-" + argPrefix;
     const argsInUppercase = args.map((a) => a.toUpperCase().replace(" ", ""));
     const keyAndValue = argsInUppercase.find(
-      (a) =>
-        a.startsWith("-" + argNameInUppercase) ||
-        a.toUpperCase().startsWith("--" + argNameInUppercase)
+      (a) => a.startsWith(argPrefix) || a.startsWith(argPrefixWithTwoDashes)
     );
-    if (!keyAndValue) {
-      return undefined;
-    }
 
-    return keyAndValue.includes("=") ? keyAndValue.split("=")[1] : undefined;
+    return keyAndValue?.includes("") ? keyAndValue.split("=")[1] : undefined;
   }
 }
