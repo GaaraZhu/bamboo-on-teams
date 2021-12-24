@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+
+    "target": "es2019",
+    "rootDir": "./src",
+    "outDir": "dist",
+
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "typeRoots": [ "node_modules/common/dist/types", "node_modules/@types"]
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude":[
+    "dist/**/*",
+    "node_modules",
+    "test/**/*.ts"
+  ]
+}

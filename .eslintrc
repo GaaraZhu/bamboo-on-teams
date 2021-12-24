@@ -1,0 +1,28 @@
+{
+    "root": true,
+    "env": {
+        "node": true
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "no-null"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier/@typescript-eslint",
+        "plugin:prettier/recommended"
+    ],
+    "rules": {
+        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/explicit-module-boundary-types": [2, {"allowArgumentsExplicitlyTypedAsAny": true}],
+        "comma-dangle": [2, "always-multiline"],
+        "no-null/no-null": 2,
+        "quotes": [2, "double"],
+        "semi": [2, "always"],
+        "eol-last": [2, "always"],
+        "object-curly-spacing": [2, "always"]
+    }
+}

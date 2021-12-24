@@ -1,0 +1,120 @@
+service: bamboo-on-teams-${self:custom.version}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 512
+  region: ap-southeast-2
+  stage: ${opt:stage, 'local'}
+  timeout: 30
+
+  deploymentBucket:
+    name: mcy-deploy-ap-southeast-2-${ssm:/bamboo-on-teams/accountId}
+    serverSideEncryption: AES256
+
+  vpc:
+    securityGroupIds:
+      - ${ssm:/bamboo-on-teams/securityGroupId}
+    subnetIds:
+      - ${ssm:/bamboo-on-teams/subnetId}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - ssm:GetParameter
+      Resource:
+        - arn:aws:ssm:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:parameter/bamboo-on-teams/*
+
+  apiGateway:
+    restApiId: !Ref ApiGatewayRestApi
+    restApiRootResourceId: !Ref bambooV1PathResource
+
+  environment:
+    BATH_PATH: ${self:custom.api.urls.prefix}
+    BAMBOO_API_TOKEN: ${ssm:${self:custom.aws.ssm.bambooApiToken}}
+    TEAMS_HMAC_SHARED_TOKEN: ${ssm:${self:custom.aws.ssm.teamsHMACToken}}
+
+package:
+  exclude:
+    - jest.config.js
+    - node_modules
+    - src/**
+    - test/**
+    - tsconfig.json
+    - README.md
+
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:custom.aws.gatewayName}
+        EndpointConfiguration:
+          Types:
+            - REGIONAL
+        Policy:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal: "*"
+              Action: execute-api:Invoke
+              Resource:
+                - execute-api:/*/*/*
+
+    BasePathResourse:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId: !Ref ApiGatewayRestApi
+        ParentId: !GetAtt
+          - ApiGatewayRestApi
+          - RootResourceId
+        PathPart: bamboo
+
+    bambooV1PathResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId: !Ref ApiGatewayRestApi
+        ParentId: !Ref BasePathResourse
+        PathPart: v1
+
+functions:
+  api:
+    name: ${self:service}
+    events:
+      - http:
+          path: ${self:custom.api.urls.command}
+          method: post
+          cors: true
+    handler: ${self:custom.api.router}
+
+plugins:
+  - serverless-offline
+  - serverless-offline-ssm
+
+custom:
+  version: v1
+  aws:
+    resourceNamePrefix: ${self:service}
+    ssm:
+        bambooApiToken: /bamboo-on-teams/bambooAPIToken
+        teamsHMACToken: /bamboo-on-teams/teamsHMACSharedToken
+
+  serverless-offline:
+    noPrependStageInUrl: true
+
+  serverless-offline-ssm:
+    stages:
+      - bamboo
+      - local
+    ssm:
+      "/bamboo-on-teams/accountId": placeholder
+      "/bamboo-on-teams/securityGroupId": placeholder
+      "/bamboo-on-teams/subnetId": placeholder
+      "/bamboo-on-teams/bambooAPIToken": placeholder
+      "/bamboo-on-teams/teamsHMACSharedToken": placeholder
+
+  api:
+    router: dist/functions/api/router.router
+    urls:
+      prefix: /bamboo-on-teams/v1
+      command: ${self:custom.api.urls.prefix}/command
