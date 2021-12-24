@@ -47,10 +47,13 @@ export const verifyHMAC = (
 //----------------------------------------------------------------------------//
 // Build API routes
 //----------------------------------------------------------------------------//
-const app = require("lambda-api")({ version: "v1.0", base: process.env.BATH_PATH });
+const app = require("lambda-api")({
+  version: "v1.0",
+  base: process.env.BATH_PATH,
+});
 app.post(
   "/command",
-//   verifyHMAC,
+  //   verifyHMAC,
   async (request: Request, response: Response) => {
     await handleCommand(request, response);
   }

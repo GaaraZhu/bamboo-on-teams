@@ -1,15 +1,15 @@
 export enum Actions {
-    BUILD = "BUILD",
-    DEPLOY = "DEPLOY",
+  BUILD = "BUILD",
+  DEPLOY = "DEPLOY",
 }
 
 export class BuildAction {
-    readonly action: Actions.BUILD
-    service: string;
-    branch: string
+  readonly action: Actions.BUILD;
+  service: string;
+  branch: string;
 
-    constructor(service: string, branch: string) {
-        this.service = service;
-        this.branch = branch;
-    }
-};
+  constructor(service: string, branch: string) {
+    this.service = service;
+    this.branch = branch;
+  }
+}
