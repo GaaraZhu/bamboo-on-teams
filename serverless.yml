@@ -9,7 +9,7 @@ provider:
   timeout: 30
 
   deploymentBucket:
-    name: mcy-deploy-ap-southeast-2-${ssm:/bamboo-on-teams/accountId}
+    name: deployment-${ssm:/bamboo-on-teams/accountId}
     serverSideEncryption: AES256
 
   vpc:
