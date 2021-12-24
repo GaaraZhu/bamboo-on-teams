@@ -44,7 +44,6 @@
         "ultra-runner": "^3.6.0",
         "ts-log-debug": "^5.5.3",
         "axios": "^0.21.1",
-        "prettier": "^2.5.1",
-        "yargs": "^17.3.1"
+        "prettier": "^2.5.1"
     }
 }
