@@ -1,6 +1,14 @@
-import { Action, ActionNames, BuildAction } from "../models/actions";
+import {
+  Action,
+  ActionNames,
+  BuildAction,
+  ListPlanBranchBuildsAction,
+  ListPlanBranchesAction,
+  ListPlansAction,
+} from "../models/actions";
 
-const usage = "Supported commands: build, list-plans, list-branches, list-builds";
+const usage =
+  "Supported commands: build, list-plans, list-branches, list-builds";
 
 export class CommandService {
   public static build = (): CommandService => new CommandService();
@@ -8,19 +16,25 @@ export class CommandService {
   public async parse(command: string): Promise<Action> {
     const action = command.split(" ")[0];
 
-    switch(action.toUpperCase()) {
+    switch (action.toUpperCase()) {
       case ActionNames.BUILD:
         return new BuildAction(command);
+      case ActionNames.LIST_PLAN:
+        return new ListPlansAction();
+      case ActionNames.LIST_PLAN_BRANCHES:
+        return new ListPlanBranchesAction(command);
+      case ActionNames.LIST_PLAN_BRANCH_BUILDS:
+        return new ListPlanBranchBuildsAction(command);
       default:
         throw {
           message: usage,
-        }
+        };
     }
   }
 
   public static isEmpty(value: string | undefined): boolean {
     return !value || /^ *$/.test(value);
-  };
+  }
 
   public static extractArg(
     argName: string,

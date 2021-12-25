@@ -1,15 +1,15 @@
 import { CommandService } from "../services/commandService";
 
 export enum ActionNames {
-  BUILD = "BUILD",
-  DEPLOY = "DEPLOY",
-  LIST_PLAN = "LIST_PLAN",
-  LIST_PLAN_BRANCHES = "LIST_PLAN_BRANCHES",
-  LIST_PLAN_BRANCH_BUILDS = "LIST_PLAN_BRANCH_BUILDS",
+  BUILD = "build",
+  DEPLOY = "deploy",
+  LIST_PLAN = "list-plan",
+  LIST_PLAN_BRANCHES = "list-branches",
+  LIST_PLAN_BRANCH_BUILDS = "list-builds",
 }
 
 export interface Action {
-  usage(): string
+  usage(): string;
 }
 
 export class BuildAction implements Action {
@@ -18,12 +18,12 @@ export class BuildAction implements Action {
   branch: string;
 
   public usage(): string {
-    return  "Usage: build -service=[service] -branch=[branch]";
+    return "Usage: build -service=[service] -branch=[branch]";
   }
 
   constructor(command: string) {
     const actionAndArgs = command.split(" ");
-    if (actionAndArgs.length==1) {
+    if (actionAndArgs.length == 1) {
       throw {
         message: this.usage(),
       };
@@ -42,32 +42,67 @@ export class BuildAction implements Action {
   }
 }
 
-export class ListPlansAction {
+export class ListPlansAction implements Action {
   readonly action = ActionNames.LIST_PLAN;
-  readonly usage = "Usage: list-plans";
   readonly project;
+
+  public usage(): string {
+    return "Usage: list-plans";
+  }
 
   constructor() {
     this.project = process.env.BAMBOO_PROJECT;
   }
 }
 
-export class ListPlanBranchesAction {
+export class ListPlanBranchesAction implements Action {
   readonly action = ActionNames.LIST_PLAN_BRANCHES;
-  readonly usage = "Usage: list-branches -plan-key=[plan-key]";
   readonly planKey: string;
 
-  constructor(planKey: string) {
-    this.planKey = planKey;
+  public usage(): string {
+    return "Usage: list-branches -planKey=[planKey]";
+  }
+
+  constructor(command: string) {
+    const actionAndArgs = command.split(" ");
+    if (actionAndArgs.length == 1) {
+      throw {
+        message: this.usage(),
+      };
+    }
+    const args = actionAndArgs.slice(1);
+    const planKey = CommandService.extractArg("planKey", args);
+    if (CommandService.isEmpty(planKey)) {
+      throw {
+        message: this.usage(),
+      };
+    }
+    this.planKey = planKey!;
   }
 }
 
-export class ListPlanBranchBuildsAction {
+export class ListPlanBranchBuildsAction implements Action {
   readonly action = ActionNames.LIST_PLAN_BRANCH_BUILDS;
-  readonly usage = "Usage: list-builds -branch-key=[branch-key]";
   readonly planBranchKey: string;
 
-  constructor(planBranchKey: string) {
-    this.planBranchKey = planBranchKey;
+  public usage(): string {
+    return "Usage: list-builds -branchKey=[branchKey]";
+  }
+
+  constructor(command: string) {
+    const actionAndArgs = command.split(" ");
+    if (actionAndArgs.length == 1) {
+      throw {
+        message: this.usage(),
+      };
+    }
+    const args = actionAndArgs.slice(1);
+    const branchKey = CommandService.extractArg("branchKey", args);
+    if (CommandService.isEmpty(branchKey)) {
+      throw {
+        message: this.usage(),
+      };
+    }
+    this.planBranchKey = branchKey!;
   }
 }
