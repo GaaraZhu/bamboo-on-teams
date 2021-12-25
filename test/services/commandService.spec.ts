@@ -23,7 +23,7 @@ describe("commandService", () => {
         CommandService.extractArg("plan", ["-plan=p1", "-branch=master"])
       ).toEqual("p1");
     });
-    it("absent", async () => {
+    it("failure case", async () => {
       expect(
         CommandService.extractArg("plan", ["-planKey=p1", "-branch=master"])
       ).toEqual(undefined);
