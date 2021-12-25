@@ -3,7 +3,7 @@ import { CommandService } from "../services/commandService";
 export enum ActionNames {
   BUILD = "build",
   DEPLOY = "deploy",
-  LIST_PLAN = "list-plan",
+  LIST_PLANS = "list-plans",
   LIST_PLAN_BRANCHES = "list-branches",
   LIST_PLAN_BRANCH_BUILDS = "list-builds",
 }
@@ -43,7 +43,7 @@ export class BuildAction implements Action {
 }
 
 export class ListPlansAction implements Action {
-  readonly action = ActionNames.LIST_PLAN;
+  readonly action = ActionNames.LIST_PLANS;
   readonly project;
 
   public usage(): string {

@@ -12,7 +12,7 @@
         "SCRIPTS": "**********************************************************************************************************************************************",
         "install-check": "find node_modules -maxdepth 0 -type d || npm install",
         "lint": "eslint '*/**/*.ts' --quiet --fix",
-        "test": "jest --silent",
+        "test": "jest ",
         "test-watch": "jest --watchAll",
         "clean": "rimraf dist",
         "compile": "tsc --project tsconfig.json",

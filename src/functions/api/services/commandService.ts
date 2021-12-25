@@ -19,7 +19,7 @@ export class CommandService {
     switch (action.toUpperCase()) {
       case ActionNames.BUILD:
         return new BuildAction(command);
-      case ActionNames.LIST_PLAN:
+      case ActionNames.LIST_PLANS:
         return new ListPlansAction();
       case ActionNames.LIST_PLAN_BRANCHES:
         return new ListPlanBranchesAction(command);
