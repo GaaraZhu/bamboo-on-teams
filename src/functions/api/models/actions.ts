@@ -1,4 +1,6 @@
-export enum Actions {
+import { CommandService } from "../services/commandService";
+
+export enum ActionNames {
   BUILD = "BUILD",
   DEPLOY = "DEPLOY",
   LIST_PLAN = "LIST_PLAN",
@@ -6,19 +8,43 @@ export enum Actions {
   LIST_PLAN_BRANCH_BUILDS = "LIST_PLAN_BRANCH_BUILDS",
 }
 
-export class BuildAction {
-  readonly action: Actions.BUILD;
+export interface Action {
+  usage(): string
+}
+
+export class BuildAction implements Action {
+  readonly action = ActionNames.BUILD;
   service: string;
   branch: string;
 
-  constructor(service: string, branch: string) {
-    this.service = service;
-    this.branch = branch;
+  public usage(): string {
+    return  "Usage: build -service=[service] -branch=[branch]";
+  }
+
+  constructor(command: string) {
+    const actionAndArgs = command.split(" ");
+    if (actionAndArgs.length==1) {
+      throw {
+        message: this.usage(),
+      };
+    }
+    const args = actionAndArgs.slice(1);
+    const service = CommandService.extractArg("service", args);
+    const branch = CommandService.extractArg("branch", args);
+    if (CommandService.isEmpty(service) || CommandService.isEmpty(branch)) {
+      throw {
+        message: this.usage(),
+      };
+    }
+
+    this.service = service!;
+    this.branch = branch!;
   }
 }
 
 export class ListPlansAction {
-  readonly action: Actions.LIST_PLAN;
+  readonly action = ActionNames.LIST_PLAN;
+  readonly usage = "Usage: list-plans";
   readonly project;
 
   constructor() {
@@ -27,7 +53,8 @@ export class ListPlansAction {
 }
 
 export class ListPlanBranchesAction {
-  readonly action: Actions.LIST_PLAN_BRANCHES;
+  readonly action = ActionNames.LIST_PLAN_BRANCHES;
+  readonly usage = "Usage: list-branches -plan-key=[plan-key]";
   readonly planKey: string;
 
   constructor(planKey: string) {
@@ -36,7 +63,8 @@ export class ListPlanBranchesAction {
 }
 
 export class ListPlanBranchBuildsAction {
-  readonly action: Actions.LIST_PLAN_BRANCH_BUILDS;
+  readonly action = ActionNames.LIST_PLAN_BRANCH_BUILDS;
+  readonly usage = "Usage: list-builds -branch-key=[branch-key]";
   readonly planBranchKey: string;
 
   constructor(planBranchKey: string) {
