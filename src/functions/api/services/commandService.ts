@@ -40,9 +40,9 @@ export class CommandService {
     argName: string,
     args: string[]
   ): string | undefined {
-    const argPrefix = `-${argName.toUpperCase()}=`;
+    const argPrefix = `-${argName.toLowerCase()}=`;
     const argPrefixWithTwoDashes = `-${argPrefix}`;
-    const argsInUppercase = args.map((a) => a.toUpperCase().replace(" ", ""));
+    const argsInUppercase = args.map((a) => a.toLowerCase().replace(" ", ""));
     const keyAndValue = argsInUppercase.find(
       (a) => a.startsWith(argPrefix) || a.startsWith(argPrefixWithTwoDashes)
     );
