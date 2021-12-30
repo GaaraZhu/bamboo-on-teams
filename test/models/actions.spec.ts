@@ -1,17 +1,18 @@
 import {
   ActionNames,
-  BuildAction,
   ListPlanBranchBuildsAction,
   ListPlanBranchesAction,
   ListPlansAction,
 } from "../../src/functions/api/models/actions";
+import { BuildAction } from "../../src/functions/api/models/buildAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
     it("build action correctly", async () => {
+      const buildCommandHelp = "Usage: build [options]\n\nOptions:\n  -s, --service <service>  service name, e.g. customers-v1\n  -b, --branch <branch>    branch name, e.g. master\n  -h, --help               display help for command\n"
       const testCases = [
         {
-          command: "build -service=customer-service -branch=master",
+          command: "build -s customer-service -b master",
           expectedAction: {
             action: ActionNames.BUILD,
             service: "customer-service",
@@ -19,7 +20,7 @@ describe("actions", () => {
           },
         },
         {
-          command: "build --service=customer-service -branch=master",
+          command: "build -s customer-service -b master",
           expectedAction: {
             action: ActionNames.BUILD,
             service: "customer-service",
@@ -35,7 +36,7 @@ describe("actions", () => {
           },
         },
         {
-          command: "build -branch=master -service=customer-service",
+          command: "build -b master -s customer-service",
           expectedAction: {
             action: ActionNames.BUILD,
             service: "customer-service",
@@ -43,29 +44,27 @@ describe("actions", () => {
           },
         },
         {
-          command: "build -branch=master -service=customer-service -plan=test",
-          expectedAction: {
-            action: ActionNames.BUILD,
-            service: "customer-service",
-            branch: "master",
+          command: "build -b master -s customer-service -p test",
+          error: {
+            message: buildCommandHelp,
           },
         },
         {
-          command: "build -service=customer-service",
+          command: "build -s customer-service",
           error: {
-            message: "Usage: build -service=[service] -branch=[branch]",
+            message: buildCommandHelp,
           },
         },
         {
-          command: "build -branch=master",
+          command: "build -b master",
           error: {
-            message: "Usage: build -service=[service] -branch=[branch]",
+            message: buildCommandHelp,
           },
         },
         {
           command: "build",
           error: {
-            message: "Usage: build -service=[service] -branch=[branch]",
+            message: buildCommandHelp,
           },
         },
       ];

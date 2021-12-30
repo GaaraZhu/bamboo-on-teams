@@ -9,38 +9,10 @@ export enum ActionNames {
 }
 
 export interface Action {
-  usage(): string;
+  // usage(): string;
 }
 
-export class BuildAction implements Action {
-  readonly action = ActionNames.BUILD;
-  service: string;
-  branch: string;
 
-  public usage(): string {
-    return "Usage: build -service=[service] -branch=[branch]";
-  }
-
-  constructor(command: string) {
-    const actionAndArgs = command.split(" ");
-    if (actionAndArgs.length == 1) {
-      throw {
-        message: this.usage(),
-      };
-    }
-    const args = actionAndArgs.slice(1);
-    const service = CommandService.extractArg("service", args);
-    const branch = CommandService.extractArg("branch", args);
-    if (CommandService.isEmpty(service) || CommandService.isEmpty(branch)) {
-      throw {
-        message: this.usage(),
-      };
-    }
-
-    this.service = service!;
-    this.branch = branch!;
-  }
-}
 
 export class ListPlansAction implements Action {
   readonly action = ActionNames.LIST_PLANS;

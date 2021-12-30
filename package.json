@@ -12,7 +12,7 @@
         "SCRIPTS": "**********************************************************************************************************************************************",
         "install-check": "find node_modules -maxdepth 0 -type d || npm install",
         "lint": "eslint '*/**/*.ts' --quiet --fix",
-        "test": "jest ",
+        "test": "jest",
         "test-watch": "jest --watchAll",
         "clean": "rimraf dist",
         "compile": "tsc --project tsconfig.json",
@@ -44,6 +44,7 @@
         "ultra-runner": "^3.6.0",
         "ts-log-debug": "^5.5.3",
         "axios": "^0.21.1",
-        "prettier": "^2.5.1"
+        "prettier": "^2.5.1",
+        "commander": "^8.3.0"
     }
 }
