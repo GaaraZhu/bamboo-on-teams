@@ -95,6 +95,7 @@ plugins:
 custom:
   version: v1
   aws:
+    gatewayName: ${self:service}
     resourceNamePrefix: ${self:service}
     ssm:
         bambooApiToken: /bamboo-on-teams/bambooAPIToken

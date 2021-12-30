@@ -1,11 +1,8 @@
-import {
-  Action,
-  ActionNames,
-  ListPlanBranchBuildsAction,
-  ListPlanBranchesAction,
-  ListPlansAction,
-} from "../models/actions";
+import { Action, ActionNames } from "../models/actions";
 import { BuildAction } from "../models/buildAction";
+import { ListPlanBranchBuildsAction } from "../models/listPlanBranchBuildsAction";
+import { ListPlanBranchesAction } from "../models/listPlanBranchesAction";
+import { ListPlansAction } from "../models/listPlansCommand";
 
 const usage =
   "Supported commands: build, list-plans, list-branches, list-builds";

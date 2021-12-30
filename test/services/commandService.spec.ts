@@ -1,4 +1,4 @@
-import { CommandService } from "../../src/functions/api/services/commandService";
+import { CommandService } from "../../src/functions/services/commandService";
 
 describe("commandService", () => {
   describe("isEmpty", () => {

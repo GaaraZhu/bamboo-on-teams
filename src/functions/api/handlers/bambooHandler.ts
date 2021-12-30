@@ -1,5 +1,5 @@
 import { Request, Response } from "lambda-api";
-import { CommandService } from "../services/commandService";
+import { CommandService } from "../../services/commandService";
 
 export const handle = async (
   request: Request,

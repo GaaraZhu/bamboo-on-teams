@@ -64,5 +64,6 @@ app.post(
 //----------------------------------------------------------------------------//
 module.exports.router = (event: any, context: any, callback: any) => {
   // Run the request
+  console.log("1111111");
   app.run(event, context, callback);
 };
