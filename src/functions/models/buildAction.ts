@@ -3,7 +3,7 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 
 export class BuildAction implements Action {
-  readonly action = ActionName.BUILD;
+  readonly name = ActionName.BUILD;
   service: string;
   branch: string;
 

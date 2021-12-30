@@ -12,7 +12,7 @@ describe("actions", () => {
       {
         command: "build -s customer-service -b master",
         expectedAction: {
-          action: ActionName.BUILD,
+          name: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
         },
@@ -20,7 +20,7 @@ describe("actions", () => {
       {
         command: "build -s customer-service -b master",
         expectedAction: {
-          action: ActionName.BUILD,
+          name: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
         },
@@ -28,7 +28,7 @@ describe("actions", () => {
       {
         command: "build --service=customer-service --branch=master",
         expectedAction: {
-          action: ActionName.BUILD,
+          name: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
         },
@@ -36,7 +36,7 @@ describe("actions", () => {
       {
         command: "build -b master -s customer-service",
         expectedAction: {
-          action: ActionName.BUILD,
+          name: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
         },
@@ -82,7 +82,7 @@ describe("actions", () => {
     it("build action correctly", async () => {
       process.env.BAMBOO_PROJECT = "API";
       expect(new ListPlansAction()).toEqual({
-        action: ActionName.LIST_PLANS,
+        name: ActionName.LIST_PLANS,
         project: "API",
       });
     });
@@ -95,7 +95,7 @@ describe("actions", () => {
       {
         command: "list-branches -pk CPV1",
         expectedAction: {
-          action: ActionName.LIST_PLAN_BRANCHES,
+          name: ActionName.LIST_PLAN_BRANCHES,
           planKey: "CPV1",
         },
       },
@@ -149,7 +149,7 @@ describe("actions", () => {
       {
         command: "list-builds -bk BPK1",
         expectedAction: {
-          action: ActionName.LIST_PLAN_BRANCH_BUILDS,
+          name: ActionName.LIST_PLAN_BRANCH_BUILDS,
           planBranchKey: "BPK1",
         },
       },

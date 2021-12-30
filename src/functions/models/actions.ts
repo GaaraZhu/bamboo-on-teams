@@ -17,5 +17,5 @@ export const sanitizeAction = (actionValue: string): ActionName | undefined => {
 };
 
 export interface Action {
-  action: ActionName;
+  name: ActionName;
 }

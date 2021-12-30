@@ -3,7 +3,7 @@ import { CommandParser } from "../services/commandParser";
 import { Action, ActionName } from "./actions";
 
 export class ListPlanBranchBuildsAction implements Action {
-  readonly action = ActionName.LIST_PLAN_BRANCH_BUILDS;
+  readonly name = ActionName.LIST_PLAN_BRANCH_BUILDS;
   readonly planBranchKey: string;
 
   constructor(command: string) {
