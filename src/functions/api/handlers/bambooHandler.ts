@@ -1,5 +1,5 @@
 import { Request, Response } from "lambda-api";
-import { CommandService } from "../../services/commandService";
+import { CommandParser } from "../../services/commandParser";
 
 export const handle = async (
   request: Request,
@@ -7,7 +7,7 @@ export const handle = async (
 ): Promise<void> => {
   const { body }: any = request;
   try {
-    const action = await CommandService.build().parse(body.command);
+    const action = await CommandParser.build().parse(body.command);
     response.status(200).json({
       message: `command received: ${JSON.stringify(action)}`,
     });

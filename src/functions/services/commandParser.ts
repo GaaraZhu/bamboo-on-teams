@@ -4,8 +4,8 @@ import { ListPlanBranchBuildsAction } from "../models/listPlanBranchBuildsAction
 import { ListPlanBranchesAction } from "../models/listPlanBranchesAction";
 import { ListPlansAction } from "../models/listPlansCommand";
 
-export class CommandService {
-  public static build = (): CommandService => new CommandService();
+export class CommandParser {
+  public static build = (): CommandParser => new CommandParser();
 
   public async parse(command: string): Promise<Action> {
     const action = sanitizeAction(command.split(" ")[0]);

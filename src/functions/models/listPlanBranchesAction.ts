@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { CommandService } from "../services/commandService";
+import { CommandParser } from "../services/commandParser";
 import { Action, ActionName } from "./actions";
 
 export class ListPlanBranchesAction implements Action {
@@ -20,7 +20,7 @@ export class ListPlanBranchesAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listBranchesCommand.parse(commandInput);
     const options = listBranchesCommand.opts();
-    if (CommandService.isEmpty(options.planKey)) {
+    if (CommandParser.isEmpty(options.planKey)) {
       throw {
         message: listBranchesCommand.helpInformation(),
       };

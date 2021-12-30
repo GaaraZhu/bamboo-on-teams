@@ -1,31 +1,31 @@
-import { CommandService } from "../../src/functions/services/commandService";
+import { CommandParser } from "../../src/functions/services/commandParser";
 
 describe("commandService", () => {
   describe("isEmpty", () => {
     it("undefined", async () => {
-      expect(CommandService.isEmpty(undefined)).toEqual(true);
+      expect(CommandParser.isEmpty(undefined)).toEqual(true);
     });
     it("empty string", async () => {
-      expect(CommandService.isEmpty("")).toEqual(true);
+      expect(CommandParser.isEmpty("")).toEqual(true);
     });
 
     it("spaces", async () => {
-      expect(CommandService.isEmpty(" ")).toEqual(true);
+      expect(CommandParser.isEmpty(" ")).toEqual(true);
     });
 
     it("spaces", async () => {
-      expect(CommandService.isEmpty("1 ")).toEqual(false);
+      expect(CommandParser.isEmpty("1 ")).toEqual(false);
     });
   });
   describe("extratArg", () => {
     it("happy case", async () => {
       expect(
-        CommandService.extractArg("plan", ["-plan=p1", "-branch=master"])
+        CommandParser.extractArg("plan", ["-plan=p1", "-branch=master"])
       ).toEqual("p1");
     });
     it("failure case", async () => {
       expect(
-        CommandService.extractArg("plan", ["-planKey=p1", "-branch=master"])
+        CommandParser.extractArg("plan", ["-planKey=p1", "-branch=master"])
       ).toEqual(undefined);
     });
   });
