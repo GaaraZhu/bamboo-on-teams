@@ -1,8 +1,8 @@
 import { Command, CommanderError } from "commander";
-import { Action, ActionNames } from "./actions";
+import { Action, ActionName } from "./actions";
 
 export class ListPlansAction implements Action {
-  readonly action = ActionNames.LIST_PLANS;
+  readonly action = ActionName.LIST_PLANS;
   readonly project;
 
   constructor() {

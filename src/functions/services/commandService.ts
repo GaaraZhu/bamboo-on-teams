@@ -1,31 +1,25 @@
-import { Action, ActionNames } from "../models/actions";
+import { Action, ActionName, sanitizeAction } from "../models/actions";
 import { BuildAction } from "../models/buildAction";
 import { ListPlanBranchBuildsAction } from "../models/listPlanBranchBuildsAction";
 import { ListPlanBranchesAction } from "../models/listPlanBranchesAction";
 import { ListPlansAction } from "../models/listPlansCommand";
 
-const usage =
-  "Supported commands: build, list-plans, list-branches, list-builds";
-
 export class CommandService {
   public static build = (): CommandService => new CommandService();
 
   public async parse(command: string): Promise<Action> {
-    const action = command.split(" ")[0];
-
-    switch (action.toUpperCase()) {
-      case ActionNames.BUILD:
+    const action = sanitizeAction(command.split(" ")[0]);
+    switch (action) {
+      case ActionName.BUILD:
         return new BuildAction(command);
-      case ActionNames.LIST_PLANS:
+      case ActionName.LIST_PLANS:
         return new ListPlansAction();
-      case ActionNames.LIST_PLAN_BRANCHES:
+      case ActionName.LIST_PLAN_BRANCHES:
         return new ListPlanBranchesAction(command);
-      case ActionNames.LIST_PLAN_BRANCH_BUILDS:
+      case ActionName.LIST_PLAN_BRANCH_BUILDS:
         return new ListPlanBranchBuildsAction(command);
       default:
-        throw {
-          message: usage,
-        };
+        throw Error(`Supported commands: ${Object.values(ActionName)}`);
     }
   }
 

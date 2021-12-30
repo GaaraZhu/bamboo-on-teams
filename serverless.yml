@@ -83,6 +83,7 @@ functions:
     name: ${self:service}
     events:
       - http:
+          private: false
           path: ${self:custom.api.urls.command}
           method: post
           cors: true
@@ -118,5 +119,5 @@ custom:
   api:
     router: dist/functions/api/router.router
     urls:
-      prefix: /bamboo-on-teams/v1
+      prefix: bamboo-on-teams/v1
       command: ${self:custom.api.urls.prefix}/command

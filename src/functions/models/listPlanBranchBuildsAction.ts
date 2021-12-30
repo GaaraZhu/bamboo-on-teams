@@ -1,9 +1,9 @@
 import { Command, CommanderError } from "commander";
 import { CommandService } from "../services/commandService";
-import { Action, ActionNames } from "./actions";
+import { Action, ActionName } from "./actions";
 
 export class ListPlanBranchBuildsAction implements Action {
-  readonly action = ActionNames.LIST_PLAN_BRANCH_BUILDS;
+  readonly action = ActionName.LIST_PLAN_BRANCH_BUILDS;
   readonly planBranchKey: string;
 
   constructor(command: string) {

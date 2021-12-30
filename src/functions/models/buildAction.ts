@@ -1,9 +1,9 @@
 import { CommandService } from "../services/commandService";
-import { Action, ActionNames } from "./actions";
+import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 
 export class BuildAction implements Action {
-  readonly action = ActionNames.BUILD;
+  readonly action = ActionName.BUILD;
   service: string;
   branch: string;
 
