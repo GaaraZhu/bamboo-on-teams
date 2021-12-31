@@ -15,6 +15,6 @@ export class ListPlansAction implements Action {
 
     const commandInput = [".", "."];
     listPlansCommand.parse(commandInput);
-    this.project = process.env.BAMBOO_PROJECT;
+    this.project = process.env.BAMBOO_PROJECT_ID;
   }
 }

@@ -31,10 +31,10 @@ provider:
 
   environment:
     BATH_PATH: bamboo/v1${self:custom.api.urls.prefix}
-    BAMBOO_HOST_URL: bamboo.mrp.net.nz
-    BAMBOO_API_TOKEN: ${ssm:${self:custom.aws.ssm.bambooApiToken}}
-    BAMBOO_PROJECT: API
-    TEAMS_HMAC_SHARED_TOKEN: ${ssm:${self:custom.aws.ssm.teamsHMACToken}}
+    BAMBOO_HOST_URL: ${ssm:/bamboo-on-teams/bambooHostUrl}
+    BAMBOO_API_TOKEN: ${ssm:/bamboo-on-teams/bambooAPIToken}
+    BAMBOO_PROJECT_ID:  ${ssm:/bamboo-on-teams/bambooProjectId}
+    TEAMS_HMAC_SHARED_TOKEN: ${ssm:/bamboo-on-teams/teamsHMACSharedToken}
 
 package:
   excludeDevDependencies: false
@@ -98,9 +98,6 @@ custom:
   aws:
     gatewayName: ${self:service}
     resourceNamePrefix: ${self:service}
-    ssm:
-        bambooApiToken: /bamboo-on-teams/bambooAPIToken
-        teamsHMACToken: /bamboo-on-teams/teamsHMACSharedToken
 
   serverless-offline:
     noPrependStageInUrl: true

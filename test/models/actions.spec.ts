@@ -80,7 +80,7 @@ describe("actions", () => {
 
   describe("ListPlansAction", () => {
     it("build action correctly", async () => {
-      process.env.BAMBOO_PROJECT = "API";
+      process.env.BAMBOO_PROJECT_ID = "API";
       expect(new ListPlansAction()).toEqual({
         name: ActionName.LIST_PLANS,
         project: "API",
