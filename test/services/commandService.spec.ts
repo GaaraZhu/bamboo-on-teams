@@ -17,16 +17,4 @@ describe("commandService", () => {
       expect(CommandParser.isEmpty("1 ")).toEqual(false);
     });
   });
-  describe("extratArg", () => {
-    it("happy case", async () => {
-      expect(
-        CommandParser.extractArg("plan", ["-plan=p1", "-branch=master"])
-      ).toEqual("p1");
-    });
-    it("failure case", async () => {
-      expect(
-        CommandParser.extractArg("plan", ["-planKey=p1", "-branch=master"])
-      ).toEqual(undefined);
-    });
-  });
 });
