@@ -9,7 +9,7 @@ provider:
   timeout: 30
 
   deploymentBucket:
-    name: deployment-${ssm:/bamboo-on-teams/accountId}
+    name: ${ssm:/bamboo-on-teams/deploymentBucket}
     serverSideEncryption: AES256
 
   vpc:
@@ -30,19 +30,17 @@ provider:
     restApiRootResourceId: !Ref bambooV1PathResource
 
   environment:
-    BATH_PATH: ${self:custom.api.urls.prefix}
-    BAMBOO_PROJECT: API
+    BATH_PATH: bamboo/v1${self:custom.api.urls.prefix}
+    BAMBOO_HOST_URL: bamboo.mrp.net.nz
     BAMBOO_API_TOKEN: ${ssm:${self:custom.aws.ssm.bambooApiToken}}
+    BAMBOO_PROJECT: API
     TEAMS_HMAC_SHARED_TOKEN: ${ssm:${self:custom.aws.ssm.teamsHMACToken}}
 
 package:
-  exclude:
-    - jest.config.js
-    - node_modules
-    - src/**
-    - test/**
-    - tsconfig.json
-    - README.md
+  excludeDevDependencies: false
+  patterns:
+    - '!node_modules/**'
+  individually: true
 
 resources:
   Resources:
@@ -92,6 +90,8 @@ functions:
 plugins:
   - serverless-offline
   - serverless-offline-ssm
+  - serverless-plugin-common-excludes
+  - serverless-plugin-include-dependencies
 
 custom:
   version: v1
@@ -110,6 +110,7 @@ custom:
       - bamboo
       - local
     ssm:
+      "/bamboo-on-teams/deploymentBucket": placeholder
       "/bamboo-on-teams/accountId": placeholder
       "/bamboo-on-teams/securityGroupId": placeholder
       "/bamboo-on-teams/subnetId": placeholder
@@ -119,5 +120,5 @@ custom:
   api:
     router: dist/functions/api/router.router
     urls:
-      prefix: bamboo-on-teams/v1
+      prefix: /bamboo-on-teams/v1
       command: ${self:custom.api.urls.prefix}/command

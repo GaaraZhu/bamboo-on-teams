@@ -1,19 +1,5 @@
 import { Request, Response } from "lambda-api";
 import { handle as handleCommand } from "./handlers/bambooHandler";
-import { Logger as TsLogger } from "ts-log-debug";
-
-//----------------------------------------------------------------------------//7
-// Logger initialization
-//----------------------------------------------------------------------------//
-const logger = new TsLogger();
-logger.appenders.set("std-log-json", {
-  type: "console",
-  layout: {
-    type: "customJson",
-    separator: "",
-  },
-  levels: ["info", "error"],
-});
 
 //----------------------------------------------------------------------------//
 // Define authentication middleware
