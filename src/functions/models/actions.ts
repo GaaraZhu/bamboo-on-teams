@@ -7,13 +7,9 @@ export enum ActionName {
 }
 
 export const sanitizeAction = (actionValue: string): ActionName | undefined => {
-  const enumValues = Object.values(ActionName);
-  for (const sanitizedEnumValue of enumValues) {
-    if (actionValue.toLowerCase() === sanitizedEnumValue.toLowerCase()) {
-      return sanitizedEnumValue;
-    }
-  }
-  return undefined;
+  return Object.values(ActionName).find(
+    (name) => name.toUpperCase() === actionValue.toUpperCase()
+  );
 };
 
 export interface Action {
