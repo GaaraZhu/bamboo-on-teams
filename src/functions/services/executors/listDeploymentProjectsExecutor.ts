@@ -6,11 +6,15 @@ export const executeListDeploymentProjectsCommand = async (
   action: ListProjectsAction,
   response: Response
 ): Promise<void> => {
-  response.status(200).json((await listProjects()).map((p: any) => p.name));
+  response
+    .status(200)
+    .json((await listDeploymentProjects()).map((p: any) => p.name));
 };
 
-export const getProject = async (projectName: string): Promise<any> => {
-  const projects = await listProjects();
+export const getDeploymentProject = async (
+  projectName: string
+): Promise<any> => {
+  const projects = await listDeploymentProjects();
   const project = projects.find(
     (p: any) => p.name.toUpperCase() === projectName.toUpperCase()
   );
@@ -25,7 +29,7 @@ export const getProject = async (projectName: string): Promise<any> => {
   return project;
 };
 
-const listProjects = async (): Promise<any> => {
+export const listDeploymentProjects = async (): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/all`;
   const { data } = await axios.get(url, {
     headers: {

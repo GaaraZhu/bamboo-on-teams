@@ -6,6 +6,9 @@ export enum ActionName {
   LIST_BUILDS = "list-builds",
   DESC_BUILD = "desc-build",
   LIST_DEPLOY_PROJECTS = "list-deploy-projects",
+  CREATE_RELEASE = "create-release",
+  LIST_RELEASES = "list-releases",
+  LIST_ENVS = "list-envs",
 }
 
 export const sanitizeAction = (actionValue: string): ActionName | undefined => {

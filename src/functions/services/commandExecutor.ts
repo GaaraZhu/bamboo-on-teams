@@ -12,6 +12,12 @@ import { DescBuildAction } from "../models/descBuildAction";
 import { executeDescBuildCommand } from "./executors/descBuildExecutor";
 import { ListProjectsAction } from "../models/listDeploymentProjects";
 import { executeListDeploymentProjectsCommand } from "./executors/listDeploymentProjectsExecutor";
+import { executeCreateReleaseCommand } from "./executors/createReleaseExecutor";
+import { CreateReleaseAction } from "../models/createReleaseAction";
+import { executeListEnvironmentsCommand } from "./executors/listEnvironmentsExecutor";
+import { ListReleasesAction } from "../models/listReleasesAction";
+import { ListEnvironmentsAction } from "../models/listEnvironmentsAction";
+import { executeListReleasesCommand } from "./executors/listReleasesExecutor";
 
 export class CommandExecutor {
   public static build = (): CommandExecutor => new CommandExecutor();
@@ -39,6 +45,24 @@ export class CommandExecutor {
       case ActionName.LIST_DEPLOY_PROJECTS:
         await executeListDeploymentProjectsCommand(
           action as ListProjectsAction,
+          response
+        );
+        break;
+      case ActionName.CREATE_RELEASE:
+        await executeCreateReleaseCommand(
+          action as CreateReleaseAction,
+          response
+        );
+        break;
+      case ActionName.LIST_RELEASES:
+        await executeListReleasesCommand(
+          action as ListReleasesAction,
+          response
+        );
+        break;
+      case ActionName.LIST_ENVS:
+        await executeListEnvironmentsCommand(
+          action as ListEnvironmentsAction,
           response
         );
         break;

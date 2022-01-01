@@ -5,6 +5,9 @@ import { ListProjectsAction } from "../models/listDeploymentProjects";
 import { ListBuildsAction } from "../models/listBuildsAction";
 import { ListBranchesAction } from "../models/listBranchesAction";
 import { ListPlansAction } from "../models/listPlansAction";
+import { CreateReleaseAction } from "../models/createReleaseAction";
+import { ListReleasesAction } from "../models/listReleasesAction";
+import { ListEnvironmentsAction } from "../models/listEnvironmentsAction";
 
 export class CommandParser {
   public static build = (): CommandParser => new CommandParser();
@@ -24,6 +27,12 @@ export class CommandParser {
         return new DescBuildAction(command);
       case ActionName.LIST_DEPLOY_PROJECTS:
         return new ListProjectsAction();
+      case ActionName.CREATE_RELEASE:
+        return new CreateReleaseAction(command);
+      case ActionName.LIST_RELEASES:
+        return new ListReleasesAction(command);
+      case ActionName.LIST_ENVS:
+        return new ListEnvironmentsAction(command);
       default:
         throw Error(`Supported commands: ${Object.values(ActionName)}`);
     }
