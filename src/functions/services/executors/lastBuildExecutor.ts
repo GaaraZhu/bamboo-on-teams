@@ -29,6 +29,9 @@ const getBuild = async (url: string): Promise<any> => {
     lifeCycleState: data.lifeCycleState,
     buildState: data.buildState,
     buildRelativeTime: data.buildRelativeTime,
-    changes: data.changes,
+    changes: data.changes?.change?.map((c: any) => ({
+      author: c.author,
+      commit: c.changesetId,
+    })),
   };
 };
