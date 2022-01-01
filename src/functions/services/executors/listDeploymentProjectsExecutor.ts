@@ -2,7 +2,7 @@ import { Response } from "lambda-api";
 import axios from "axios";
 import { ListProjectsAction } from "../../models/listDeploymentProjects";
 
-export const executeListDeploymentProjects = async (
+export const executeListDeploymentProjectsCommand = async (
   action: ListProjectsAction,
   response: Response
 ): Promise<void> => {

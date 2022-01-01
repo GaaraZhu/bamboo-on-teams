@@ -2,8 +2,8 @@ import { Command, CommanderError } from "commander";
 import { CommandParser } from "../services/commandParser";
 import { Action, ActionName } from "./actions";
 
-export class ListPlanBranchesAction implements Action {
-  readonly name = ActionName.LIST_PLAN_BRANCHES;
+export class ListBranchesAction implements Action {
+  readonly name = ActionName.LIST_BRANCHES;
   readonly planName: string;
 
   constructor(command: string) {

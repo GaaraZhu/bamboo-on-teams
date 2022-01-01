@@ -1,10 +1,10 @@
 import { Action, ActionName, sanitizeAction } from "../models/actions";
 import { BuildAction } from "../models/buildAction";
-import { LastBuildAction } from "../models/lastBuildAction";
+import { DescBuildAction } from "../models/descBuildAction";
 import { ListProjectsAction } from "../models/listDeploymentProjects";
-import { ListPlanBranchBuildsAction } from "../models/listPlanBranchBuildsAction";
-import { ListPlanBranchesAction } from "../models/listPlanBranchesAction";
-import { ListPlansAction } from "../models/listPlansCommand";
+import { ListBuildsAction } from "../models/listBuildsAction";
+import { ListBranchesAction } from "../models/listBranchesAction";
+import { ListPlansAction } from "../models/listPlansAction";
 
 export class CommandParser {
   public static build = (): CommandParser => new CommandParser();
@@ -16,12 +16,12 @@ export class CommandParser {
         return new BuildAction(command);
       case ActionName.LIST_PLANS:
         return new ListPlansAction();
-      case ActionName.LIST_PLAN_BRANCHES:
-        return new ListPlanBranchesAction(command);
-      case ActionName.LIST_PLAN_BRANCH_BUILDS:
-        return new ListPlanBranchBuildsAction(command);
-      case ActionName.LAST_PLAN_BRANCH_BUILD:
-        return new LastBuildAction(command);
+      case ActionName.LIST_BRANCHES:
+        return new ListBranchesAction(command);
+      case ActionName.LIST_BUILDS:
+        return new ListBuildsAction(command);
+      case ActionName.DESC_BUILD:
+        return new DescBuildAction(command);
       case ActionName.LIST_DEPLOY_PROJECTS:
         return new ListProjectsAction();
       default:

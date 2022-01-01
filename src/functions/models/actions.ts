@@ -2,9 +2,9 @@ export enum ActionName {
   BUILD = "build",
   DEPLOY = "deploy",
   LIST_PLANS = "list-plans",
-  LIST_PLAN_BRANCHES = "list-branches",
-  LIST_PLAN_BRANCH_BUILDS = "list-builds",
-  LAST_PLAN_BRANCH_BUILD = "last-build",
+  LIST_BRANCHES = "list-branches",
+  LIST_BUILDS = "list-builds",
+  DESC_BUILD = "desc-build",
   LIST_DEPLOY_PROJECTS = "list-deploy-projects",
 }
 

@@ -1,17 +1,17 @@
 import { Action, ActionName } from "../models/actions";
 import { Response } from "lambda-api";
-import { ListPlansAction } from "../models/listPlansCommand";
-import { executeListPlans } from "./executors/listPlanExecutor";
-import { executeListPlanBranches } from "./executors/listPlanBranchesExecutor";
-import { ListPlanBranchesAction } from "../models/listPlanBranchesAction";
-import { executeListPlanBranchBuilds } from "./executors/listPlanBranchBuildsExecutor";
-import { ListPlanBranchBuildsAction } from "../models/listPlanBranchBuildsAction";
-import { executeBuild } from "./executors/buildExecutor";
+import { ListPlansAction } from "../models/listPlansAction";
+import { executeListPlansCommand } from "./executors/listPlansExecutor";
+import { executeListBranchesCommand } from "./executors/listPlanBranchesExecutor";
+import { ListBranchesAction } from "../models/listBranchesAction";
+import { executeListBuildsCommand } from "./executors/listBuildsExecutor";
+import { ListBuildsAction } from "../models/listBuildsAction";
+import { executeBuildCommand } from "./executors/buildExecutor";
 import { BuildAction } from "../models/buildAction";
-import { LastBuildAction } from "../models/lastBuildAction";
-import { executeLastBuild } from "./executors/lastBuildExecutor";
+import { DescBuildAction } from "../models/descBuildAction";
+import { executeDescBuildCommand } from "./executors/descBuildExecutor";
 import { ListProjectsAction } from "../models/listDeploymentProjects";
-import { executeListDeploymentProjects } from "./executors/listDeploymentProjectsExecutor";
+import { executeListDeploymentProjectsCommand } from "./executors/listDeploymentProjectsExecutor";
 
 export class CommandExecutor {
   public static build = (): CommandExecutor => new CommandExecutor();
@@ -19,28 +19,25 @@ export class CommandExecutor {
   public async process(action: Action, response: Response): Promise<void> {
     switch (action.name) {
       case ActionName.LIST_PLANS:
-        await executeListPlans(action as ListPlansAction, response);
+        await executeListPlansCommand(action as ListPlansAction, response);
         break;
-      case ActionName.LIST_PLAN_BRANCHES:
-        await executeListPlanBranches(
-          action as ListPlanBranchesAction,
+      case ActionName.LIST_BRANCHES:
+        await executeListBranchesCommand(
+          action as ListBranchesAction,
           response
         );
         break;
-      case ActionName.LIST_PLAN_BRANCH_BUILDS:
-        await executeListPlanBranchBuilds(
-          action as ListPlanBranchBuildsAction,
-          response
-        );
+      case ActionName.LIST_BUILDS:
+        await executeListBuildsCommand(action as ListBuildsAction, response);
         break;
       case ActionName.BUILD:
-        await executeBuild(action as BuildAction, response);
+        await executeBuildCommand(action as BuildAction, response);
         break;
-      case ActionName.LAST_PLAN_BRANCH_BUILD:
-        await executeLastBuild(action as LastBuildAction, response);
+      case ActionName.DESC_BUILD:
+        await executeDescBuildCommand(action as DescBuildAction, response);
         break;
       case ActionName.LIST_DEPLOY_PROJECTS:
-        await executeListDeploymentProjects(
+        await executeListDeploymentProjectsCommand(
           action as ListProjectsAction,
           response
         );

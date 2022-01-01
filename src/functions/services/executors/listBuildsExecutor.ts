@@ -1,20 +1,14 @@
 import { Response } from "lambda-api";
 import axios from "axios";
-import { ListPlanBranchBuildsAction } from "../../models/listPlanBranchBuildsAction";
+import { ListBuildsAction } from "../../models/listBuildsAction";
 import { getBranch } from "./listPlanBranchesExecutor";
 
-export const executeListPlanBranchBuilds = async (
-  action: ListPlanBranchBuildsAction,
+export const executeListBuildsCommand = async (
+  action: ListBuildsAction,
   response: Response
 ): Promise<void> => {
   const branch = await getBranch(action.planName, action.branchName);
-  response.status(200).json(
-    (await listPlanBranchBuilds(branch.key)).map((r: any) => ({
-      buildNumber: r.buildNumber,
-      lifeCycleState: r.lifeCycleState,
-      buildState: r.buildState,
-    }))
-  );
+  response.status(200).json(await listPlanBranchBuilds(branch.key));
 };
 
 export const listPlanBranchBuilds = async (branchKey: string): Promise<any> => {
@@ -27,9 +21,7 @@ export const listPlanBranchBuilds = async (branchKey: string): Promise<any> => {
 
   return data.results.result?.map((r: any) => ({
     key: r.key,
-    buildNumber: r.buildNumber,
     lifeCycleState: r.lifeCycleState,
     buildState: r.buildState,
-    url: r.link.href,
   }));
 };

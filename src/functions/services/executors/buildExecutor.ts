@@ -3,7 +3,7 @@ import axios from "axios";
 import { getBranch } from "./listPlanBranchesExecutor";
 import { BuildAction } from "../../models/buildAction";
 
-export const executeBuild = async (
+export const executeBuildCommand = async (
   action: BuildAction,
   response: Response
 ): Promise<void> => {

@@ -1,10 +1,10 @@
 import { Response } from "lambda-api";
 import axios from "axios";
-import { ListPlanBranchesAction } from "../../models/listPlanBranchesAction";
-import { getPlan } from "./listPlanExecutor";
+import { ListBranchesAction } from "../../models/listBranchesAction";
+import { getPlan } from "./listPlansExecutor";
 
-export const executeListPlanBranches = async (
-  action: ListPlanBranchesAction,
+export const executeListBranchesCommand = async (
+  action: ListBranchesAction,
   response: Response
 ): Promise<void> => {
   const plan = await getPlan(action.planName);
