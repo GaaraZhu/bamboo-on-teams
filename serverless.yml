@@ -35,6 +35,7 @@ provider:
     BAMBOO_API_TOKEN: ${ssm:/bamboo-on-teams/bambooAPIToken}
     BAMBOO_PROJECT_ID:  ${ssm:/bamboo-on-teams/bambooProjectId}
     TEAMS_HMAC_SHARED_TOKEN: ${ssm:/bamboo-on-teams/teamsHMACSharedToken}
+    TZ: Pacific/Auckland
 
 package:
   excludeDevDependencies: false
