@@ -9,7 +9,23 @@ export const executeListPlans = async (
   response.status(200).json((await listPlans()).map((p: any) => p.name));
 };
 
-export const listPlans = async (): Promise<any> => {
+export const getPlan = async (planName: string): Promise<any> => {
+  const plans = await listPlans();
+  const plan = plans.find(
+    (p: any) => p.name.toUpperCase() === planName.toUpperCase()
+  );
+  if (!plan) {
+    throw Error(
+      `Unknow plan provided ${planName}, available plans: ${plans.map(
+        (p: any) => p.name
+      )}`
+    );
+  }
+
+  return plan;
+};
+
+const listPlans = async (): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/project/${process.env.BAMBOO_PROJECT_ID}?expand=plans&max-result=10000`;
   const { data } = await axios.get(url, {
     headers: {

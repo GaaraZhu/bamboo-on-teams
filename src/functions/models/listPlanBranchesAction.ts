@@ -10,10 +10,7 @@ export class ListPlanBranchesAction implements Action {
     const listBranchesCommand = new Command()
       .name("list-branches")
       .usage("[options]")
-      .option(
-        "-pn, --planName <planName>",
-        "the case insensitive plan name, e.g. customers-v1"
-      );
+      .option("-s, --service <service>", "service name, e.g. customers-v1");
     listBranchesCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listBranchesCommand.helpInformation(),
@@ -23,11 +20,11 @@ export class ListPlanBranchesAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listBranchesCommand.parse(commandInput);
     const options = listBranchesCommand.opts();
-    if (CommandParser.isEmpty(options.planName)) {
+    if (CommandParser.isEmpty(options.service)) {
       throw {
         message: listBranchesCommand.helpInformation(),
       };
     }
-    this.planName = options.planName!;
+    this.planName = options.service!;
   }
 }

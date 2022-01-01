@@ -1,5 +1,6 @@
 import { Action, ActionName, sanitizeAction } from "../models/actions";
 import { BuildAction } from "../models/buildAction";
+import { LastBuildAction } from "../models/lastBuildAction";
 import { ListPlanBranchBuildsAction } from "../models/listPlanBranchBuildsAction";
 import { ListPlanBranchesAction } from "../models/listPlanBranchesAction";
 import { ListPlansAction } from "../models/listPlansCommand";
@@ -18,6 +19,8 @@ export class CommandParser {
         return new ListPlanBranchesAction(command);
       case ActionName.LIST_PLAN_BRANCH_BUILDS:
         return new ListPlanBranchBuildsAction(command);
+      case ActionName.LAST_PLAN_BRANCH_BUILD:
+        return new LastBuildAction(command);
       default:
         throw Error(`Supported commands: ${Object.values(ActionName)}`);
     }
