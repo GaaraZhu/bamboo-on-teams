@@ -4,13 +4,16 @@ import { Action, ActionName } from "./actions";
 
 export class ListPlanBranchBuildsAction implements Action {
   readonly name = ActionName.LIST_PLAN_BRANCH_BUILDS;
-  readonly planBranchKey: string;
+  readonly planBranchName: string;
 
   constructor(command: string) {
     const listBuildsCommand = new Command()
       .name("list-builds")
       .usage("[options]")
-      .option("-bk, --branchKey <branchKey>", "branch job identifier");
+      .option(
+        "-bn, --branchName <branchName>",
+        "plan branch name, e.g. release-1.0.0"
+      );
     listBuildsCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listBuildsCommand.helpInformation(),
@@ -22,12 +25,12 @@ export class ListPlanBranchBuildsAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listBuildsCommand.parse(commandInput);
     const options = listBuildsCommand.opts();
-    if (CommandParser.isEmpty(options.branchKey)) {
+    if (CommandParser.isEmpty(options.branchName)) {
       throw {
         message: listBuildsCommand.helpInformation(),
       };
     }
 
-    this.planBranchKey = options.branchKey;
+    this.planBranchName = options.branchName;
   }
 }

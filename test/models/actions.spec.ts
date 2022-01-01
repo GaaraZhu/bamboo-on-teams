@@ -90,35 +90,35 @@ describe("actions", () => {
 
   describe("ListPlanBranchesAction", () => {
     const helpMessage =
-      "Usage: list-branches [options]\n\nOptions:\n  -pk, --planKey <planKey>  the plan identifier\n  -h, --help                display help for command\n";
+      "Usage: list-branches [options]\n\nOptions:\n  -pn, --planName <planName>  the case insensitive plan name, e.g. customers-v1\n  -h, --help                  display help for command\n";
     const testCases = [
       {
-        command: "list-branches -pk CPV1",
+        command: "list-branches -pn customers-v1",
         expectedAction: {
           name: ActionName.LIST_PLAN_BRANCHES,
-          planKey: "CPV1",
+          planName: "customers-v1",
         },
       },
       {
-        command: "list-branches --pk CPV1",
+        command: "list-branches --pn customers-v1",
         error: {
           message: helpMessage,
         },
       },
       {
-        command: "list-branches -pk CPV1 -b master",
+        command: "list-branches -pk customers-v1 -b master",
         error: {
           message: helpMessage,
         },
       },
       {
-        command: "list-branches -pk",
+        command: "list-branches -pn",
         error: {
           message: helpMessage,
         },
       },
       {
-        command: "list-branches s-pk",
+        command: "list-branches s-pn",
         error: {
           message: helpMessage,
         },
@@ -144,29 +144,36 @@ describe("actions", () => {
 
   describe("ListPlanBranchBuildsAction", () => {
     const helpMessage =
-      "Usage: list-builds [options]\n\nOptions:\n  -bk, --branchKey <branchKey>  branch job identifier\n  -h, --help                    display help for command\n";
+      "Usage: list-builds [options]\n\nOptions:\n  -bn, --branchName <branchName>  plan branch name, e.g. release-1.0.0\n  -h, --help                      display help for command\n";
     const testCases = [
       {
-        command: "list-builds -bk BPK1",
+        command: "list-builds -bn release-1.0.0",
         expectedAction: {
           name: ActionName.LIST_PLAN_BRANCH_BUILDS,
-          planBranchKey: "BPK1",
+          planBranchName: "release-1.0.0",
         },
       },
       {
-        command: "list-builds --bk BPK1",
+        command: "list-builds --branchName release-1.0.0",
+        expectedAction: {
+          name: ActionName.LIST_PLAN_BRANCH_BUILDS,
+          planBranchName: "release-1.0.0",
+        },
+      },
+      {
+        command: "list-builds --bn release-1.0.0",
         error: {
           message: helpMessage,
         },
       },
       {
-        command: "list-builds -bk",
+        command: "list-builds -bn",
         error: {
           message: helpMessage,
         },
       },
       {
-        command: "list-builds s-bk",
+        command: "list-builds s-bn",
         error: {
           message: helpMessage,
         },

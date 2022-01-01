@@ -4,13 +4,16 @@ import { Action, ActionName } from "./actions";
 
 export class ListPlanBranchesAction implements Action {
   readonly name = ActionName.LIST_PLAN_BRANCHES;
-  readonly planKey: string;
+  readonly planName: string;
 
   constructor(command: string) {
     const listBranchesCommand = new Command()
       .name("list-branches")
       .usage("[options]")
-      .option("-pk, --planKey <planKey>", "the plan identifier");
+      .option(
+        "-pn, --planName <planName>",
+        "the case insensitive plan name, e.g. customers-v1"
+      );
     listBranchesCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listBranchesCommand.helpInformation(),
@@ -20,11 +23,11 @@ export class ListPlanBranchesAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listBranchesCommand.parse(commandInput);
     const options = listBranchesCommand.opts();
-    if (CommandParser.isEmpty(options.planKey)) {
+    if (CommandParser.isEmpty(options.planName)) {
       throw {
         message: listBranchesCommand.helpInformation(),
       };
     }
-    this.planKey = options.planKey!;
+    this.planName = options.planName!;
   }
 }
