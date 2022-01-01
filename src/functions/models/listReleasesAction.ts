@@ -11,10 +11,7 @@ export class ListReleasesAction implements Action {
     const listBranchesCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option(
-        "-p, --project <project>",
-        "deployment project name, e.g. customers-v1"
-      )
+      .option("-s, --service <service>", "service name, e.g. customers-v1")
       .option(
         "-b, --branch <branch>",
         "bamboo branch name, e.g. release-1.0.0"
@@ -29,14 +26,14 @@ export class ListReleasesAction implements Action {
     listBranchesCommand.parse(commandInput);
     const options = listBranchesCommand.opts();
     if (
-      CommandParser.isEmpty(options.project) ||
+      CommandParser.isEmpty(options.service) ||
       CommandParser.isEmpty(options.branch)
     ) {
       throw {
         message: listBranchesCommand.helpInformation(),
       };
     }
-    this.deploymentProject = options.project!;
+    this.deploymentProject = options.service!;
     this.planBranch = options.branch!;
   }
 }

@@ -10,10 +10,7 @@ export class ListEnvironmentsAction implements Action {
     const listEnvsCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option(
-        "-p, --project <project>",
-        "deployment project name, e.g. customers-v1"
-      );
+      .option("-s, --service <service>", "service name, e.g. customers-v1");
     listEnvsCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listEnvsCommand.helpInformation(),
@@ -23,11 +20,11 @@ export class ListEnvironmentsAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listEnvsCommand.parse(commandInput);
     const options = listEnvsCommand.opts();
-    if (CommandParser.isEmpty(options.project)) {
+    if (CommandParser.isEmpty(options.service)) {
       throw {
         message: listEnvsCommand.helpInformation(),
       };
     }
-    this.deploymentProject = options.project!;
+    this.deploymentProject = options.service!;
   }
 }

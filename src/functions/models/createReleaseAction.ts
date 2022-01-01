@@ -12,10 +12,7 @@ export class CreateReleaseAction implements Action {
     const buildCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option(
-        "-p, --project <project>",
-        "deployment project name, e.g. customers-v1"
-      )
+      .option("-s, --service <service>", "service name, e.g. customers-v1")
       .option("-b, --build <build>", "build key, e.g. API-CCV28-1")
       .option("-r, --release <release>", "release name, e.g. v1.0.0");
     buildCommand.exitOverride((_: CommanderError) => {
@@ -32,14 +29,14 @@ export class CreateReleaseAction implements Action {
     if (
       CommandParser.isEmpty(options.build) ||
       CommandParser.isEmpty(options.release) ||
-      CommandParser.isEmpty(options.project)
+      CommandParser.isEmpty(options.service)
     ) {
       throw {
         message: buildCommand.helpInformation(),
       };
     }
 
-    this.deploymentProject = options.project;
+    this.deploymentProject = options.service;
     this.buildKey = options.build;
     this.releaseName = options.release;
   }

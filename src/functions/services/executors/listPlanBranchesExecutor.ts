@@ -23,7 +23,7 @@ export const getBranch = async (
   );
   if (!branch) {
     throw Error(
-      `Unknow branch provided ${branchName} for plan ${planName}, available branches: ${branches.map(
+      `Unknow branch name provided ${branchName} for plan ${planName}, available branches: ${branches.map(
         (b: any) => b.name
       )}`
     );

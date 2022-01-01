@@ -2,42 +2,42 @@ import { CommandParser } from "../services/commandParser";
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 
-export class DeployAction implements Action {
-  readonly name = ActionName.DEPLOY;
+export class DeployLatestAction implements Action {
+  readonly name = ActionName.DEPLOY_LATEST;
+  service: string;
+  branch: string;
   env: string;
-  releaseName: string;
-  deploymentProject: string;
 
   constructor(command: string) {
-    const buildCommand = new Command()
+    const deployLatestCommand = new Command()
       .name(this.name)
       .usage("[options]")
       .option("-s, --service <service>", "service name, e.g. customers-v1")
-      .option("-e, --env <env>", "env name, e.g. dev")
-      .option("-r, --release <release>", "release name, e.g. v1.0.0");
-    buildCommand.exitOverride((_: CommanderError) => {
+      .option("-b, --branch <branch>", "bamboo branch name, e.g. master")
+      .option("-e, --env <env>", "env name, e.g. dev");
+    deployLatestCommand.exitOverride((_: CommanderError) => {
       throw {
-        message: buildCommand.helpInformation(),
+        message: deployLatestCommand.helpInformation(),
       };
     }); //to avoid process.exit
 
     // The default expectation is that the arguments are from node and have the application as argv[0]
     // and the script being run in argv[1], with user parameters after that.
     const commandInput = [".", ...command.split(" ")];
-    buildCommand.parse(commandInput);
-    const options = buildCommand.opts();
+    deployLatestCommand.parse(commandInput);
+    const options = deployLatestCommand.opts();
     if (
       CommandParser.isEmpty(options.service) ||
-      CommandParser.isEmpty(options.env) ||
-      CommandParser.isEmpty(options.release)
+      CommandParser.isEmpty(options.branch) ||
+      CommandParser.isEmpty(options.env)
     ) {
       throw {
-        message: buildCommand.helpInformation(),
+        message: deployLatestCommand.helpInformation(),
       };
     }
 
-    this.deploymentProject = options.service;
+    this.service = options.service;
+    this.branch = options.branch;
     this.env = options.env;
-    this.releaseName = options.release;
   }
 }

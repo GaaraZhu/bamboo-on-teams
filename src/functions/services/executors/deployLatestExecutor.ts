@@ -1,0 +1,108 @@
+import { Response } from "lambda-api";
+import axios from "axios";
+import { getBranch } from "./listPlanBranchesExecutor";
+import { DeployLatestAction } from "../../models/deployLatestAction";
+import { getPlan } from "./listPlansExecutor";
+import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
+import { getEnvironment } from "./listEnvironmentsExecutor";
+import { deploy } from "./deployExecutor";
+import { createRelease } from "./createReleaseExecutor";
+
+export const executeDeployLatestCommand = async (
+  action: DeployLatestAction,
+  response: Response
+): Promise<void> => {
+  // get the latest build from the service branch
+  const branch = await getBranch(action.service, action.branch);
+  const latestBuild = await getLatestSuccessBuild(branch.key);
+  if (!latestBuild) {
+    response.status(400).json({
+      message: `No success build found for service ${action.service} in branch ${action.branch}`,
+    });
+    return;
+  }
+
+  // get all releases for the service branch
+  const project = await getDeploymentProject(action.service);
+  const buildReleases = await getBuildReleases(project.id, action.branch);
+
+  // create a release if not exist for the build
+  let targetRelease = buildReleases?.find((r: any) =>
+    r.items.find((i: any) => i.planResultKey.key === latestBuild.key)
+  );
+  if (!targetRelease) {
+    let releaseName = `${action.branch}-1`;
+    const releasePrefixedWithBranch = buildReleases?.find((r: any) =>
+      r.name.toUpperCase().startsWith(action.branch.toUpperCase() + "-")
+    );
+    if (releasePrefixedWithBranch) {
+      const lastDashIndex = releasePrefixedWithBranch.name.lastIndexOf("-");
+      releaseName = `${releasePrefixedWithBranch.name.substring(
+        0,
+        lastDashIndex
+      )}-${+releasePrefixedWithBranch.name.substring(lastDashIndex + 1) + 1}`;
+    }
+
+    targetRelease = await createRelease(
+      project.id,
+      latestBuild.key,
+      releaseName
+    );
+  }
+
+  // deploy the release to the environment
+  const env = await getEnvironment(project.id, action.env);
+  const deployment = await deploy(env.id, targetRelease.id);
+
+  response.status(200).json({
+    service: action.service,
+    branch: action.branch,
+    build: {
+      buildNumber: latestBuild.buildNumber,
+      buildRelativeTime: latestBuild.buildRelativeTime,
+      vcsRevisionKey: latestBuild.vcsRevisionKey,
+      release: targetRelease.name,
+    },
+    environment: action.env,
+    deployment: {
+      id: deployment.deploymentResultId,
+      link: deployment.link.href,
+    },
+  });
+};
+
+export const getBuildReleases = async (
+  projectId: string,
+  branchName: string
+): Promise<any> => {
+  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/versions?planBranchName=${branchName}`;
+  const { data } = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+    },
+  });
+
+  return data.versions;
+};
+
+export const getLatestSuccessBuild = async (
+  branchKey: string
+): Promise<any> => {
+  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?buildstate=Successful&max-results=1&expand=results.result`;
+  const { data } = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+    },
+  });
+
+  return data.results.result
+    ? {
+        key: data.results.result[0].key,
+        buildNumber: data.results.result[0].buildNumber,
+        buildRelativeTime: data.results.result[0].buildRelativeTime,
+        vcsRevisionKey: data.results.result[0].vcsRevisionKey,
+        lifeCycleState: data.results.result[0].lifeCycleState,
+        buildState: data.results.result[0].buildState,
+      }
+    : undefined;
+};

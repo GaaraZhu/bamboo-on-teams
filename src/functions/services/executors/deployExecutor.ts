@@ -15,7 +15,10 @@ export const executeDeployCommand = async (
   response.status(200).json(await deploy(env.id, release.id));
 };
 
-const deploy = async (envId: string, releaseId: string): Promise<any> => {
+export const deploy = async (
+  envId: string,
+  releaseId: string
+): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/queue/deployment/?environmentId=${envId}&versionId=${releaseId}`;
   const { data } = await axios.post(url, undefined, {
     headers: {
