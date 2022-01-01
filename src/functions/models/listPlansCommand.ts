@@ -6,7 +6,7 @@ export class ListPlansAction implements Action {
   readonly project;
 
   constructor() {
-    const listPlansCommand = new Command().name("list-plans");
+    const listPlansCommand = new Command().name(this.name);
     listPlansCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listPlansCommand.helpInformation(),

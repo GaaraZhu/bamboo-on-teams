@@ -8,7 +8,7 @@ export class ListPlanBranchesAction implements Action {
 
   constructor(command: string) {
     const listBranchesCommand = new Command()
-      .name("list-branches")
+      .name(this.name)
       .usage("[options]")
       .option("-s, --service <service>", "service name, e.g. customers-v1");
     listBranchesCommand.exitOverride((_: CommanderError) => {

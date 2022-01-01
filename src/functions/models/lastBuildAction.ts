@@ -9,7 +9,7 @@ export class LastBuildAction implements Action {
 
   constructor(command: string) {
     const lastBuildCommand = new Command()
-      .name("last-build")
+      .name(this.name)
       .usage("[options]")
       .option("-s, --service <service>", "service name, e.g. customers-v1")
       .option("-b, --branch <branch>", "bamboo branch name, e.g. master");

@@ -10,6 +10,8 @@ import { executeBuild } from "./executors/buildExecutor";
 import { BuildAction } from "../models/buildAction";
 import { LastBuildAction } from "../models/lastBuildAction";
 import { executeLastBuild } from "./executors/lastBuildExecutor";
+import { ListProjectsAction } from "../models/listDeploymentProjects";
+import { executeListDeploymentProjects } from "./executors/listDeploymentProjectsExecutor";
 
 export class CommandExecutor {
   public static build = (): CommandExecutor => new CommandExecutor();
@@ -36,6 +38,12 @@ export class CommandExecutor {
         break;
       case ActionName.LAST_PLAN_BRANCH_BUILD:
         await executeLastBuild(action as LastBuildAction, response);
+        break;
+      case ActionName.LIST_DEPLOY_PROJECTS:
+        await executeListDeploymentProjects(
+          action as ListProjectsAction,
+          response
+        );
         break;
       default:
         throw Error(`Supported commands: ${Object.values(ActionName)}`);

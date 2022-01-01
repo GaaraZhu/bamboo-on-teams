@@ -9,7 +9,7 @@ export class ListPlanBranchBuildsAction implements Action {
 
   constructor(command: string) {
     const listBuildsCommand = new Command()
-      .name("list-builds")
+      .name(this.name)
       .usage("[options]")
       .option("-s, --service <service>", "service name, e.g. customers-v1")
       .option(
