@@ -11,6 +11,25 @@ export const executeListEnvironmentsCommand = async (
   response.status(200).json(await listEnvironments(project.id));
 };
 
+export const getEnvironment = async (
+  projectId: string,
+  envName: string
+): Promise<any> => {
+  const envs = await listEnvironments(projectId);
+  const env = envs.find(
+    (e: any) => e.name.toUpperCase() === envName.toUpperCase()
+  );
+  if (!env) {
+    throw Error(
+      `Unknow environment name provided ${envName}, available plans: ${envs.map(
+        (e: any) => e.name
+      )}`
+    );
+  }
+
+  return env;
+};
+
 const listEnvironments = async (projectId: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}`;
   const { data } = await axios.get(url, {

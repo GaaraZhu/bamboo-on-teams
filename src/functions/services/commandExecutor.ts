@@ -18,6 +18,8 @@ import { executeListEnvironmentsCommand } from "./executors/listEnvironmentsExec
 import { ListReleasesAction } from "../models/listReleasesAction";
 import { ListEnvironmentsAction } from "../models/listEnvironmentsAction";
 import { executeListReleasesCommand } from "./executors/listReleasesExecutor";
+import { executeDeployCommand } from "./executors/deployExecutor";
+import { DeployAction } from "../models/deployAction";
 
 export class CommandExecutor {
   public static build = (): CommandExecutor => new CommandExecutor();
@@ -65,6 +67,9 @@ export class CommandExecutor {
           action as ListEnvironmentsAction,
           response
         );
+        break;
+      case ActionName.DEPLOY:
+        await executeDeployCommand(action as DeployAction, response);
         break;
       default:
         throw Error(`Supported commands: ${Object.values(ActionName)}`);
