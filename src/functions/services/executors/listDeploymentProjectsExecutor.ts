@@ -20,7 +20,7 @@ export const getDeploymentProject = async (
   );
   if (!project) {
     throw Error(
-      `Unknow project name provided ${projectName}, available plans: ${projects.map(
+      `Unknown project provided ${projectName}, available plans: ${projects.map(
         (p: any) => p.name
       )}`
     );

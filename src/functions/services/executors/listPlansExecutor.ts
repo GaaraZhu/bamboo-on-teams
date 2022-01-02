@@ -16,7 +16,7 @@ export const getPlan = async (planName: string): Promise<any> => {
   );
   if (!plan) {
     throw Error(
-      `Unknow plan provided ${planName}, available plans: ${plans.map(
+      `Unknown plan provided ${planName}, available plans: ${plans.map(
         (p: any) => p.name
       )}`
     );

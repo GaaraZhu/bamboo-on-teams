@@ -1,6 +1,6 @@
-import { CommandParser } from "../services/commandParser";
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
+import { isEmpty } from "../utils";
 
 export class DeployLatestAction implements Action {
   readonly name = ActionName.DEPLOY_LATEST;
@@ -27,9 +27,9 @@ export class DeployLatestAction implements Action {
     deployLatestCommand.parse(commandInput);
     const options = deployLatestCommand.opts();
     if (
-      CommandParser.isEmpty(options.service) ||
-      CommandParser.isEmpty(options.branch) ||
-      CommandParser.isEmpty(options.env)
+      isEmpty(options.service) ||
+      isEmpty(options.branch) ||
+      isEmpty(options.env)
     ) {
       throw {
         message: deployLatestCommand.helpInformation(),

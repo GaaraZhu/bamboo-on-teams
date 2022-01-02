@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { CommandParser } from "../services/commandParser";
+import { isEmpty } from "../utils";
 import { Action, ActionName } from "./actions";
 
 export class ListReleasesAction implements Action {
@@ -25,10 +25,7 @@ export class ListReleasesAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listBranchesCommand.parse(commandInput);
     const options = listBranchesCommand.opts();
-    if (
-      CommandParser.isEmpty(options.service) ||
-      CommandParser.isEmpty(options.branch)
-    ) {
+    if (isEmpty(options.service) || isEmpty(options.branch)) {
       throw {
         message: listBranchesCommand.helpInformation(),
       };

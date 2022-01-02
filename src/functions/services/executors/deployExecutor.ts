@@ -4,11 +4,14 @@ import { DeployAction } from "../../models/deployAction";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getRelease } from "./listReleasesExecutor";
+import { prodEnvCheck } from "../../utils";
 
 export const executeDeployCommand = async (
   action: DeployAction,
   response: Response
 ): Promise<void> => {
+  prodEnvCheck(action.env);
+
   const project = await getDeploymentProject(action.deploymentProject);
   const env = await getEnvironment(project.id, action.env);
   const release = await getRelease(project.id, action.releaseName);

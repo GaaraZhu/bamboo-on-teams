@@ -1,6 +1,6 @@
-import { CommandParser } from "../services/commandParser";
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
+import { isEmpty } from "../utils";
 
 export class CreateReleaseAction implements Action {
   readonly name = ActionName.CREATE_RELEASE;
@@ -27,9 +27,9 @@ export class CreateReleaseAction implements Action {
     buildCommand.parse(commandInput);
     const options = buildCommand.opts();
     if (
-      CommandParser.isEmpty(options.build) ||
-      CommandParser.isEmpty(options.release) ||
-      CommandParser.isEmpty(options.service)
+      isEmpty(options.build) ||
+      isEmpty(options.release) ||
+      isEmpty(options.service)
     ) {
       throw {
         message: buildCommand.helpInformation(),

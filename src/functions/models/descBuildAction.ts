@@ -1,6 +1,6 @@
-import { CommandParser } from "../services/commandParser";
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
+import { isEmpty } from "../utils";
 
 export class DescBuildAction implements Action {
   readonly name = ActionName.DESC_BUILD;
@@ -21,7 +21,7 @@ export class DescBuildAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     lastBuildCommand.parse(commandInput);
     const options = lastBuildCommand.opts();
-    if (CommandParser.isEmpty(options.key)) {
+    if (isEmpty(options.key)) {
       throw {
         message: lastBuildCommand.helpInformation(),
       };

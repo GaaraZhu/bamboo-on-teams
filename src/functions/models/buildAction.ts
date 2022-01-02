@@ -1,6 +1,6 @@
-import { CommandParser } from "../services/commandParser";
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
+import { isEmpty } from "../utils";
 
 export class BuildAction implements Action {
   readonly name = ActionName.BUILD;
@@ -24,10 +24,7 @@ export class BuildAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     buildCommand.parse(commandInput);
     const options = buildCommand.opts();
-    if (
-      CommandParser.isEmpty(options.service) ||
-      CommandParser.isEmpty(options.branch)
-    ) {
+    if (isEmpty(options.service) || isEmpty(options.branch)) {
       throw {
         message: buildCommand.helpInformation(),
       };

@@ -2,16 +2,19 @@ import { Response } from "lambda-api";
 import axios from "axios";
 import { getBranch } from "./listPlanBranchesExecutor";
 import { DeployLatestAction } from "../../models/deployLatestAction";
-import { getPlan } from "./listPlansExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deploy } from "./deployExecutor";
 import { createRelease } from "./createReleaseExecutor";
+import { prodEnvCheck } from "../../utils";
 
 export const executeDeployLatestCommand = async (
   action: DeployLatestAction,
   response: Response
 ): Promise<void> => {
+  // 1. check environment availability
+  prodEnvCheck(action.env);
+
   // get the latest build from the service branch
   const branch = await getBranch(action.service, action.branch);
   const latestBuild = await getLatestSuccessBuild(branch.key);

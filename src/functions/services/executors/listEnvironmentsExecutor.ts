@@ -21,7 +21,7 @@ export const getEnvironment = async (
   );
   if (!env) {
     throw Error(
-      `Unknow environment name provided ${envName}, available plans: ${envs.map(
+      `Unknown environment provided ${envName}, availables: ${envs.map(
         (e: any) => e.name
       )}`
     );

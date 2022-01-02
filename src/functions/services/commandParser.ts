@@ -43,8 +43,4 @@ export class CommandParser {
         throw Error(`Supported commands: ${Object.values(ActionName)}`);
     }
   }
-
-  public static isEmpty(value: string | undefined): boolean {
-    return !value || /^ *$/.test(value);
-  }
 }
