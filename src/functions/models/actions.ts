@@ -10,6 +10,7 @@ export enum ActionName {
   CREATE_RELEASE = "create-release",
   LIST_RELEASES = "list-releases",
   LIST_ENVS = "list-envs",
+  LIST_DEPLOYS = "list-deploys",
 }
 
 export const sanitizeAction = (actionValue: string): ActionName | undefined => {

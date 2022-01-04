@@ -8,7 +8,7 @@ export const executeListEnvironmentsCommand = async (
   response: Response
 ): Promise<void> => {
   const project = await getDeploymentProject(action.deploymentProject);
-  response.status(200).json(await listEnvironments(project.id));
+  response.status(200).json((await listEnvironments(project.id)).map((e: any) => e.name));
 };
 
 export const getEnvironment = async (
