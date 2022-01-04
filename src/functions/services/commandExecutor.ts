@@ -24,6 +24,8 @@ import { executeDeployLatestCommand } from "./executors/deployLatestExecutor";
 import { DeployLatestAction } from "../models/deployLatestAction";
 import { executeListDeploysCommand } from "./executors/listDeploysExecutor";
 import { ListDeploysAction } from "../models/listDeploysAction";
+import { executePromoteReleaseCommand } from "./executors/promoteReleaseExecutor";
+import { PromoteReleaseAction } from "../models/promoteReleaseAction";
 
 export class CommandExecutor {
   public static build = (): CommandExecutor => new CommandExecutor();
@@ -83,6 +85,12 @@ export class CommandExecutor {
         break;
       case ActionName.LIST_DEPLOYS:
         await executeListDeploysCommand(action as ListDeploysAction, response);
+        break;
+      case ActionName.PROMOTE_RELEASE:
+        await executePromoteReleaseCommand(
+          action as PromoteReleaseAction,
+          response
+        );
         break;
       default:
         throw Error(`Supported commands: ${Object.values(ActionName)}`);

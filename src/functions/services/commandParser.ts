@@ -11,6 +11,7 @@ import { ListEnvironmentsAction } from "../models/listEnvironmentsAction";
 import { DeployAction } from "../models/deployAction";
 import { DeployLatestAction } from "../models/deployLatestAction";
 import { ListDeploysAction } from "../models/listDeploysAction";
+import { PromoteReleaseAction } from "../models/promoteReleaseAction";
 
 export class CommandParser {
   public static build = (): CommandParser => new CommandParser();
@@ -42,6 +43,8 @@ export class CommandParser {
         return new DeployLatestAction(command);
       case ActionName.LIST_DEPLOYS:
         return new ListDeploysAction(command);
+      case ActionName.PROMOTE_RELEASE:
+        return new PromoteReleaseAction(command);
       default:
         throw Error(`Supported commands: ${Object.values(ActionName)}`);
     }
