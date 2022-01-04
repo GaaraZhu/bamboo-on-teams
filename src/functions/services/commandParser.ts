@@ -8,8 +8,8 @@ import { ListPlansAction } from "../models/listPlansAction";
 import { CreateReleaseAction } from "../models/createReleaseAction";
 import { ListReleasesAction } from "../models/listReleasesAction";
 import { ListEnvironmentsAction } from "../models/listEnvironmentsAction";
-import { DeployAction } from "../models/deployAction";
-import { DeployLatestAction } from "../models/deployLatestAction";
+import { DeployReleaseAction } from "../models/deployReleaseAction";
+import { DeployLatestBuildAction } from "../models/deployLatestBuildAction";
 import { ListDeploysAction } from "../models/listDeploysAction";
 import { PromoteReleaseAction } from "../models/promoteReleaseAction";
 
@@ -37,10 +37,10 @@ export class CommandParser {
         return new ListReleasesAction(command);
       case ActionName.LIST_ENVS:
         return new ListEnvironmentsAction(command);
-      case ActionName.DEPLOY:
-        return new DeployAction(command);
-      case ActionName.DEPLOY_LATEST:
-        return new DeployLatestAction(command);
+      case ActionName.DEPLOY_RELEASE:
+        return new DeployReleaseAction(command);
+      case ActionName.DEPLOY_LATEST_BUILD:
+        return new DeployLatestBuildAction(command);
       case ActionName.LIST_DEPLOYS:
         return new ListDeploysAction(command);
       case ActionName.PROMOTE_RELEASE:

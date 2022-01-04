@@ -18,10 +18,10 @@ import { executeListEnvironmentsCommand } from "./executors/listEnvironmentsExec
 import { ListReleasesAction } from "../models/listReleasesAction";
 import { ListEnvironmentsAction } from "../models/listEnvironmentsAction";
 import { executeListReleasesCommand } from "./executors/listReleasesExecutor";
-import { executeDeployCommand } from "./executors/deployExecutor";
-import { DeployAction } from "../models/deployAction";
-import { executeDeployLatestCommand } from "./executors/deployLatestExecutor";
-import { DeployLatestAction } from "../models/deployLatestAction";
+import { executeDeployReleaseCommand } from "./executors/deployReleaseExecutor";
+import { DeployReleaseAction } from "../models/deployReleaseAction";
+import { executeDeployLatestCommand } from "./executors/deployLatestBuildExecutor";
+import { DeployLatestBuildAction } from "../models/deployLatestBuildAction";
 import { executeListDeploysCommand } from "./executors/listDeploysExecutor";
 import { ListDeploysAction } from "../models/listDeploysAction";
 import { executePromoteReleaseCommand } from "./executors/promoteReleaseExecutor";
@@ -74,12 +74,12 @@ export class CommandExecutor {
           response
         );
         break;
-      case ActionName.DEPLOY:
-        await executeDeployCommand(action as DeployAction, response);
+      case ActionName.DEPLOY_RELEASE:
+        await executeDeployReleaseCommand(action as DeployReleaseAction, response);
         break;
-      case ActionName.DEPLOY_LATEST:
+      case ActionName.DEPLOY_LATEST_BUILD:
         await executeDeployLatestCommand(
-          action as DeployLatestAction,
+          action as DeployLatestBuildAction,
           response
         );
         break;

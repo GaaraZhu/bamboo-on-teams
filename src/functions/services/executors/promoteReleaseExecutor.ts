@@ -2,9 +2,9 @@ import { Response } from "lambda-api";
 import axios from "axios";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
-import { prodEnvCheck } from "../../utils";
 import { PromoteReleaseAction } from "../../models/promoteReleaseAction";
 import { listDeploys } from "./listDeploysExecutor";
+import { deployRelease } from "./deployReleaseExecutor";
 
 export const executePromoteReleaseCommand = async (
   action: PromoteReleaseAction,
@@ -23,7 +23,7 @@ export const executePromoteReleaseCommand = async (
   const targetEnv = await getEnvironment(project.id, action.targetEnv);
   response
     .status(200)
-    .json(await deploy(targetEnv.id, lastSuccessDeploy.release.id));
+    .json(await deployRelease(targetEnv.id, lastSuccessDeploy.release.id));
 };
 
 export const deploy = async (

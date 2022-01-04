@@ -2,8 +2,8 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { isEmpty } from "../utils";
 
-export class DeployAction implements Action {
-  readonly name = ActionName.DEPLOY;
+export class DeployReleaseAction implements Action {
+  readonly name = ActionName.DEPLOY_RELEASE;
   env: string;
   releaseName: string;
   deploymentProject: string;

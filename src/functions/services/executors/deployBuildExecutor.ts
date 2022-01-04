@@ -1,15 +1,15 @@
 import { Response } from "lambda-api";
 import axios from "axios";
 import { getBranch } from "./listPlanBranchesExecutor";
-import { DeployLatestAction } from "../../models/deployLatestAction";
+import { DeployLatestBuildAction } from "../../models/deployLatestBuildAction";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
-import { deploy } from "./deployExecutor";
+import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
 import { prodEnvCheck } from "../../utils";
 
 export const executeDeployLatestCommand = async (
-  action: DeployLatestAction,
+  action: DeployLatestBuildAction,
   response: Response
 ): Promise<void> => {
   // 1. check environment availability
@@ -55,7 +55,7 @@ export const executeDeployLatestCommand = async (
 
   // deploy the release to the environment
   const env = await getEnvironment(project.id, action.env);
-  const deployment = await deploy(env.id, targetRelease.id);
+  const deployment = await deployRelease(env.id, targetRelease.id);
 
   response.status(200).json({
     service: action.service,

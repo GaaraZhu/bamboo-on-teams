@@ -2,8 +2,8 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { isEmpty } from "../utils";
 
-export class DeployLatestAction implements Action {
-  readonly name = ActionName.DEPLOY_LATEST;
+export class DeployLatestBuildAction implements Action {
+  readonly name = ActionName.DEPLOY_LATEST_BUILD;
   service: string;
   branch: string;
   env: string;
