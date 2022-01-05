@@ -1,14 +1,16 @@
 import { Command, CommanderError } from "commander";
 import { emptyCheck } from "../utils";
 import { Action, ActionName } from "./actions";
+import { Response } from "lambda-api";
+import { executeListBranchesCommand } from "../services/executors/listPlanBranchesExecutor";
 
 export class ListBranchesAction implements Action {
-  readonly name = ActionName.LIST_BRANCHES;
+  readonly actionName = ActionName.LIST_BRANCHES;
   readonly planName: string;
 
   constructor(command: string) {
     const listBranchesCommand = new Command()
-      .name(this.name)
+      .name(this.actionName)
       .usage("[options]")
       .option(
         "-s, --service <service>",
@@ -24,5 +26,9 @@ export class ListBranchesAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listBranchesCommand.parse(commandInput);
     this.planName = listBranchesCommand.opts().service!;
+  }
+
+  async process(response: Response): Promise<void> {
+    return await executeListBranchesCommand(this, response);
   }
 }

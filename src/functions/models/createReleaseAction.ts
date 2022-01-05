@@ -1,16 +1,18 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { emptyCheck } from "../utils";
+import { Response } from "lambda-api";
+import { executeCreateReleaseCommand } from "../services/executors/createReleaseExecutor";
 
 export class CreateReleaseAction implements Action {
-  readonly name = ActionName.CREATE_RELEASE;
+  readonly actionName = ActionName.CREATE_RELEASE;
   deploymentProject: string;
   buildKey: string;
   releaseName: string;
 
   constructor(command: string) {
     const buildCommand = new Command()
-      .name(this.name)
+      .name(this.actionName)
       .usage("[options]")
       .option(
         "-s, --service <service>",
@@ -37,5 +39,9 @@ export class CreateReleaseAction implements Action {
     this.deploymentProject = options.service;
     this.buildKey = options.build;
     this.releaseName = options.release;
+  }
+
+  async process(response: Response): Promise<void> {
+    return await executeCreateReleaseCommand(this, response);
   }
 }

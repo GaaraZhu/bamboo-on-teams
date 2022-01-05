@@ -1,16 +1,18 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { emptyCheck } from "../utils";
+import { Response } from "lambda-api";
+import { executeDeployLatestCommand } from "../services/executors/deployLatestBuildExecutor";
 
 export class DeployLatestBuildAction implements Action {
-  readonly name = ActionName.DEPLOY_LATEST_BUILD;
+  readonly actionName = ActionName.DEPLOY_LATEST_BUILD;
   service: string;
   branch: string;
   env: string;
 
   constructor(command: string) {
     const deployLatestCommand = new Command()
-      .name(this.name)
+      .name(this.actionName)
       .usage("[options]")
       .option(
         "-s, --service <service>",
@@ -37,5 +39,9 @@ export class DeployLatestBuildAction implements Action {
     this.service = options.service;
     this.branch = options.branch;
     this.env = options.env;
+  }
+
+  async process(response: Response): Promise<void> {
+    return await executeDeployLatestCommand(this, response);
   }
 }

@@ -9,7 +9,7 @@ export const executeDescBuildCommand = async (
   response.status(200).json(await getBuild(action.key));
 };
 
-const getBuild = async (key: string): Promise<any> => {
+export const getBuild = async (key: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${key}`;
   const { data } = await axios.get(`${url}?expand=changes`, {
     headers: {
@@ -20,6 +20,10 @@ const getBuild = async (key: string): Promise<any> => {
   return {
     key: data.key,
     buildNumber: data.buildNumber,
+    branch: {
+      key: data.plan.key,
+      name: data.plan.shortName,
+    },
     lifeCycleState: data.lifeCycleState,
     buildState: data.buildState,
     buildRelativeTime: data.buildRelativeTime,

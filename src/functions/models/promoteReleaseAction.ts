@@ -1,16 +1,18 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { emptyCheck } from "../utils";
+import { Response } from "lambda-api";
+import { executePromoteReleaseCommand } from "../services/executors/promoteReleaseExecutor";
 
 export class PromoteReleaseAction implements Action {
-  readonly name = ActionName.PROMOTE_RELEASE;
+  readonly actionName = ActionName.PROMOTE_RELEASE;
   service: string;
   sourceEnv: string;
   targetEnv: string;
 
   constructor(command: string) {
     const promoteReleaseCommand = new Command()
-      .name(this.name)
+      .name(this.actionName)
       .usage("[options]")
       .description("promote the release from one environment to another")
       .option(
@@ -43,5 +45,9 @@ export class PromoteReleaseAction implements Action {
     this.service = options.service;
     this.sourceEnv = options.sourceEnv;
     this.targetEnv = options.targetEnv;
+  }
+
+  async process(response: Response): Promise<void> {
+    return await executePromoteReleaseCommand(this, response);
   }
 }

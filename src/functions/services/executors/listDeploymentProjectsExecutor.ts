@@ -1,9 +1,9 @@
 import { Response } from "lambda-api";
 import axios from "axios";
-import { ListProjectsAction } from "../../models/listDeploymentProjects";
+import { ListDeploymentProjectsAction } from "../../models/listDeploymentProjects";
 
 export const executeListDeploymentProjectsCommand = async (
-  action: ListProjectsAction,
+  action: ListDeploymentProjectsAction,
   response: Response
 ): Promise<void> => {
   response

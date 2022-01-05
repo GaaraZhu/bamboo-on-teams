@@ -1,5 +1,9 @@
 import { InvalidArgumentError } from "commander";
 
+export type Class<T> = {
+  new (command: string): T;
+};
+
 export const emptyCheck = (value: string | undefined): any => {
   if (!value || /^ *$/.test(value)) {
     throw new InvalidArgumentError("empty argument");

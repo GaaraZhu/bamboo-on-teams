@@ -1,14 +1,16 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { emptyCheck } from "../utils";
+import { Response } from "lambda-api";
+import { executeDescBuildCommand } from "../services/executors/descBuildExecutor";
 
 export class DescBuildAction implements Action {
-  readonly name = ActionName.DESC_BUILD;
+  readonly actionName = ActionName.DESC_BUILD;
   key: string;
 
   constructor(command: string) {
     const lastBuildCommand = new Command()
-      .name(this.name)
+      .name(this.actionName)
       .usage("[options]")
       .requiredOption(
         "-k, --key <key>",
@@ -25,5 +27,9 @@ export class DescBuildAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     lastBuildCommand.parse(commandInput);
     this.key = lastBuildCommand.opts().key;
+  }
+
+  async process(response: Response): Promise<void> {
+    return await executeDescBuildCommand(this, response);
   }
 }

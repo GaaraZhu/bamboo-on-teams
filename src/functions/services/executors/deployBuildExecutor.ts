@@ -1,42 +1,35 @@
 import { Response } from "lambda-api";
 import axios from "axios";
-import { getBranch } from "./listPlanBranchesExecutor";
-import { DeployLatestBuildAction } from "../../models/deployLatestBuildAction";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
 import { prodEnvCheck } from "../../utils";
+import { DeployBuildAction } from "../../models/deployBuildAction";
+import { getBuild } from "./descBuildExecutor";
 
-export const executeDeployLatestCommand = async (
-  action: DeployLatestBuildAction,
+export const executeDeployBuildCommand = async (
+  action: DeployBuildAction,
   response: Response
 ): Promise<void> => {
   // 1. check environment availability
   prodEnvCheck(action.env);
 
-  // get the latest build from the service branch
-  const branch = await getBranch(action.service, action.branch);
-  const latestBuild = await getLatestSuccessBuild(branch.key);
-  if (!latestBuild) {
-    response.status(400).json({
-      message: `No success build found for service ${action.service} in branch ${action.branch}`,
-    });
-    return;
-  }
+  // get the build
+  const build = await getBuild(action.buildKey);
 
   // get all releases for the service branch
   const project = await getDeploymentProject(action.service);
-  const buildReleases = await getBuildReleases(project.id, action.branch);
+  const buildReleases = await getBuildReleases(project.id, build.branch.key);
 
   // create a release if not exist for the build
   let targetRelease = buildReleases?.find((r: any) =>
-    r.items.find((i: any) => i.planResultKey.key === latestBuild.key)
+    r.items.find((i: any) => i.planResultKey.key === build.key)
   );
   if (!targetRelease) {
-    let releaseName = `${action.branch}-1`;
+    let releaseName = `${build.branch.name}-1`;
     const releasePrefixedWithBranch = buildReleases?.find((r: any) =>
-      r.name.toUpperCase().startsWith(action.branch.toUpperCase() + "-")
+      r.name.toUpperCase().startsWith(build.branch.name.toUpperCase() + "-")
     );
     if (releasePrefixedWithBranch) {
       const lastDashIndex = releasePrefixedWithBranch.name.lastIndexOf("-");
@@ -46,11 +39,7 @@ export const executeDeployLatestCommand = async (
       )}-${+releasePrefixedWithBranch.name.substring(lastDashIndex + 1) + 1}`;
     }
 
-    targetRelease = await createRelease(
-      project.id,
-      latestBuild.key,
-      releaseName
-    );
+    targetRelease = await createRelease(project.id, build.key, releaseName);
   }
 
   // deploy the release to the environment
@@ -59,13 +48,8 @@ export const executeDeployLatestCommand = async (
 
   response.status(200).json({
     service: action.service,
-    branch: action.branch,
-    build: {
-      buildNumber: latestBuild.buildNumber,
-      buildRelativeTime: latestBuild.buildRelativeTime,
-      vcsRevisionKey: latestBuild.vcsRevisionKey,
-      release: targetRelease.name,
-    },
+    branch: build.branch.name,
+    build: build,
     environment: action.env,
     deployment: {
       id: deployment.deploymentResultId,

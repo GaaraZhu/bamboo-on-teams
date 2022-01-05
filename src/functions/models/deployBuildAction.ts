@@ -2,15 +2,16 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { emptyCheck } from "../utils";
 import { Response } from "lambda-api";
-import { executeBuildCommand } from "../services/executors/buildExecutor";
+import { executeDeployBuildCommand } from "../services/executors/deployBuildExecutor";
 
-export class BuildAction implements Action {
-  readonly actionName = ActionName.BUILD;
+export class DeployBuildAction implements Action {
+  readonly actionName = ActionName.DEPLOY_BUILD;
   service: string;
-  branch: string;
+  env: string;
+  buildKey: string;
 
   constructor(command: string) {
-    const buildCommand = new Command()
+    const deployBuildCommand = new Command()
       .name(this.actionName)
       .usage("[options]")
       .option(
@@ -18,26 +19,29 @@ export class BuildAction implements Action {
         "service name, e.g. customers-v1",
         emptyCheck
       )
+      .option("-e, --env <env>", "env name, e.g. dev", emptyCheck)
       .option(
-        "-b, --branch <branch>",
-        "bamboo branch name, e.g. master",
+        "-bk, --build-key <buildKey>",
+        "bamboo build key, e.g. API-CPV1-30",
         emptyCheck
       );
-    buildCommand.exitOverride((_: CommanderError) => {
+    deployBuildCommand.exitOverride((_: CommanderError) => {
       throw {
-        message: buildCommand.helpInformation(),
+        message: deployBuildCommand.helpInformation(),
       };
     }); //to avoid process.exit
 
     // The default expectation is that the arguments are from node and have the application as argv[0]
     // and the script being run in argv[1], with user parameters after that.
     const commandInput = [".", ...command.split(" ")];
-    buildCommand.parse(commandInput);
-    this.service = buildCommand.opts().service;
-    this.branch = buildCommand.opts().branch;
+    deployBuildCommand.parse(commandInput);
+    const options = deployBuildCommand.opts();
+    this.service = options.service;
+    this.env = options.env;
+    this.buildKey = options.buildKey;
   }
 
   async process(response: Response): Promise<void> {
-    return await executeBuildCommand(this, response);
+    return await executeDeployBuildCommand(this, response);
   }
 }
