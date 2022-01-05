@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 
 export class BuildAction implements Action {
   readonly name = ActionName.BUILD;
@@ -11,8 +11,16 @@ export class BuildAction implements Action {
     const buildCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option("-s, --service <service>", "service name, e.g. customers-v1")
-      .option("-b, --branch <branch>", "bamboo branch name, e.g. master");
+      .option(
+        "-s, --service <service>",
+        "service name, e.g. customers-v1",
+        emptyCheck
+      )
+      .option(
+        "-b, --branch <branch>",
+        "bamboo branch name, e.g. master",
+        emptyCheck
+      );
     buildCommand.exitOverride((_: CommanderError) => {
       throw {
         message: buildCommand.helpInformation(),
@@ -23,14 +31,7 @@ export class BuildAction implements Action {
     // and the script being run in argv[1], with user parameters after that.
     const commandInput = [".", ...command.split(" ")];
     buildCommand.parse(commandInput);
-    const options = buildCommand.opts();
-    if (isEmpty(options.service) || isEmpty(options.branch)) {
-      throw {
-        message: buildCommand.helpInformation(),
-      };
-    }
-
-    this.service = options.service;
-    this.branch = options.branch;
+    this.service = buildCommand.opts().service;
+    this.branch = buildCommand.opts().branch;
   }
 }

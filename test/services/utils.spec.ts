@@ -1,20 +1,20 @@
-import { isEmpty, prodEnvCheck } from "../../src/functions/utils";
+import { emptyCheck, prodEnvCheck } from "../../src/functions/utils";
 
 describe("utils", () => {
-  describe("isEmpty", () => {
+  describe("emptyCheck", () => {
     it("undefined", async () => {
-      expect(isEmpty(undefined)).toEqual(true);
+      expect(emptyCheck(undefined)).toEqual(true);
     });
     it("empty string", async () => {
-      expect(isEmpty("")).toEqual(true);
+      expect(emptyCheck("")).toEqual(true);
     });
 
     it("spaces", async () => {
-      expect(isEmpty(" ")).toEqual(true);
+      expect(emptyCheck(" ")).toEqual(true);
     });
 
     it("spaces", async () => {
-      expect(isEmpty("1 ")).toEqual(false);
+      expect(emptyCheck("1 ")).toEqual(false);
     });
   });
 

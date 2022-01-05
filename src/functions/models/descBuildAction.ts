@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { emptyCheck, isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 
 export class DescBuildAction implements Action {
   readonly name = ActionName.DESC_BUILD;
@@ -10,7 +10,11 @@ export class DescBuildAction implements Action {
     const lastBuildCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .requiredOption("-k, --key <key>", "build key, e.g. API-CCV28-1", emptyCheck);
+      .requiredOption(
+        "-k, --key <key>",
+        "build key, e.g. API-CCV28-1",
+        emptyCheck
+      );
     lastBuildCommand.exitOverride((_: CommanderError) => {
       throw {
         message: lastBuildCommand.helpInformation(),
@@ -20,12 +24,6 @@ export class DescBuildAction implements Action {
     // and the script being run in argv[1], with user parameters after that.
     const commandInput = [".", ...command.split(" ")];
     lastBuildCommand.parse(commandInput);
-    const options = lastBuildCommand.opts();
-    // if (isEmpty(options.key)) {
-    //   throw {
-    //     message: lastBuildCommand.helpInformation(),
-    //   };
-    // }
-    this.key = options.key;
+    this.key = lastBuildCommand.opts().key;
   }
 }

@@ -75,7 +75,10 @@ export class CommandExecutor {
         );
         break;
       case ActionName.DEPLOY_RELEASE:
-        await executeDeployReleaseCommand(action as DeployReleaseAction, response);
+        await executeDeployReleaseCommand(
+          action as DeployReleaseAction,
+          response
+        );
         break;
       case ActionName.DEPLOY_LATEST_BUILD:
         await executeDeployLatestCommand(

@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 import { Action, ActionName } from "./actions";
 
 export class ListEnvironmentsAction implements Action {
@@ -10,7 +10,11 @@ export class ListEnvironmentsAction implements Action {
     const listEnvsCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option("-s, --service <service>", "service name, e.g. customers-v1");
+      .option(
+        "-s, --service <service>",
+        "service name, e.g. customers-v1",
+        emptyCheck
+      );
     listEnvsCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listEnvsCommand.helpInformation(),
@@ -19,12 +23,6 @@ export class ListEnvironmentsAction implements Action {
 
     const commandInput = [".", ...command.split(" ")];
     listEnvsCommand.parse(commandInput);
-    const options = listEnvsCommand.opts();
-    if (isEmpty(options.service)) {
-      throw {
-        message: listEnvsCommand.helpInformation(),
-      };
-    }
-    this.deploymentProject = options.service!;
+    this.deploymentProject = listEnvsCommand.opts().service!;
   }
 }

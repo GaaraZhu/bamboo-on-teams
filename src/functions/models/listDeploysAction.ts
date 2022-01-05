@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 import { Action, ActionName } from "./actions";
 
 export class ListDeploysAction implements Action {
@@ -11,8 +11,12 @@ export class ListDeploysAction implements Action {
     const listDeploysCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option("-s, --service <service>", "service name, e.g. customers-v1")
-      .option("-e, --env <env>", "env name, e.g. dev");
+      .option(
+        "-s, --service <service>",
+        "service name, e.g. customers-v1",
+        emptyCheck
+      )
+      .option("-e, --env <env>", "env name, e.g. dev", emptyCheck);
     listDeploysCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listDeploysCommand.helpInformation(),
@@ -22,11 +26,7 @@ export class ListDeploysAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listDeploysCommand.parse(commandInput);
     const options = listDeploysCommand.opts();
-    if (isEmpty(options.service) || isEmpty(options.env)) {
-      throw {
-        message: listDeploysCommand.helpInformation(),
-      };
-    }
+
     this.deploymentProject = options.service!;
     this.env = options.env!;
   }

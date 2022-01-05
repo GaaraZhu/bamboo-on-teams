@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 import { Action, ActionName } from "./actions";
 
 export class ListBuildsAction implements Action {
@@ -11,7 +11,11 @@ export class ListBuildsAction implements Action {
     const listBuildsCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option("-s, --service <service>", "service name, e.g. customers-v1")
+      .option(
+        "-s, --service <service>",
+        "service name, e.g. customers-v1",
+        emptyCheck
+      )
       .option(
         "-b, --branch <branch>",
         "bamboo branch name, e.g. release-1.0.0"
@@ -27,12 +31,6 @@ export class ListBuildsAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listBuildsCommand.parse(commandInput);
     const options = listBuildsCommand.opts();
-    if (isEmpty(options.service) || isEmpty(options.branch)) {
-      throw {
-        message: listBuildsCommand.helpInformation(),
-      };
-    }
-
     this.planName = options.service;
     this.branchName = options.branch;
   }

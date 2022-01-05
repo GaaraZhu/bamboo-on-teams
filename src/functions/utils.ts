@@ -2,14 +2,10 @@ import { InvalidArgumentError } from "commander";
 
 export const emptyCheck = (value: string | undefined): any => {
   if (!value || /^ *$/.test(value)) {
-    throw new InvalidArgumentError('empty argument');
+    throw new InvalidArgumentError("empty argument");
   }
 
   return value;
-};
-
-export const isEmpty = (value: string | undefined): boolean => {
-    return !value || /^ *$/.test(value);
 };
 
 export const prodEnvCheck = (env: string): void => {

@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 
 export class CreateReleaseAction implements Action {
   readonly name = ActionName.CREATE_RELEASE;
@@ -12,9 +12,17 @@ export class CreateReleaseAction implements Action {
     const buildCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option("-s, --service <service>", "service name, e.g. customers-v1")
-      .option("-b, --build <build>", "build key, e.g. API-CCV28-1")
-      .option("-r, --release <release>", "release name, e.g. v1.0.0");
+      .option(
+        "-s, --service <service>",
+        "service name, e.g. customers-v1",
+        emptyCheck
+      )
+      .option("-b, --build <build>", "build key, e.g. API-CCV28-1", emptyCheck)
+      .option(
+        "-r, --release <release>",
+        "release name, e.g. v1.0.0",
+        emptyCheck
+      );
     buildCommand.exitOverride((_: CommanderError) => {
       throw {
         message: buildCommand.helpInformation(),
@@ -26,16 +34,6 @@ export class CreateReleaseAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     buildCommand.parse(commandInput);
     const options = buildCommand.opts();
-    if (
-      isEmpty(options.build) ||
-      isEmpty(options.release) ||
-      isEmpty(options.service)
-    ) {
-      throw {
-        message: buildCommand.helpInformation(),
-      };
-    }
-
     this.deploymentProject = options.service;
     this.buildKey = options.build;
     this.releaseName = options.release;

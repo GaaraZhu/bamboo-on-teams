@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 
 export class DeployReleaseAction implements Action {
   readonly name = ActionName.DEPLOY_RELEASE;
@@ -12,9 +12,17 @@ export class DeployReleaseAction implements Action {
     const buildCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option("-s, --service <service>", "service name, e.g. customers-v1")
-      .option("-e, --env <env>", "env name, e.g. dev")
-      .option("-r, --release <release>", "release name, e.g. v1.0.0");
+      .option(
+        "-s, --service <service>",
+        "service name, e.g. customers-v1",
+        emptyCheck
+      )
+      .option("-e, --env <env>", "env name, e.g. dev", emptyCheck)
+      .option(
+        "-r, --release <release>",
+        "release name, e.g. v1.0.0",
+        emptyCheck
+      );
     buildCommand.exitOverride((_: CommanderError) => {
       throw {
         message: buildCommand.helpInformation(),
@@ -26,16 +34,6 @@ export class DeployReleaseAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     buildCommand.parse(commandInput);
     const options = buildCommand.opts();
-    if (
-      isEmpty(options.service) ||
-      isEmpty(options.env) ||
-      isEmpty(options.release)
-    ) {
-      throw {
-        message: buildCommand.helpInformation(),
-      };
-    }
-
     this.deploymentProject = options.service;
     this.env = options.env;
     this.releaseName = options.release;

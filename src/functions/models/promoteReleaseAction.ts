@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 
 export class PromoteReleaseAction implements Action {
   readonly name = ActionName.PROMOTE_RELEASE;
@@ -13,14 +13,20 @@ export class PromoteReleaseAction implements Action {
       .name(this.name)
       .usage("[options]")
       .description("promote the release from one environment to another")
-      .option("-s, --service <service>", "service name, e.g. customers-v1")
+      .option(
+        "-s, --service <service>",
+        "service name, e.g. customers-v1",
+        emptyCheck
+      )
       .option(
         "-se, --source-env <sourceEnv>",
-        "source environment name, e.g. dev"
+        "source environment name, e.g. dev",
+        emptyCheck
       )
       .option(
         "-te, --target-env <targetEnv>",
-        "target environment name, e.g. test"
+        "target environment name, e.g. test",
+        emptyCheck
       );
     promoteReleaseCommand.exitOverride((_: CommanderError) => {
       throw {
@@ -33,15 +39,6 @@ export class PromoteReleaseAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     promoteReleaseCommand.parse(commandInput);
     const options = promoteReleaseCommand.opts();
-    if (
-      isEmpty(options.service) ||
-      isEmpty(options.sourceEnv) ||
-      isEmpty(options.targetEnv)
-    ) {
-      throw {
-        message: promoteReleaseCommand.helpInformation(),
-      };
-    }
 
     this.service = options.service;
     this.sourceEnv = options.sourceEnv;

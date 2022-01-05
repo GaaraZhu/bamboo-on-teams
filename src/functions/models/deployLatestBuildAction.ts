@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 
 export class DeployLatestBuildAction implements Action {
   readonly name = ActionName.DEPLOY_LATEST_BUILD;
@@ -12,9 +12,17 @@ export class DeployLatestBuildAction implements Action {
     const deployLatestCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option("-s, --service <service>", "service name, e.g. customers-v1")
-      .option("-b, --branch <branch>", "bamboo branch name, e.g. master")
-      .option("-e, --env <env>", "env name, e.g. dev");
+      .option(
+        "-s, --service <service>",
+        "service name, e.g. customers-v1",
+        emptyCheck
+      )
+      .option(
+        "-b, --branch <branch>",
+        "bamboo branch name, e.g. master",
+        emptyCheck
+      )
+      .option("-e, --env <env>", "env name, e.g. dev", emptyCheck);
     deployLatestCommand.exitOverride((_: CommanderError) => {
       throw {
         message: deployLatestCommand.helpInformation(),
@@ -26,16 +34,6 @@ export class DeployLatestBuildAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     deployLatestCommand.parse(commandInput);
     const options = deployLatestCommand.opts();
-    if (
-      isEmpty(options.service) ||
-      isEmpty(options.branch) ||
-      isEmpty(options.env)
-    ) {
-      throw {
-        message: deployLatestCommand.helpInformation(),
-      };
-    }
-
     this.service = options.service;
     this.branch = options.branch;
     this.env = options.env;

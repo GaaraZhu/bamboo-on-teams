@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { isEmpty } from "../utils";
+import { emptyCheck } from "../utils";
 import { Action, ActionName } from "./actions";
 
 export class ListReleasesAction implements Action {
@@ -11,10 +11,15 @@ export class ListReleasesAction implements Action {
     const listBranchesCommand = new Command()
       .name(this.name)
       .usage("[options]")
-      .option("-s, --service <service>", "service name, e.g. customers-v1")
+      .option(
+        "-s, --service <service>",
+        "service name, e.g. customers-v1",
+        emptyCheck
+      )
       .option(
         "-b, --branch <branch>",
-        "bamboo branch name, e.g. release-1.0.0"
+        "bamboo branch name, e.g. release-1.0.0",
+        emptyCheck
       );
     listBranchesCommand.exitOverride((_: CommanderError) => {
       throw {
@@ -25,11 +30,7 @@ export class ListReleasesAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listBranchesCommand.parse(commandInput);
     const options = listBranchesCommand.opts();
-    if (isEmpty(options.service) || isEmpty(options.branch)) {
-      throw {
-        message: listBranchesCommand.helpInformation(),
-      };
-    }
+
     this.deploymentProject = options.service!;
     this.planBranch = options.branch!;
   }
