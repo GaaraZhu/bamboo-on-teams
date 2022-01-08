@@ -14,13 +14,13 @@ export class DeployReleaseAction implements Action {
     const buildCommand = new Command()
       .name(this.actionName)
       .usage("[options]")
-      .option(
+      .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
         emptyCheck
       )
-      .option("-e, --env <env>", "env name, e.g. dev", emptyCheck)
-      .option(
+      .requiredOption("-e, --env <env>", "env name, e.g. dev", emptyCheck)
+      .requiredOption(
         "-r, --release <release>",
         "release name, e.g. v1.0.0",
         emptyCheck

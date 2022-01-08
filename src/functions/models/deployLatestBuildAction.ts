@@ -14,17 +14,17 @@ export class DeployLatestBuildAction implements Action {
     const deployLatestCommand = new Command()
       .name(this.actionName)
       .usage("[options]")
-      .option(
+      .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
         emptyCheck
       )
-      .option(
+      .requiredOption(
         "-b, --branch <branch>",
         "bamboo branch name, e.g. master",
         emptyCheck
       )
-      .option("-e, --env <env>", "env name, e.g. dev", emptyCheck);
+      .requiredOption("-e, --env <env>", "env name, e.g. dev", emptyCheck);
     deployLatestCommand.exitOverride((_: CommanderError) => {
       throw {
         message: deployLatestCommand.helpInformation(),

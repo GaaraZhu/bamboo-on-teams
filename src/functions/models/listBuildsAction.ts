@@ -13,12 +13,12 @@ export class ListBuildsAction implements Action {
     const listBuildsCommand = new Command()
       .name(this.actionName)
       .usage("[options]")
-      .option(
+      .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
         emptyCheck
       )
-      .option(
+      .requiredOption(
         "-b, --branch <branch>",
         "bamboo branch name, e.g. release-1.0.0"
       );

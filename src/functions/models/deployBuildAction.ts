@@ -14,13 +14,13 @@ export class DeployBuildAction implements Action {
     const deployBuildCommand = new Command()
       .name(this.actionName)
       .usage("[options]")
-      .option(
+      .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
         emptyCheck
       )
-      .option("-e, --env <env>", "env name, e.g. dev", emptyCheck)
-      .option(
+      .requiredOption("-e, --env <env>", "env name, e.g. dev", emptyCheck)
+      .requiredOption(
         "-bk, --build-key <buildKey>",
         "bamboo build key, e.g. API-CPV1-30",
         emptyCheck

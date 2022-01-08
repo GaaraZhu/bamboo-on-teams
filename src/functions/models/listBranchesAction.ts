@@ -12,7 +12,7 @@ export class ListBranchesAction implements Action {
     const listBranchesCommand = new Command()
       .name(this.actionName)
       .usage("[options]")
-      .option(
+      .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
         emptyCheck

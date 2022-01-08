@@ -15,17 +15,17 @@ export class PromoteReleaseAction implements Action {
       .name(this.actionName)
       .usage("[options]")
       .description("promote the release from one environment to another")
-      .option(
+      .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
         emptyCheck
       )
-      .option(
+      .requiredOption(
         "-se, --source-env <sourceEnv>",
         "source environment name, e.g. dev",
         emptyCheck
       )
-      .option(
+      .requiredOption(
         "-te, --target-env <targetEnv>",
         "target environment name, e.g. test",
         emptyCheck

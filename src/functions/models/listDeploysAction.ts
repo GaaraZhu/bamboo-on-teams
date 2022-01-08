@@ -13,12 +13,12 @@ export class ListDeploysAction implements Action {
     const listDeploysCommand = new Command()
       .name(this.actionName)
       .usage("[options]")
-      .option(
+      .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
         emptyCheck
       )
-      .option("-e, --env <env>", "env name, e.g. dev", emptyCheck);
+      .requiredOption("-e, --env <env>", "env name, e.g. dev", emptyCheck);
     listDeploysCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listDeploysCommand.helpInformation(),
