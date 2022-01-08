@@ -13,6 +13,7 @@ export class DeployLatestBuildAction implements Action {
   constructor(command: string) {
     const deployLatestCommand = new Command()
       .name(this.actionName)
+      .description("Deploy the service with the latest build in a branch to an environment")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

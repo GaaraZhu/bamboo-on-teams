@@ -11,6 +11,7 @@ export class ListBranchesAction implements Action {
   constructor(command: string) {
     const listBranchesCommand = new Command()
       .name(this.actionName)
+      .description("List branch plans for a service")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

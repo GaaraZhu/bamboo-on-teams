@@ -12,6 +12,7 @@ export class ListBuildsAction implements Action {
   constructor(command: string) {
     const listBuildsCommand = new Command()
       .name(this.actionName)
+      .description("List builds for a service in a branch plan")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

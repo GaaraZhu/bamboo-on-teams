@@ -7,7 +7,7 @@ export class ListDeploymentProjectsAction implements Action {
   readonly actionName = ActionName.LIST_DEPLOY_PROJECTS;
 
   constructor() {
-    const listProjectsCommand = new Command().name(this.actionName);
+    const listProjectsCommand = new Command().name(this.actionName).description("List deployment projects");
     listProjectsCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listProjectsCommand.helpInformation(),

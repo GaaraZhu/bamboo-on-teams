@@ -11,6 +11,7 @@ export class ListEnvironmentsAction implements Action {
   constructor(command: string) {
     const listEnvsCommand = new Command()
       .name(this.actionName)
+      .description("List available environments for a service")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

@@ -11,6 +11,7 @@ export class DescBuildAction implements Action {
   constructor(command: string) {
     const lastBuildCommand = new Command()
       .name(this.actionName)
+      .description("Describe a build")
       .usage("[options]")
       .requiredOption(
         "-k, --key <key>",

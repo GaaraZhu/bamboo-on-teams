@@ -12,6 +12,7 @@ export class BuildAction implements Action {
   constructor(command: string) {
     const buildCommand = new Command()
       .name(this.actionName)
+      .description("Trigger a branch build for a service")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

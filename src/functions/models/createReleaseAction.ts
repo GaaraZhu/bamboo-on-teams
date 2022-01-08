@@ -13,6 +13,7 @@ export class CreateReleaseAction implements Action {
   constructor(command: string) {
     const buildCommand = new Command()
       .name(this.actionName)
+      .description("Create a release for a service build")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

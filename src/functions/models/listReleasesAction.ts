@@ -12,6 +12,7 @@ export class ListReleasesAction implements Action {
   constructor(command: string) {
     const listBranchesCommand = new Command()
       .name(this.actionName)
+      .description("List the releases created from a service branch")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",
