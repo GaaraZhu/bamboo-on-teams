@@ -43,7 +43,7 @@ const createPlanBranch = async (
   }/rest/api/latest/plan/${planKey}/branch/${vscBranch.replace(
     /\//g,
     "-"
-  )}?vcsBranch="${vscBranch}"`;
+  )}?vcsBranch=${vscBranch}`;
   console.log(url);
   const { data, status, statusText } = await axios.put(url, undefined, {
     headers: {
