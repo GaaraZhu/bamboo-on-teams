@@ -6,7 +6,7 @@ export const executeDescBuildCommand = async (
   action: DescBuildAction,
   response: Response
 ): Promise<void> => {
-  response.status(200).json(await getBuild(action.key));
+  response.status(200).json(await getBuild(action.build));
 };
 
 export const getBuild = async (key: string): Promise<any> => {

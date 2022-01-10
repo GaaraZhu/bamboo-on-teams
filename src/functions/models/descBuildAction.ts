@@ -6,7 +6,7 @@ import { executeDescBuildCommand } from "../services/executors/descBuildExecutor
 
 export class DescBuildAction implements Action {
   readonly actionName = ActionName.DESC_BUILD;
-  key: string;
+  build: string;
 
   constructor(command: string) {
     const lastBuildCommand = new Command()
@@ -14,7 +14,7 @@ export class DescBuildAction implements Action {
       .description("Describe a build")
       .usage("[options]")
       .requiredOption(
-        "-k, --key <key>",
+        "-b, --build <build>",
         "build key, e.g. API-CCV28-1",
         emptyCheck
       );
@@ -27,7 +27,7 @@ export class DescBuildAction implements Action {
     // and the script being run in argv[1], with user parameters after that.
     const commandInput = [".", ...command.split(" ")];
     lastBuildCommand.parse(commandInput);
-    this.key = lastBuildCommand.opts().key;
+    this.build = lastBuildCommand.opts().build;
   }
 
   async process(response: Response): Promise<void> {

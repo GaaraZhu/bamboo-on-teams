@@ -9,7 +9,6 @@ export const executeCreateBranchCommand = async (
 ): Promise<void> => {
   const plan = await getPlan(action.planName);
   const vscBranches = await getAllBranches(plan.key);
-  console.log(vscBranches);
   const vscBranch: string = vscBranches.find(
     (b: any) => b.toUpperCase() === action.vscBranch.toUpperCase()
   );
@@ -44,16 +43,13 @@ const createPlanBranch = async (
     /\//g,
     "-"
   )}?vcsBranch=${vscBranch}`;
-  console.log(url);
   const { data, status, statusText } = await axios.put(url, undefined, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
       "Content-Type": "application/json",
     },
   });
-  console.log(status);
-  console.log(statusText);
-  console.log(data);
+
   if (status !== 200) {
     throw Error(statusText);
   }
