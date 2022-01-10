@@ -10,7 +10,7 @@ export const executeListEnvironmentsCommand = async (
   const project = await getDeploymentProject(action.deploymentProject);
   response
     .status(200)
-    .json((await listEnvironments(project.id)).map((e: any) => e.name));
+    .json((await listEnvironments(project.id)));
 };
 
 export const getEnvironment = async (
