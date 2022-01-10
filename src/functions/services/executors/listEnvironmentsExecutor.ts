@@ -44,12 +44,12 @@ const listEnvironments = async (projectId: string): Promise<any> => {
     .filter(
       (e: any) =>
         e.operations.canView &&
-        e.operations.canExecute &&
         e.operations.allowedToExecute &&
         e.configurationState === "TASKED"
     )
     .map((e: any) => ({
       id: e.id,
       name: e.name,
+      canExecute: e.operations.canExecute
     }));
 };

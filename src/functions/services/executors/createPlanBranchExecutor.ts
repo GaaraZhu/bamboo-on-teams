@@ -23,7 +23,6 @@ export const executeCreateBranchCommand = async (
 
 const getAllBranches = async (planKey: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/plan/${planKey}/vcsBranches?max-result=10000`;
-  console.log(url);
   const { data } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,

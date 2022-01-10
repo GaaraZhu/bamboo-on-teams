@@ -10,6 +10,7 @@ export const handle = async (
     const action = await CommandParser.build().parse(body.command);
     await action.process(response);
   } catch (err: any) {
+    console.log(JSON.stringify(err));
     response.status(404).json({
       message: err.message,
     });

@@ -19,12 +19,10 @@ export const createRelease = async (
   release: string
 ): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/version`;
-  console.log(url);
   const payload = JSON.stringify({
     planResultKey: buildKey,
     name: release,
   });
-  console.log(payload);
   const { data } = await axios.post(url, payload, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
