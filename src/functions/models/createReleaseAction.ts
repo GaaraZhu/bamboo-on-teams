@@ -20,7 +20,11 @@ export class CreateReleaseAction implements Action {
         "service name, e.g. customers-v1",
         emptyCheck
       )
-      .requiredOption("-b, --build <build>", "build key, e.g. API-CCV28-1", emptyCheck)
+      .requiredOption(
+        "-b, --build <build>",
+        "build key, e.g. API-CCV28-1",
+        emptyCheck
+      )
       .requiredOption(
         "-r, --release <release>",
         "release name, e.g. v1.0.0",

@@ -14,6 +14,7 @@ import { ListPlansAction } from "./listPlansAction";
 import { ListReleasesAction } from "./listReleasesAction";
 import { PromoteReleaseAction } from "./promoteReleaseAction";
 import { DeployBuildAction } from "./deployBuildAction";
+import { createBranchAction } from "./createBranchAction";
 
 export enum ActionName {
   BUILD = "build",
@@ -30,6 +31,7 @@ export enum ActionName {
   LIST_ENVS = "list-envs",
   LIST_DEPLOYS = "list-deploys",
   PROMOTE_RELEASE = "promote-release",
+  CREATE_BRANCH = "create-branch",
 }
 
 export const sanitizeActionName = (
@@ -60,4 +62,5 @@ export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.LIST_PLANS]: ListPlansAction,
   [ActionName.LIST_RELEASES]: ListReleasesAction,
   [ActionName.PROMOTE_RELEASE]: PromoteReleaseAction,
+  [ActionName.CREATE_BRANCH]: createBranchAction,
 };
