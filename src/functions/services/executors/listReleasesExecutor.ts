@@ -33,7 +33,9 @@ export const getRelease = async (
     id: data.id,
     name: data.name,
     planBranchName: data.planBranchName,
-    creationDate: new Date(data.creationDate).toLocaleString(),
+    creationDate: data.creationDate
+      ? new Date(data.creationDate).toLocaleString()
+      : "",
   };
 };
 
@@ -49,6 +51,8 @@ const listReleases = async (projectId: string): Promise<any> => {
     id: r.id,
     name: r.name,
     planBranchName: r.planBranchName,
-    creationDate: new Date(r.creationDate).toLocaleString(),
+    creationDate: r.creationDate
+      ? new Date(r.creationDate).toLocaleString()
+      : "",
   }));
 };

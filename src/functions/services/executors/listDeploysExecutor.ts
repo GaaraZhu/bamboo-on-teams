@@ -28,8 +28,10 @@ export const listDeploys = async (environmentId: string): Promise<any> => {
     },
     deploymentState: r.deploymentState,
     lifeCycleState: r.lifeCycleState,
-    startedDate: new Date(r.startedDate).toLocaleString(),
-    finishedDate: new Date(r.finishedDate).toLocaleString(),
+    startedDate: r.startedDate ? new Date(r.startedDate).toLocaleString() : "",
+    finishedDate: r.finishedDate
+      ? new Date(r.finishedDate).toLocaleString()
+      : "",
     agent: r.agent.name,
   }));
 };

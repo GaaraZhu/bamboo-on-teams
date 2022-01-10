@@ -34,6 +34,8 @@ export const createRelease = async (
     id: data.id,
     name: data.name,
     planBranchName: data.planBranchName,
-    creationDate: new Date(data.creationDate).toLocaleString(),
+    creationDate: data.creationDate
+      ? new Date(data.creationDate).toLocaleString()
+      : "",
   };
 };
