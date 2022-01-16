@@ -14,7 +14,7 @@ export class DeployLatestBuildAction implements Action {
     const deployLatestCommand = new Command()
       .name(this.actionName)
       .description(
-        "Deploy the service with the latest build in a branch to an environment"
+        "Deploy the service with the latest build in a branch to an environment."
       )
       .usage("[options]")
       .requiredOption(

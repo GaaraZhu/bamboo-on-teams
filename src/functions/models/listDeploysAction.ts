@@ -12,7 +12,7 @@ export class ListDeploysAction implements Action {
   constructor(command: string) {
     const listDeploysCommand = new Command()
       .name(this.actionName)
-      .description("List the deployments in a service environment")
+      .description("List the deployments in a service environment.")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

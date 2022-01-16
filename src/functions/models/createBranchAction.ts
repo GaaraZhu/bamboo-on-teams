@@ -12,7 +12,7 @@ export class createBranchAction implements Action {
   constructor(command: string) {
     const createBranchCommand = new Command()
       .name(this.actionName)
-      .description("Create branch for a plan")
+      .description("Create branch for a plan.")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

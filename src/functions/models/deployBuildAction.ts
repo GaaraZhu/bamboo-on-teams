@@ -13,7 +13,7 @@ export class DeployBuildAction implements Action {
   constructor(command: string) {
     const deployBuildCommand = new Command()
       .name(this.actionName)
-      .description("Deploy a service build to an environment")
+      .description("Deploy a service build to an environment.")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

@@ -9,7 +9,7 @@ export class ListDeploymentProjectsAction implements Action {
   constructor() {
     const listProjectsCommand = new Command()
       .name(this.actionName)
-      .description("List deployment projects");
+      .description("List deployment projects.");
     listProjectsCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listProjectsCommand.helpInformation(),
