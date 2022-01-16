@@ -5,14 +5,25 @@ export const handle = async (
   request: Request,
   response: Response
 ): Promise<void> => {
-  const { body }: any = request;
+  const body: IncomingMessage = request.body;
+  console.log(`Action: ${body.text} triggered by user ${body.from.name} from channel ${body.channelId}`);
   try {
-    const action = await CommandParser.build().parse(body.command);
+    const action = await CommandParser.build().parse(body.text);
     await action.process(response);
   } catch (err: any) {
-    console.log(JSON.stringify(err));
+    console.log(`Failed to execute ACTION ${body.text} due to ${JSON.stringify(err)}`);
     response.status(404).json({
       message: err.message,
     });
   }
+  console.log(`Action: ${body.text} finished`);
 };
+
+interface IncomingMessage {
+  channelId: string;
+  from: {
+    id: string;
+    name: string;
+  };
+  text: string;
+}
