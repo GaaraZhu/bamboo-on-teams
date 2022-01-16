@@ -1,20 +1,38 @@
-import { emptyCheck, prodEnvCheck } from "../../src/functions/utils";
+import { trim, prodEnvCheck } from "../../src/functions/utils";
 
 describe("utils", () => {
   describe("emptyCheck", () => {
-    it("undefined", async () => {
-      expect(emptyCheck(undefined)).toEqual(true);
-    });
-    it("empty string", async () => {
-      expect(emptyCheck("")).toEqual(true);
-    });
+    const testCases = [
+      {
+        input: undefined,
+        errorMessage: "empty argument", 
+      },
+      {
+        input: "",
+        errorMessage: "empty argument", 
+      },
+      {
+        input: " ",
+        errorMessage: "empty argument", 
+      },
+      {
+        input: "master",
+        output: "master",
+      },
+      {
+        input: "master ",
+        output: "master",
+      },
+    ];
 
-    it("spaces", async () => {
-      expect(emptyCheck(" ")).toEqual(true);
-    });
-
-    it("spaces", async () => {
-      expect(emptyCheck("1 ")).toEqual(false);
+    testCases.forEach((testCase) => {
+      it("Input: " + testCase.input, async () => {
+        try {
+          expect(trim(testCase.input)).toEqual(testCase.output);
+        } catch (err: any) {
+          expect(err.message).toEqual(testCase.errorMessage);
+        }
+      });
     });
   });
 
@@ -44,6 +62,16 @@ describe("utils", () => {
         errorMessage: "Bamboo-on-teams is disabled for production environment",
       },
     ];
-    //TODO: run above test cases
+
+    testCases.forEach((testCase) => {
+      it(testCase.description, async () => {
+        process.env.ENABLE_FOR_PROD = testCase.enabledForProd;
+        try {
+          expect(prodEnvCheck(testCase.env));
+        } catch (err: any) {
+          expect(err.message).toEqual(testCase.errorMessage);
+        }
+      });
+    });
   });
 });

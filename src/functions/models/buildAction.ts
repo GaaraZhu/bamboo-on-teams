@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Response } from "lambda-api";
 import { executeBuildCommand } from "../services/executors/buildExecutor";
 
@@ -12,17 +12,17 @@ export class BuildAction implements Action {
   constructor(command: string) {
     const buildCommand = new Command()
       .name(this.actionName)
-      .description("Trigger a branch build for a service")
+      .description("Trigger a branch build for a service.")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
       .requiredOption(
         "-b, --branch <branch>",
         "bamboo branch name, e.g. master",
-        emptyCheck
+        trim
       );
     buildCommand.exitOverride((_: CommanderError) => {
       throw {

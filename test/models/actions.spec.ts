@@ -8,20 +8,29 @@ import { ListPlansAction } from "../../src/functions/models/listPlansAction";
 describe("actions", () => {
   describe("BuildAction", () => {
     const buildCommandHelp =
-      "Usage: build [options]\n\nOptions:\n  -s, --service <service>  service name, e.g. customers-v1\n  -b, --branch <branch>    bamboo branch name, e.g. master\n  -h, --help               display help for command\n";
+`Usage: build [options]
+
+Trigger a branch build for a service.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -b, --branch <branch>    bamboo branch name, e.g. master
+  -h, --help               display help for command
+`;
+
     const testCases = [
       {
         command: "build -s customer-service -b master",
         expectedAction: {
-          name: ActionName.BUILD,
+          actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
         },
       },
       {
-        command: "build -s customer-service -b master",
+        command: "build -s customer-service --branch master",
         expectedAction: {
-          name: ActionName.BUILD,
+          actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
         },
@@ -29,7 +38,7 @@ describe("actions", () => {
       {
         command: "build --service=customer-service --branch=master",
         expectedAction: {
-          name: ActionName.BUILD,
+          actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
         },
@@ -37,7 +46,7 @@ describe("actions", () => {
       {
         command: "build -b master -s customer-service",
         expectedAction: {
-          name: ActionName.BUILD,
+          actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
         },
@@ -83,7 +92,7 @@ describe("actions", () => {
     it("build action correctly", async () => {
       process.env.BAMBOO_PROJECT_ID = "API";
       expect(new ListPlansAction()).toEqual({
-        name: ActionName.LIST_PLANS,
+        actionName: ActionName.LIST_PLANS,
         project: "API",
       });
     });
@@ -91,19 +100,26 @@ describe("actions", () => {
 
   describe("ListBranchesAction", () => {
     const helpMessage =
-      "Usage: list-branches [options]\n\nOptions:\n  -s, --service <service>  service name, e.g. customers-v1\n  -h, --help               display help for command\n";
+`Usage: list-branches [options]
+
+List branch plans for a service.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -h, --help               display help for command
+`;
     const testCases = [
       {
         command: "list-branches -s customers-v1",
         expectedAction: {
-          name: ActionName.LIST_BRANCHES,
+          actionName: ActionName.LIST_BRANCHES,
           planName: "customers-v1",
         },
       },
       {
         command: "list-branches --service customers-v1",
         expectedAction: {
-          name: ActionName.LIST_BRANCHES,
+          actionName: ActionName.LIST_BRANCHES,
           planName: "customers-v1",
         },
       },
@@ -146,12 +162,20 @@ describe("actions", () => {
 
   describe("ListBuildsAction", () => {
     const helpMessage =
-      "Usage: list-builds [options]\n\nOptions:\n  -s, --service <service>  service name, e.g. customers-v1\n  -b, --branch <branch>    bamboo branch name, e.g. release-1.0.0\n  -h, --help               display help for command\n";
+`Usage: list-builds [options]
+
+List builds for a service in a branch plan.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -b, --branch <branch>    bamboo branch name, e.g. release-1.0.0
+  -h, --help               display help for command
+`;
     const testCases = [
       {
         command: "list-builds -s customers-v1 -b release-1.0.0",
         expectedAction: {
-          name: ActionName.LIST_BUILDS,
+          actionName: ActionName.LIST_BUILDS,
           planName: "customers-v1",
           branchName: "release-1.0.0",
         },
@@ -159,7 +183,7 @@ describe("actions", () => {
       {
         command: "list-builds --service customers-v1 --branch release-1.0.0",
         expectedAction: {
-          name: ActionName.LIST_BUILDS,
+          actionName: ActionName.LIST_BUILDS,
           planName: "customers-v1",
           branchName: "release-1.0.0",
         },
@@ -203,37 +227,44 @@ describe("actions", () => {
 
   describe("DescBuildAction", () => {
     const lastBuildCommandHelp =
-      "Usage: desc-build [options]\n\nOptions:\n  -k, --key <key>  build key, e.g. API-CCV28-1\n  -h, --help       display help for command\n";
+`Usage: desc-build [options]
+
+Describe a build.
+
+Options:
+  -b, --build <build>  build key, e.g. API-CCV28-1
+  -h, --help           display help for command
+`;
     const testCases = [
       {
-        command: "desc-build -k API-CJI-2",
+        command: "desc-build -b API-CJI-2",
         expectedAction: {
-          name: ActionName.DESC_BUILD,
-          key: "API-CJI-2",
+          actionName: ActionName.DESC_BUILD,
+          build: "API-CJI-2",
         },
       },
       {
-        command: "desc-build -kAPI-CJI-2",
+        command: "desc-build -bAPI-CJI-2",
         expectedAction: {
-          name: ActionName.DESC_BUILD,
-          key: "API-CJI-2",
+          actionName: ActionName.DESC_BUILD,
+          build: "API-CJI-2",
         },
       },
       {
-        command: "desc-build --key API-CJI-2",
+        command: "desc-build --build API-CJI-2",
         expectedAction: {
-          name: ActionName.DESC_BUILD,
-          key: "API-CJI-2",
+          actionName: ActionName.DESC_BUILD,
+          build: "API-CJI-2",
         },
       },
       {
-        command: "desc-build -k",
+        command: "desc-build -b",
         error: {
           message: lastBuildCommandHelp,
         },
       },
       {
-        command: "desc-build -k5 -p",
+        command: "desc-build -b5 -p",
         error: {
           message: lastBuildCommandHelp,
         },

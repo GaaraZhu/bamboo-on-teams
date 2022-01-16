@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { Response } from "lambda-api";
 import { executeListReleasesCommand } from "../services/executors/listReleasesExecutor";
@@ -17,12 +17,12 @@ export class ListReleasesAction implements Action {
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
       .requiredOption(
         "-b, --branch <branch>",
         "bamboo branch name, e.g. release-1.0.0",
-        emptyCheck
+        trim
       );
     listBranchesCommand.exitOverride((_: CommanderError) => {
       throw {

@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { Response } from "lambda-api";
 import { executeCreateBranchCommand } from "../services/executors/createPlanBranchExecutor";
@@ -17,12 +17,12 @@ export class createBranchAction implements Action {
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
       .requiredOption(
         "-b, --branch <branch>",
         "vcsBranch name, e.g. master",
-        emptyCheck
+        trim
       );
     createBranchCommand.exitOverride((_: CommanderError) => {
       throw {

@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Response } from "lambda-api";
 import { executeCreateReleaseCommand } from "../services/executors/createReleaseExecutor";
 
@@ -18,17 +18,17 @@ export class CreateReleaseAction implements Action {
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
       .requiredOption(
         "-b, --build <build>",
         "build key, e.g. API-CCV28-1",
-        emptyCheck
+        trim
       )
       .requiredOption(
         "-r, --release <release>",
         "release name, e.g. v1.0.0",
-        emptyCheck
+        trim
       );
     buildCommand.exitOverride((_: CommanderError) => {
       throw {

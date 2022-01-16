@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { Response } from "lambda-api";
 import { executeListDeploysCommand } from "../services/executors/listDeploysExecutor";
@@ -17,9 +17,9 @@ export class ListDeploysAction implements Action {
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
-      .requiredOption("-e, --env <env>", "env name, e.g. dev", emptyCheck);
+      .requiredOption("-e, --env <env>", "env name, e.g. dev", trim);
     listDeploysCommand.exitOverride((_: CommanderError) => {
       throw {
         message: listDeploysCommand.helpInformation(),

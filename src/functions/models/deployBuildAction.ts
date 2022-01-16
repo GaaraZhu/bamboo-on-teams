@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Response } from "lambda-api";
 import { executeDeployBuildCommand } from "../services/executors/deployBuildExecutor";
 
@@ -18,13 +18,13 @@ export class DeployBuildAction implements Action {
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
-      .requiredOption("-e, --env <env>", "env name, e.g. dev", emptyCheck)
+      .requiredOption("-e, --env <env>", "env name, e.g. dev", trim)
       .requiredOption(
         "-bk, --build-key <buildKey>",
         "bamboo build key, e.g. API-CPV1-30",
-        emptyCheck
+        trim
       );
     deployBuildCommand.exitOverride((_: CommanderError) => {
       throw {

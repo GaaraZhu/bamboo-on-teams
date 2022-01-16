@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Response } from "lambda-api";
 import { executeDeployLatestCommand } from "../services/executors/deployLatestBuildExecutor";
 
@@ -20,14 +20,14 @@ export class DeployLatestBuildAction implements Action {
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
       .requiredOption(
         "-b, --branch <branch>",
         "bamboo branch name, e.g. master",
-        emptyCheck
+        trim
       )
-      .requiredOption("-e, --env <env>", "env name, e.g. dev", emptyCheck);
+      .requiredOption("-e, --env <env>", "env name, e.g. dev", trim);
     deployLatestCommand.exitOverride((_: CommanderError) => {
       throw {
         message: deployLatestCommand.helpInformation(),

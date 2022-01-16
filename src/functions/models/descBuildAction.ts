@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Response } from "lambda-api";
 import { executeDescBuildCommand } from "../services/executors/descBuildExecutor";
 
@@ -11,12 +11,12 @@ export class DescBuildAction implements Action {
   constructor(command: string) {
     const lastBuildCommand = new Command()
       .name(this.actionName)
-      .description("Describe a build")
+      .description("Describe a build.")
       .usage("[options]")
       .requiredOption(
         "-b, --build <build>",
         "build key, e.g. API-CCV28-1",
-        emptyCheck
+        trim
       );
     lastBuildCommand.exitOverride((_: CommanderError) => {
       throw {

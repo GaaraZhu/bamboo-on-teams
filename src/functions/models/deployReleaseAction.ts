@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Response } from "lambda-api";
 import { executeDeployReleaseCommand } from "../services/executors/deployReleaseExecutor";
 
@@ -18,13 +18,13 @@ export class DeployReleaseAction implements Action {
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
-      .requiredOption("-e, --env <env>", "env name, e.g. dev", emptyCheck)
+      .requiredOption("-e, --env <env>", "env name, e.g. dev", trim)
       .requiredOption(
         "-r, --release <release>",
         "release name, e.g. v1.0.0",
-        emptyCheck
+        trim
       );
     buildCommand.exitOverride((_: CommanderError) => {
       throw {

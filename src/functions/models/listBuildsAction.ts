@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { Response } from "lambda-api";
 import { executeListBuildsCommand } from "../services/executors/listBuildsExecutor";
@@ -12,12 +12,12 @@ export class ListBuildsAction implements Action {
   constructor(command: string) {
     const listBuildsCommand = new Command()
       .name(this.actionName)
-      .description("List builds for a service in a branch plan")
+      .description("List builds for a service in a branch plan.")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
       .requiredOption(
         "-b, --branch <branch>",

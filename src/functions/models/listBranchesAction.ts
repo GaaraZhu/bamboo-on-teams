@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { Response } from "lambda-api";
 import { executeListBranchesCommand } from "../services/executors/listPlanBranchesExecutor";
@@ -11,12 +11,12 @@ export class ListBranchesAction implements Action {
   constructor(command: string) {
     const listBranchesCommand = new Command()
       .name(this.actionName)
-      .description("List branch plans for a service")
+      .description("List branch plans for a service.")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       );
     listBranchesCommand.exitOverride((_: CommanderError) => {
       throw {

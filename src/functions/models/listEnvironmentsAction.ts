@@ -1,5 +1,5 @@
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { Response } from "lambda-api";
 import { executeListEnvironmentsCommand } from "../services/executors/listEnvironmentsExecutor";
@@ -16,7 +16,7 @@ export class ListEnvironmentsAction implements Action {
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       );
     listEnvsCommand.exitOverride((_: CommanderError) => {
       throw {

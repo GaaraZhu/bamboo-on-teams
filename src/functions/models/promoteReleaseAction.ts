@@ -1,6 +1,6 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
-import { emptyCheck } from "../utils";
+import { trim } from "../utils";
 import { Response } from "lambda-api";
 import { executePromoteReleaseCommand } from "../services/executors/promoteReleaseExecutor";
 
@@ -18,17 +18,17 @@ export class PromoteReleaseAction implements Action {
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
-        emptyCheck
+        trim
       )
       .requiredOption(
         "-se, --source-env <sourceEnv>",
         "source environment name, e.g. dev",
-        emptyCheck
+        trim
       )
       .requiredOption(
         "-te, --target-env <targetEnv>",
         "target environment name, e.g. test",
-        emptyCheck
+        trim
       );
     promoteReleaseCommand.exitOverride((_: CommanderError) => {
       throw {
