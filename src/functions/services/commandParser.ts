@@ -11,12 +11,18 @@ export class CommandParser {
   public async parse(command: string): Promise<Action> {
     const actionName = sanitizeActionName(command.split(" ")[0]);
     if (!actionName) {
-      throw Error(`Supported commands: ${Object.values(ActionName)}`);
+      throw {
+        status: 400,
+        message: `Supported commands: ${Object.values(ActionName)}`,
+      };
     }
 
     const action = actionLookup[actionName];
     if (!action) {
-      throw Error("Internal error: no action found in the lookup table");
+      throw {
+        status: 500,
+        message: "Internal error: no action found in the lookup table",
+      };
     }
 
     return new action(command);

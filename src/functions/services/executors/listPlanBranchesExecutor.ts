@@ -2,6 +2,7 @@ import { Response } from "lambda-api";
 import axios from "axios";
 import { ListBranchesAction } from "../../models/listBranchesAction";
 import { getPlan } from "./listPlansExecutor";
+import { statusCheck } from "../../utils";
 
 export const executeListBranchesCommand = async (
   action: ListBranchesAction,
@@ -22,11 +23,12 @@ export const getBranch = async (
     (b: any) => b.name.toUpperCase() === branchName.toUpperCase()
   );
   if (!branch) {
-    throw Error(
-      `Unknown branch provided ${branchName} for plan ${planName}, available branches: ${branches.map(
+    throw {
+      status: 400,
+      message: `Unknown branch provided ${branchName} for plan ${planName}, available branches: ${branches.map(
         (b: any) => b.name
-      )}`
-    );
+      )}`,
+    };
   }
 
   return branch;
@@ -34,11 +36,13 @@ export const getBranch = async (
 
 const listPlanBranches = async (planKey: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/plan/${planKey}?expand=branches`;
-  const { data } = await axios.get(url, {
+  const { data, status, statusText } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
+
+  statusCheck(status, statusText);
 
   const branches = data.branches.branch
     ?.filter((b: any) => b.enabled)

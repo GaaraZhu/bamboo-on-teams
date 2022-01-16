@@ -1,6 +1,7 @@
 import { Response } from "lambda-api";
 import { DescBuildAction } from "../../models/descBuildAction";
 import axios from "axios";
+import { statusCheck } from "../../utils";
 
 export const executeDescBuildCommand = async (
   action: DescBuildAction,
@@ -11,11 +12,16 @@ export const executeDescBuildCommand = async (
 
 export const getBuild = async (key: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${key}`;
-  const { data } = await axios.get(`${url}?expand=changes`, {
-    headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
-    },
-  });
+  const { data, status, statusText } = await axios.get(
+    `${url}?expand=changes`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      },
+    }
+  );
+
+  statusCheck(status, statusText);
 
   return {
     key: data.key,

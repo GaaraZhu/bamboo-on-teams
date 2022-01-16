@@ -20,6 +20,7 @@ export class DescBuildAction implements Action {
       );
     lastBuildCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: lastBuildCommand.helpInformation(),
       };
     }); //to avoid process.exit

@@ -2,6 +2,7 @@ import { Response } from "lambda-api";
 import axios from "axios";
 import { getPlan } from "./listPlansExecutor";
 import { createBranchAction } from "../../models/createBranchAction";
+import { statusCheck } from "../../utils";
 
 export const executeCreateBranchCommand = async (
   action: createBranchAction,
@@ -49,9 +50,7 @@ const createPlanBranch = async (
     },
   });
 
-  if (status !== 200) {
-    throw Error(statusText);
-  }
+  statusCheck(status, statusText);
 
   return data;
 };

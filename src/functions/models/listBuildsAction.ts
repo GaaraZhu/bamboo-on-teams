@@ -25,6 +25,7 @@ export class ListBuildsAction implements Action {
       );
     listBuildsCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: listBuildsCommand.helpInformation(),
       };
     }); //to avoid process.exit

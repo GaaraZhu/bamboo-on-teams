@@ -53,24 +53,28 @@ Options:
       {
         command: "build -b master -s customer-service -p test",
         error: {
+          status: 400,
           message: buildCommandHelp,
         },
       },
       {
         command: "build -s customer-service",
         error: {
+          status: 400,
           message: buildCommandHelp,
         },
       },
       {
         command: "build -b master",
         error: {
+          status: 400,
           message: buildCommandHelp,
         },
       },
       {
         command: "build",
         error: {
+          status: 400,
           message: buildCommandHelp,
         },
       },
@@ -124,24 +128,28 @@ Options:
       {
         command: "list-branches -s customers-v1 -b master",
         error: {
+          status: 400,
           message: helpMessage,
         },
       },
       {
         command: "list-branches -s",
         error: {
+          status: 400,
           message: helpMessage,
         },
       },
       {
         command: "list-branches s-s",
         error: {
+          status: 400,
           message: helpMessage,
         },
       },
       {
         command: "list-branches",
         error: {
+          status: 400,
           message: helpMessage,
         },
       },
@@ -188,24 +196,28 @@ Options:
       {
         command: "list-builds --b release-1.0.0",
         error: {
+          status: 400,
           message: helpMessage,
         },
       },
       {
         command: "list-builds -b",
         error: {
+          status: 400,
           message: helpMessage,
         },
       },
       {
         command: "list-builds s-b",
         error: {
+          status: 400,
           message: helpMessage,
         },
       },
       {
         command: "list-builds",
         error: {
+          status: 400,
           message: helpMessage,
         },
       },
@@ -256,18 +268,21 @@ Options:
       {
         command: "desc-build -b",
         error: {
+          status: 400,
           message: lastBuildCommandHelp,
         },
       },
       {
         command: "desc-build -b5 -p",
         error: {
+          status: 400,
           message: lastBuildCommandHelp,
         },
       },
       {
         command: "desc-build",
         error: {
+          status: 400,
           message: lastBuildCommandHelp,
         },
       },

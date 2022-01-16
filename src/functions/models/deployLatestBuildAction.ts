@@ -30,6 +30,7 @@ export class DeployLatestBuildAction implements Action {
       .requiredOption("-e, --env <env>", "env name, e.g. dev", trim);
     deployLatestCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: deployLatestCommand.helpInformation(),
       };
     }); //to avoid process.exit

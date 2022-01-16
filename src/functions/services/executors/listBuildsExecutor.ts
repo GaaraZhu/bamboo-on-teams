@@ -2,6 +2,7 @@ import { Response } from "lambda-api";
 import axios from "axios";
 import { ListBuildsAction } from "../../models/listBuildsAction";
 import { getBranch } from "./listPlanBranchesExecutor";
+import { statusCheck } from "../../utils";
 
 export const executeListBuildsCommand = async (
   action: ListBuildsAction,
@@ -13,11 +14,13 @@ export const executeListBuildsCommand = async (
 
 export const listPlanBranchBuilds = async (branchKey: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?includeAllStates=true`;
-  const { data } = await axios.get(url, {
+  const { data, status, statusText } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
+
+  statusCheck(status, statusText);
 
   return data.results.result?.map((r: any) => ({
     key: r.key,

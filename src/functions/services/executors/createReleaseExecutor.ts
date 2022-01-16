@@ -2,6 +2,7 @@ import { Response } from "lambda-api";
 import axios from "axios";
 import { CreateReleaseAction } from "../../models/createReleaseAction";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
+import { statusCheck } from "../../utils";
 
 export const executeCreateReleaseCommand = async (
   action: CreateReleaseAction,
@@ -23,12 +24,14 @@ export const createRelease = async (
     planResultKey: buildKey,
     name: release,
   });
-  const { data } = await axios.post(url, payload, {
+  const { data, status, statusText } = await axios.post(url, payload, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
       "Content-Type": "application/json",
     },
   });
+
+  statusCheck(status, statusText);
 
   return {
     id: data.id,

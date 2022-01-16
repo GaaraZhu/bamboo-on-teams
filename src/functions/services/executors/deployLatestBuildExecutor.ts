@@ -6,7 +6,7 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { prodEnvCheck } from "../../utils";
+import { prodEnvCheck, statusCheck } from "../../utils";
 
 export const executeDeployLatestCommand = async (
   action: DeployLatestBuildAction,
@@ -79,11 +79,13 @@ export const getBuildReleases = async (
   branchName: string
 ): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/versions?planBranchName=${branchName}`;
-  const { data } = await axios.get(url, {
+  const { data, status, statusText } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
+
+  statusCheck(status, statusText);
 
   return data.versions;
 };
@@ -92,11 +94,13 @@ export const getLatestSuccessBuild = async (
   branchKey: string
 ): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?buildstate=Successful&max-results=1&expand=results.result`;
-  const { data } = await axios.get(url, {
+  const { data, status, statusText } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
+
+  statusCheck(status, statusText);
 
   return data.results.result
     ? {

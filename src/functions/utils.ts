@@ -17,6 +17,18 @@ export const prodEnvCheck = (env: string): void => {
     process.env.ENABLE_FOR_PROD?.toUpperCase() === "TRUE" &&
     env?.toUpperCase().startsWith("PROD")
   ) {
-    throw Error("Bamboo-on-teams is disabled for production environment");
+    throw {
+      status: 400,
+      message: "Bamboo-on-teams is disabled for production environment",
+    };
+  }
+};
+
+export const statusCheck = (status: number, message: string): void => {
+  if (status >= 300) {
+    throw {
+      status: status,
+      message: message,
+    };
   }
 };

@@ -13,6 +13,7 @@ export class ListPlansAction implements Action {
       .description("List bamboo plans.");
     listPlansCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: listPlansCommand.helpInformation(),
       };
     }); //to avoid process.exit

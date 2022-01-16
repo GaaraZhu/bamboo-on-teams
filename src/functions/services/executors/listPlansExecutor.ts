@@ -1,6 +1,7 @@
 import { ListPlansAction } from "../../models/listPlansAction";
 import { Response } from "lambda-api";
 import axios from "axios";
+import { statusCheck } from "../../utils";
 
 export const executeListPlansCommand = async (
   action: ListPlansAction,
@@ -15,11 +16,12 @@ export const getPlan = async (planName: string): Promise<any> => {
     (p: any) => p.name.toUpperCase() === planName.toUpperCase()
   );
   if (!plan) {
-    throw Error(
-      `Unknown plan provided ${planName}, available plans: ${plans.map(
+    throw {
+      status: 400,
+      message: `Unknown plan provided ${planName}, available plans: ${plans.map(
         (p: any) => p.name
-      )}`
-    );
+      )}`,
+    };
   }
 
   return plan;
@@ -27,11 +29,13 @@ export const getPlan = async (planName: string): Promise<any> => {
 
 const listPlans = async (): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/project/${process.env.BAMBOO_PROJECT_ID}?expand=plans&max-result=10000`;
-  const { data } = await axios.get(url, {
+  const { data, status, statusText } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
+
+  statusCheck(status, statusText);
 
   return data.plans.plan
     ?.filter((p: any) => p.enabled)

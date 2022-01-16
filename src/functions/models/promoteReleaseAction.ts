@@ -32,6 +32,7 @@ export class PromoteReleaseAction implements Action {
       );
     promoteReleaseCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: promoteReleaseCommand.helpInformation(),
       };
     }); //to avoid process.exit

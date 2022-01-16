@@ -26,6 +26,7 @@ export class createBranchAction implements Action {
       );
     createBranchCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: createBranchCommand.helpInformation(),
       };
     }); //to avoid process.exit

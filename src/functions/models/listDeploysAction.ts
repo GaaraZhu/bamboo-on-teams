@@ -22,6 +22,7 @@ export class ListDeploysAction implements Action {
       .requiredOption("-e, --env <env>", "env name, e.g. dev", trim);
     listDeploysCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: listDeploysCommand.helpInformation(),
       };
     }); //to avoid process.exit

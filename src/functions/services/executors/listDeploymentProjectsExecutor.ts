@@ -1,6 +1,7 @@
 import { Response } from "lambda-api";
 import axios from "axios";
 import { ListDeploymentProjectsAction } from "../../models/listDeploymentProjects";
+import { statusCheck } from "../../utils";
 
 export const executeListDeploymentProjectsCommand = async (
   action: ListDeploymentProjectsAction,
@@ -19,11 +20,12 @@ export const getDeploymentProject = async (
     (p: any) => p.name.toUpperCase() === projectName.toUpperCase()
   );
   if (!project) {
-    throw Error(
-      `Unknown project provided ${projectName}, available plans: ${projects.map(
+    throw {
+      status: 400,
+      message: `Unknown project provided ${projectName}, available plans: ${projects.map(
         (p: any) => p.name
-      )}`
-    );
+      )}`,
+    };
   }
 
   return project;
@@ -31,11 +33,13 @@ export const getDeploymentProject = async (
 
 export const listDeploymentProjects = async (): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/all`;
-  const { data } = await axios.get(url, {
+  const { data, status, statusText } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
+
+  statusCheck(status, statusText);
 
   return data
     .map((p: any) => ({

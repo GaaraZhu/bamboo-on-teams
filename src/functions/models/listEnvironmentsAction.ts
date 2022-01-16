@@ -20,6 +20,7 @@ export class ListEnvironmentsAction implements Action {
       );
     listEnvsCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: listEnvsCommand.helpInformation(),
       };
     }); //to avoid process.exit

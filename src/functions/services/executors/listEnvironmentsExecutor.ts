@@ -2,6 +2,7 @@ import { Response } from "lambda-api";
 import axios from "axios";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { ListEnvironmentsAction } from "../../models/listEnvironmentsAction";
+import { statusCheck } from "../../utils";
 
 export const executeListEnvironmentsCommand = async (
   action: ListEnvironmentsAction,
@@ -20,11 +21,12 @@ export const getEnvironment = async (
     (e: any) => e.name.toUpperCase() === envName.toUpperCase()
   );
   if (!env) {
-    throw Error(
-      `Unknown environment provided ${envName}, availables: ${envs.map(
+    throw {
+      status: 400,
+      message: `Unknown environment provided ${envName}, availables: ${envs.map(
         (e: any) => e.name
-      )}`
-    );
+      )}`,
+    };
   }
 
   return env;
@@ -32,11 +34,13 @@ export const getEnvironment = async (
 
 const listEnvironments = async (projectId: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}`;
-  const { data } = await axios.get(url, {
+  const { data, status, statusText } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
+
+  statusCheck(status, statusText);
 
   return data.environments
     .filter(

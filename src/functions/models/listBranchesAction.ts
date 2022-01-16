@@ -20,6 +20,7 @@ export class ListBranchesAction implements Action {
       );
     listBranchesCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: listBranchesCommand.helpInformation(),
       };
     }); //to avoid process.exit

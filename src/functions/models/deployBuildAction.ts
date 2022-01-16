@@ -28,6 +28,7 @@ export class DeployBuildAction implements Action {
       );
     deployBuildCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: deployBuildCommand.helpInformation(),
       };
     }); //to avoid process.exit

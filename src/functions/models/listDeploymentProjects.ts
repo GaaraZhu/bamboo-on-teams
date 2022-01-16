@@ -12,6 +12,7 @@ export class ListDeploymentProjectsAction implements Action {
       .description("List deployment projects.");
     listProjectsCommand.exitOverride((_: CommanderError) => {
       throw {
+        status: 400,
         message: listProjectsCommand.helpInformation(),
       };
     }); //to avoid process.exit

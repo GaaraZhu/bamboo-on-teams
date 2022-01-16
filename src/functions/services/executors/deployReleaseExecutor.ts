@@ -4,7 +4,7 @@ import { DeployReleaseAction } from "../../models/deployReleaseAction";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getRelease } from "./listReleasesExecutor";
-import { prodEnvCheck } from "../../utils";
+import { prodEnvCheck, statusCheck } from "../../utils";
 
 export const executeDeployReleaseCommand = async (
   action: DeployReleaseAction,
@@ -23,12 +23,14 @@ export const deployRelease = async (
   releaseId: string
 ): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/queue/deployment/?environmentId=${envId}&versionId=${releaseId}`;
-  const { data } = await axios.post(url, undefined, {
+  const { data, status, statusText } = await axios.post(url, undefined, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
       "Content-Type": "application/json",
     },
   });
+
+  statusCheck(status, statusText);
 
   return data;
 };

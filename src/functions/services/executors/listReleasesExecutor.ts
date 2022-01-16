@@ -2,6 +2,7 @@ import { Response } from "lambda-api";
 import axios from "axios";
 import { ListReleasesAction } from "../../models/listReleasesAction";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
+import { statusCheck } from "../../utils";
 
 export const executeListReleasesCommand = async (
   action: ListReleasesAction,
@@ -23,11 +24,13 @@ export const getRelease = async (
   releaseName: string
 ): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/versions?name=${releaseName}`;
-  const { data } = await axios.get(url, {
+  const { data, status, statusText } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
+
+  statusCheck(status, statusText);
 
   return {
     id: data.id,
@@ -41,11 +44,13 @@ export const getRelease = async (
 
 const listReleases = async (projectId: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/versions`;
-  const { data } = await axios.get(url, {
+  const { data, status, statusText } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
+
+  statusCheck(status, statusText);
 
   return data.versions.map((r: any) => ({
     id: r.id,
