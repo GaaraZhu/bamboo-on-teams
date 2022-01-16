@@ -5,15 +5,15 @@ describe("utils", () => {
     const testCases = [
       {
         input: undefined,
-        errorMessage: "empty argument", 
+        errorMessage: "empty argument",
       },
       {
         input: "",
-        errorMessage: "empty argument", 
+        errorMessage: "empty argument",
       },
       {
         input: " ",
-        errorMessage: "empty argument", 
+        errorMessage: "empty argument",
       },
       {
         input: "master",

@@ -7,8 +7,7 @@ import { ListPlansAction } from "../../src/functions/models/listPlansAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
-    const buildCommandHelp =
-`Usage: build [options]
+    const buildCommandHelp = `Usage: build [options]
 
 Trigger a branch build for a service.
 
@@ -99,8 +98,7 @@ Options:
   });
 
   describe("ListBranchesAction", () => {
-    const helpMessage =
-`Usage: list-branches [options]
+    const helpMessage = `Usage: list-branches [options]
 
 List branch plans for a service.
 
@@ -161,8 +159,7 @@ Options:
   });
 
   describe("ListBuildsAction", () => {
-    const helpMessage =
-`Usage: list-builds [options]
+    const helpMessage = `Usage: list-builds [options]
 
 List builds for a service in a branch plan.
 
@@ -226,8 +223,7 @@ Options:
   });
 
   describe("DescBuildAction", () => {
-    const lastBuildCommandHelp =
-`Usage: desc-build [options]
+    const lastBuildCommandHelp = `Usage: desc-build [options]
 
 Describe a build.
 

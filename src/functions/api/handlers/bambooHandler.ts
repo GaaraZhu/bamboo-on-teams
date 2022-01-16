@@ -6,12 +6,16 @@ export const handle = async (
   response: Response
 ): Promise<void> => {
   const body: IncomingMessage = request.body;
-  console.log(`Action: ${body.text} triggered by user ${body.from.name} from channel ${body.channelId}`);
+  console.log(
+    `Action: ${body.text} triggered by user ${body.from.name} from channel ${body.channelId}`
+  );
   try {
     const action = await CommandParser.build().parse(body.text);
     await action.process(response);
   } catch (err: any) {
-    console.log(`Failed to execute ACTION ${body.text} due to ${JSON.stringify(err)}`);
+    console.log(
+      `Failed to execute ACTION ${body.text} due to ${JSON.stringify(err)}`
+    );
     response.status(404).json({
       message: err.message,
     });
