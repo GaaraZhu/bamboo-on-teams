@@ -1,8 +1,7 @@
 import { Response } from "lambda-api";
-import axios from "axios";
 import { getBranch } from "./listPlanBranchesExecutor";
 import { BuildAction } from "../../models/buildAction";
-import { statusCheck } from "../../utils";
+import { axiosPost } from "../../utils";
 
 export const executeBuildCommand = async (
   action: BuildAction,
@@ -14,13 +13,11 @@ export const executeBuildCommand = async (
 const build = async (planName: string, branchName: string): Promise<any> => {
   const branch = await getBranch(planName, branchName);
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/queue/${branch.key}`;
-  const { data, status, statusText } = await axios.post(url, undefined, {
+  const { data } = await axiosPost(url, undefined, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
-
-  statusCheck(status, statusText);
 
   return data;
 };

@@ -1,11 +1,10 @@
 import { Response } from "lambda-api";
-import axios from "axios";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { PromoteReleaseAction } from "../../models/promoteReleaseAction";
 import { listDeploys } from "./listDeploysExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
-import { statusCheck } from "../../utils";
+import { axiosPost } from "../../utils";
 
 export const executePromoteReleaseCommand = async (
   action: PromoteReleaseAction,
@@ -33,14 +32,12 @@ export const deploy = async (
   releaseId: string
 ): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/queue/deployment/?environmentId=${envId}&versionId=${releaseId}`;
-  const { data, status, statusText } = await axios.post(url, undefined, {
+  const { data, status, statusText } = await axiosPost(url, undefined, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
       "Content-Type": "application/json",
     },
   });
-
-  statusCheck(status, statusText);
 
   return data;
 };

@@ -1,8 +1,7 @@
 import { Response } from "lambda-api";
-import axios from "axios";
 import { getPlan } from "./listPlansExecutor";
 import { createBranchAction } from "../../models/createBranchAction";
-import { statusCheck } from "../../utils";
+import { axiosGet, axiosPut } from "../../utils";
 
 export const executeCreateBranchCommand = async (
   action: createBranchAction,
@@ -24,7 +23,7 @@ export const executeCreateBranchCommand = async (
 
 const getAllBranches = async (planKey: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/plan/${planKey}/vcsBranches?max-result=10000`;
-  const { data } = await axios.get(url, {
+  const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
@@ -43,14 +42,12 @@ const createPlanBranch = async (
     /\//g,
     "-"
   )}?vcsBranch=${vscBranch}`;
-  const { data, status, statusText } = await axios.put(url, undefined, {
+  const { data } = await axiosPut(url, undefined, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
       "Content-Type": "application/json",
     },
   });
-
-  statusCheck(status, statusText);
 
   return data;
 };

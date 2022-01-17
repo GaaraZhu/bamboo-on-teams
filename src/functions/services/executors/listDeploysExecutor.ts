@@ -1,9 +1,8 @@
 import { Response } from "lambda-api";
-import axios from "axios";
 import { ListDeploysAction } from "../../models/listDeploysAction";
+import { axiosGet } from "../../utils";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
-import { statusCheck } from "../../utils";
 
 export const executeListDeploysCommand = async (
   action: ListDeploysAction,
@@ -16,13 +15,11 @@ export const executeListDeploysCommand = async (
 
 export const listDeploys = async (environmentId: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/environment/${environmentId}/results`;
-  const { data, status, statusText } = await axios.get(url, {
+  const { data, status, statusText } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
-
-  statusCheck(status, statusText);
 
   return data.results?.map((r: any) => ({
     release: {

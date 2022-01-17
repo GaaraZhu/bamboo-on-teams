@@ -1,12 +1,11 @@
 import { Response } from "lambda-api";
-import axios from "axios";
 import { getBranch } from "./listPlanBranchesExecutor";
 import { DeployLatestBuildAction } from "../../models/deployLatestBuildAction";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { prodEnvCheck, statusCheck } from "../../utils";
+import { axiosGet, prodEnvCheck } from "../../utils";
 
 export const executeDeployLatestCommand = async (
   action: DeployLatestBuildAction,
@@ -79,13 +78,11 @@ export const getBuildReleases = async (
   branchName: string
 ): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/versions?planBranchName=${branchName}`;
-  const { data, status, statusText } = await axios.get(url, {
+  const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
-
-  statusCheck(status, statusText);
 
   return data.versions;
 };
@@ -94,13 +91,11 @@ export const getLatestSuccessBuild = async (
   branchKey: string
 ): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?buildstate=Successful&max-results=1&expand=results.result`;
-  const { data, status, statusText } = await axios.get(url, {
+  const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
-
-  statusCheck(status, statusText);
 
   return data.results.result
     ? {

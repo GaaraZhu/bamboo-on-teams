@@ -1,7 +1,6 @@
 import { ListPlansAction } from "../../models/listPlansAction";
 import { Response } from "lambda-api";
-import axios from "axios";
-import { statusCheck } from "../../utils";
+import { axiosGet } from "../../utils";
 
 export const executeListPlansCommand = async (
   action: ListPlansAction,
@@ -29,13 +28,11 @@ export const getPlan = async (planName: string): Promise<any> => {
 
 const listPlans = async (): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/project/${process.env.BAMBOO_PROJECT_ID}?expand=plans&max-result=10000`;
-  const { data, status, statusText } = await axios.get(url, {
+  const { data, status, statusText } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },
   });
-
-  statusCheck(status, statusText);
 
   return data.plans.plan
     ?.filter((p: any) => p.enabled)
