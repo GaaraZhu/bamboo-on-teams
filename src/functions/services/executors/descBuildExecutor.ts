@@ -20,6 +20,7 @@ export const getBuild = async (key: string): Promise<any> => {
   return {
     key: data.key,
     buildNumber: data.buildNumber,
+    service: data.master.shortName,
     branch: {
       key: data.plan.key,
       name: data.plan.shortName,
@@ -33,3 +34,20 @@ export const getBuild = async (key: string): Promise<any> => {
     })),
   };
 };
+
+export interface Build {
+  key: string;
+  service: string;
+  buildNumber: string;
+  branch: {
+    key: string,
+    name: string,
+  },
+  lifeCycleState: string,
+  buildState: string,
+  buildRelativeTime: string,
+  changes: {
+    author: string,
+    commit: string,
+  }[],
+}
