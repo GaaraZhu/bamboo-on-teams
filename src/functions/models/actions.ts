@@ -15,8 +15,10 @@ import { ListReleasesAction } from "./listReleasesAction";
 import { PromoteReleaseAction } from "./promoteReleaseAction";
 import { DeployBuildAction } from "./deployBuildAction";
 import { createBranchAction } from "./createBranchAction";
+import { HelpAction } from "./helpAction";
 
 export enum ActionName {
+  HELP = "help",
   BUILD = "build",
   LIST_PLANS = "list-plans",
   LIST_BRANCHES = "list-branches",
@@ -48,6 +50,7 @@ export interface Action {
 }
 
 export const actionLookup: Record<ActionName, Class<Action>> = {
+  [ActionName.HELP]: HelpAction,
   [ActionName.BUILD]: BuildAction,
   [ActionName.CREATE_RELEASE]: CreateReleaseAction,
   [ActionName.DEPLOY_LATEST_BUILD]: DeployLatestBuildAction,
