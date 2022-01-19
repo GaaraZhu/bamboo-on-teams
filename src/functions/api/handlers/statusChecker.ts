@@ -34,36 +34,36 @@ const sendBuildNotification = async (
   event: BuildJobCheckingInput
 ): Promise<void> => {
   const BUILD_NOTIFICATION = `{
-        "@type": "MessageCard",
-        "@context": "http://schema.org/extensions",
-        "themeColor": "0076D7",
-        "summary": "Service ${event.service} built successfully",
-        "sections": [{
-            "activityTitle": "Service ${event.service} built successfully",
-            "activitySubtitle": "triggered by ${event.triggeredBy}",
-            "activityImage": "https://teamsnodesample.azurewebsites.net/static/img/image5.png",
-            "facts": [{
-                "name": "Number",
-                "value": "${build.buildNumber}"
-            }, {
-                "name": "Branch",
-                "value": "${event.branch}"
-            }, {
-                "name": "Job State",
-                "value": "${build.lifeCycleState}"
-            }, {
-                "name": "Build State",
-                "value": "${build.buildState}"
-            }, {
-                "name": "Build Relative Time",
-                "value": "${build.buildRelativeTime}"
-            }, {
-              "name": "Url",
-              "value": "${build.url}"
-            }],
-            "markdown": true
-        }]
-    }`;
+      "@type": "MessageCard",
+      "@context": "http://schema.org/extensions",
+      "themeColor": "0076D7",
+      "summary": "Service ${event.service} built successfully",
+      "sections": [{
+          "activityTitle": "Service ${event.service} built successfully",
+          "activitySubtitle": "triggered by ${event.triggeredBy}",
+          "activityImage": "https://static.thenounproject.com/png/2714806-200.png",
+          "facts": [{
+              "name": "Number",
+              "value": "${build.buildNumber}"
+          }, {
+              "name": "Branch",
+              "value": "${event.branch}"
+          }, {
+              "name": "Job State",
+              "value": "${build.lifeCycleState}"
+          }, {
+              "name": "Build State",
+              "value": "${build.buildState}"
+          }, {
+              "name": "Build Relative Time",
+              "value": "${build.buildRelativeTime}"
+          }, {
+            "name": "Url",
+            "value": "${build.url}"
+          }],
+          "markdown": true
+      }]
+  }`;
   const url = process.env.NOTIFICATION_URL!;
   await axiosPost(url, BUILD_NOTIFICATION, {
     headers: {
