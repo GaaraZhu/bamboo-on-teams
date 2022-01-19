@@ -48,8 +48,12 @@ export const executeDeployBuildCommand = async (
   response.status(200).json({
     service: action.service,
     branch: build.branch.name,
-    build: build,
     environment: action.env,
+    build: {
+      buildNumber: build.buildNumber,
+      buildRelativeTime: build.buildRelativeTime,
+      release: targetRelease.name,
+    },
     deployment: {
       id: deployment.deploymentResultId,
       link: deployment.link.href,

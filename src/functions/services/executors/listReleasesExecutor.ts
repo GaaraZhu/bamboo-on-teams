@@ -22,26 +22,26 @@ export const getRelease = async (
   projectId: string,
   releaseName: string
 ): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/versions?name=${releaseName}`;
-  const { data, status, statusText } = await axiosGet(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
-    },
-  });
+  const versions = await listReleases(projectId);
+  const version = versions?.find(
+    (v: any) => v.name.toUpperCase() === releaseName.toUpperCase()
+  );
 
-  return {
-    id: data.id,
-    name: data.name,
-    planBranchName: data.planBranchName,
-    creationDate: data.creationDate
-      ? new Date(data.creationDate).toLocaleString()
-      : "",
-  };
+  if (!version) {
+    throw {
+      status: 400,
+      message: `Unknown release provided ${releaseName}, available versions: ${versions.map(
+        (v: any) => v.name
+      )}`,
+    };
+  }
+
+  return version;
 };
 
 const listReleases = async (projectId: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/versions`;
-  const { data, status, statusText } = await axiosGet(url, {
+  const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },

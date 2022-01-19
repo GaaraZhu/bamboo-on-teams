@@ -59,13 +59,13 @@ export const executeDeployLatestCommand = async (
   response.status(200).json({
     service: action.service,
     branch: action.branch,
+    environment: action.env,
     build: {
       buildNumber: latestBuild.buildNumber,
       buildRelativeTime: latestBuild.buildRelativeTime,
       vcsRevisionKey: latestBuild.vcsRevisionKey,
       release: targetRelease.name,
     },
-    environment: action.env,
     deployment: {
       id: deployment.deploymentResultId,
       link: deployment.link.href,
