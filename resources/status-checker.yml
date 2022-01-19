@@ -1,0 +1,25 @@
+StatusChecker:
+  name: ${self:custom.aws.stepFunction.name}
+  definition:
+    StartAt: DelayTheChecking
+    States:
+      DelayTheChecking:
+        Type: Wait
+        Seconds: 180
+        Next: CheckStatus
+
+      CheckStatus:
+        Type: Task
+        Resource:
+          Fn::GetAtt: [checkStatusFunc, Arn]
+        Retry:
+          - ErrorEquals:
+              - retriableError
+            IntervalSeconds: 30
+            BackoffRate: 1
+            MaxAttempts: 34
+        Next: FinalEndState
+
+      FinalEndState:
+        Type: Pass
+        End: true

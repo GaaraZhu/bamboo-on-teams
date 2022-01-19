@@ -1,4 +1,4 @@
-import { Action, ActionName } from "./actions";
+import { Action, ActionName, JobType } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Response } from "lambda-api";
@@ -6,11 +6,13 @@ import { executeDeployBuildCommand } from "../services/executors/deployBuildExec
 
 export class DeployBuildAction implements Action {
   readonly actionName = ActionName.DEPLOY_BUILD;
+  readonly type = JobType.DEPLOYMENT;
+  readonly triggeredBy: string;
   service: string;
   env: string;
   buildKey: string;
 
-  constructor(command: string) {
+  constructor(command: string, triggeredBy: string) {
     const deployBuildCommand = new Command()
       .name(this.actionName)
       .description("Deploy a service build to an environment.")
@@ -41,6 +43,7 @@ export class DeployBuildAction implements Action {
     this.service = options.service;
     this.env = options.env;
     this.buildKey = options.buildKey;
+    this.triggeredBy = triggeredBy;
   }
 
   async process(response: Response): Promise<void> {

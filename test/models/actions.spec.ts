@@ -24,6 +24,7 @@ Options:
           actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
+          triggeredBy: "james",
         },
       },
       {
@@ -32,6 +33,7 @@ Options:
           actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
+          triggeredBy: "james",
         },
       },
       {
@@ -40,6 +42,7 @@ Options:
           actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
+          triggeredBy: "james",
         },
       },
       {
@@ -48,6 +51,7 @@ Options:
           actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
+          triggeredBy: "james",
         },
       },
       {
@@ -82,7 +86,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new BuildAction(testCase.command);
+          const actualAction = new BuildAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -94,8 +98,9 @@ Options:
   describe("ListPlansAction", () => {
     it("build action correctly", async () => {
       process.env.BAMBOO_PROJECT_ID = "API";
-      expect(new ListPlansAction()).toEqual({
+      expect(new ListPlansAction("james")).toEqual({
         actionName: ActionName.LIST_PLANS,
+        triggeredBy: "james",
         project: "API",
       });
     });
@@ -116,6 +121,7 @@ Options:
         expectedAction: {
           actionName: ActionName.LIST_BRANCHES,
           planName: "customers-v1",
+          triggeredBy: "james",
         },
       },
       {
@@ -123,6 +129,7 @@ Options:
         expectedAction: {
           actionName: ActionName.LIST_BRANCHES,
           planName: "customers-v1",
+          triggeredBy: "james",
         },
       },
       {
@@ -157,7 +164,10 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ListBranchesAction(testCase.command);
+          const actualAction = new ListBranchesAction(
+            testCase.command,
+            "james"
+          );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -183,6 +193,7 @@ Options:
           actionName: ActionName.LIST_BUILDS,
           planName: "customers-v1",
           branchName: "release-1.0.0",
+          triggeredBy: "james",
         },
       },
       {
@@ -191,6 +202,7 @@ Options:
           actionName: ActionName.LIST_BUILDS,
           planName: "customers-v1",
           branchName: "release-1.0.0",
+          triggeredBy: "james",
         },
       },
       {
@@ -225,7 +237,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ListBuildsAction(testCase.command);
+          const actualAction = new ListBuildsAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -249,6 +261,7 @@ Options:
         expectedAction: {
           actionName: ActionName.DESC_BUILD,
           build: "API-CJI-2",
+          triggeredBy: "james",
         },
       },
       {
@@ -256,6 +269,7 @@ Options:
         expectedAction: {
           actionName: ActionName.DESC_BUILD,
           build: "API-CJI-2",
+          triggeredBy: "james",
         },
       },
       {
@@ -263,6 +277,7 @@ Options:
         expectedAction: {
           actionName: ActionName.DESC_BUILD,
           build: "API-CJI-2",
+          triggeredBy: "james",
         },
       },
       {
@@ -290,7 +305,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new DescBuildAction(testCase.command);
+          const actualAction = new DescBuildAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);

@@ -8,7 +8,7 @@ import {
 export class CommandParser {
   public static build = (): CommandParser => new CommandParser();
 
-  public async parse(command: string): Promise<Action> {
+  public async parse(command: string, triggeredBy: string): Promise<Action> {
     const actionName = sanitizeActionName(command.split(" ")[0]);
     if (!actionName) {
       throw {
@@ -25,6 +25,6 @@ export class CommandParser {
       };
     }
 
-    return new action(command);
+    return new action(command, triggeredBy);
   }
 }

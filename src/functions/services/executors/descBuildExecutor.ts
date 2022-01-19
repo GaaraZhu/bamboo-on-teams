@@ -9,7 +9,7 @@ export const executeDescBuildCommand = async (
   response.status(200).json(await getBuild(action.build));
 };
 
-export const getBuild = async (key: string): Promise<any> => {
+export const getBuild = async (key: string): Promise<Build> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${key}`;
   const { data } = await axiosGet(`${url}?expand=changes`, {
     headers: {
@@ -20,14 +20,15 @@ export const getBuild = async (key: string): Promise<any> => {
   return {
     key: data.key,
     buildNumber: data.buildNumber,
-    service: data.master.shortName,
+    service: data.master?.shortName,
     branch: {
-      key: data.plan.key,
-      name: data.plan.shortName,
+      key: data.plan?.key,
+      name: data.plan?.shortName,
     },
     lifeCycleState: data.lifeCycleState,
     buildState: data.buildState,
     buildRelativeTime: data.buildRelativeTime,
+    url: url,
     changes: data.changes?.change?.map((c: any) => ({
       author: c.author,
       commit: c.changesetId,
@@ -40,14 +41,15 @@ export interface Build {
   service: string;
   buildNumber: string;
   branch: {
-    key: string,
-    name: string,
-  },
-  lifeCycleState: string,
-  buildState: string,
-  buildRelativeTime: string,
+    key: string;
+    name: string;
+  };
+  lifeCycleState: string;
+  buildState: string;
+  buildRelativeTime: string;
+  url: string;
   changes: {
-    author: string,
-    commit: string,
-  }[],
+    author: string;
+    commit: string;
+  }[];
 }

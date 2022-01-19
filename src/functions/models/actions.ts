@@ -44,8 +44,16 @@ export const sanitizeActionName = (
   );
 };
 
+export enum JobType {
+  BUILD,
+  DEPLOYMENT,
+  OTHERS,
+}
+
 export interface Action {
   actionName: ActionName;
+  triggeredBy: string;
+  type: JobType;
   process(response: Response): Promise<void>;
 }
 

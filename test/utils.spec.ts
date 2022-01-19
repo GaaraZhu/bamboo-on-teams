@@ -1,4 +1,4 @@
-import { trim, prodEnvCheck } from "../../src/functions/utils";
+import { trim, prodEnvCheck } from "../src/functions/utils";
 
 describe("utils", () => {
   describe("emptyCheck", () => {

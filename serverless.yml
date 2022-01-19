@@ -24,17 +24,25 @@ provider:
         - ssm:GetParameter
       Resource:
         - arn:aws:ssm:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:parameter/bamboo-on-teams/*
+    - Effect: Allow
+      Action:
+        - states:StartExecution
+      Resource: ${self:custom.aws.stepFunction.arn}
 
   apiGateway:
     restApiId: !Ref ApiGatewayRestApi
     restApiRootResourceId: !Ref bambooV1PathResource
 
   environment:
+    REGION: ap-southeast-2
     BATH_PATH: bamboo/v1${self:custom.api.urls.prefix}
     BAMBOO_HOST_URL: ${ssm:/bamboo-on-teams/bambooHostUrl}
     BAMBOO_API_TOKEN: ${ssm:/bamboo-on-teams/bambooAPIToken}
     BAMBOO_PROJECT_ID:  ${ssm:/bamboo-on-teams/bambooProjectId}
     TEAMS_HMAC_SHARED_TOKEN: ${ssm:/bamboo-on-teams/teamsHMACSharedToken}
+    NOTIFICATION_URL: ${ssm:/bamboo-on-terams/notificationURL}
+    STATUS_CHECKER_ARN: ${self:custom.aws.stepFunction.arn}
+    STEP_FUNCTIONS_ENDPOINT: https://states.ap-southeast-2.amazonaws.com
     TZ: Pacific/Auckland
     ENABLE_FOR_PROD: false
 
@@ -49,7 +57,7 @@ resources:
     ApiGatewayRestApi:
       Type: AWS::ApiGateway::RestApi
       Properties:
-        Name: ${self:custom.aws.gatewayName}
+        Name: ${self:custom.aws.gateway.name}
         EndpointConfiguration:
           Types:
             - REGIONAL
@@ -87,19 +95,29 @@ functions:
           path: ${self:custom.api.urls.command}
           method: post
           cors: true
-    handler: ${self:custom.api.router}
+    handler: dist/functions/api/router.router
+  checkStatusFunc:
+    name: ${self:service}-${self:provider.stage}-statusChecker
+    handler: dist/functions/api/handlers/statusChecker.checkJobStatus
 
 plugins:
   - serverless-offline
   - serverless-offline-ssm
+  - serverless-step-functions
   - serverless-plugin-common-excludes
   - serverless-plugin-include-dependencies
+
+stepFunctions:
+  stateMachines: ${file(resources/status-checker.yml)}
 
 custom:
   version: v1
   aws:
-    gatewayName: ${self:service}
-    resourceNamePrefix: ${self:service}
+    gateway:
+      name: ${self:service}
+    stepFunction:
+      name: ${self:service}-status-puller-${self:provider.stage}
+      arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.name}
 
   serverless-offline:
     noPrependStageInUrl: true
@@ -117,7 +135,6 @@ custom:
       "/bamboo-on-teams/teamsHMACSharedToken": placeholder
 
   api:
-    router: dist/functions/api/router.router
     urls:
       prefix: /bamboo-on-teams/v1
       command: ${self:custom.api.urls.prefix}/command

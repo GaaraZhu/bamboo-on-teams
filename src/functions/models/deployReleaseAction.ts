@@ -1,4 +1,4 @@
-import { Action, ActionName } from "./actions";
+import { Action, ActionName, JobType } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Response } from "lambda-api";
@@ -6,11 +6,13 @@ import { executeDeployReleaseCommand } from "../services/executors/deployRelease
 
 export class DeployReleaseAction implements Action {
   readonly actionName = ActionName.DEPLOY_RELEASE;
+  readonly type = JobType.DEPLOYMENT;
+  readonly triggeredBy: string;
   env: string;
   releaseName: string;
   deploymentProject: string;
 
-  constructor(command: string) {
+  constructor(command: string, triggeredBy: string) {
     const buildCommand = new Command()
       .name(this.actionName)
       .description("Deploy a release to a service environment.")
@@ -41,6 +43,7 @@ export class DeployReleaseAction implements Action {
     this.deploymentProject = options.service;
     this.env = options.env;
     this.releaseName = options.release;
+    this.triggeredBy = triggeredBy;
   }
 
   async process(response: Response): Promise<void> {

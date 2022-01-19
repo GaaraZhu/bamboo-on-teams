@@ -1,13 +1,15 @@
 import { Command, CommanderError } from "commander";
-import { Action, ActionName } from "./actions";
+import { Action, ActionName, JobType } from "./actions";
 import { Response } from "lambda-api";
 import { executeListPlansCommand } from "../services/executors/listPlansExecutor";
 
 export class ListPlansAction implements Action {
   readonly actionName = ActionName.LIST_PLANS;
+  readonly type = JobType.BUILD;
+  readonly triggeredBy: string;
   readonly project;
 
-  constructor() {
+  constructor(triggeredBy: string) {
     const listPlansCommand = new Command()
       .name(this.actionName)
       .description("List bamboo plans.");
@@ -21,6 +23,7 @@ export class ListPlansAction implements Action {
     const commandInput = [".", "."];
     listPlansCommand.parse(commandInput);
     this.project = process.env.BAMBOO_PROJECT_ID!;
+    this.triggeredBy = triggeredBy;
   }
 
   async process(response: Response): Promise<void> {

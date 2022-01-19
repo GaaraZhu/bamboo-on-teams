@@ -10,7 +10,7 @@ export const handle = async (
     `Action: ${body.text} triggered by user ${body.from.name} from channel ${body.channelId}`
   );
   try {
-    const action = await CommandParser.build().parse(body.text);
+    const action = await CommandParser.build().parse(body.text, body.from.name);
     await action.process(response);
   } catch (err: any) {
     console.log(

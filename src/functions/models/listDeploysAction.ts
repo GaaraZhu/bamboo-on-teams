@@ -1,15 +1,17 @@
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
-import { Action, ActionName } from "./actions";
+import { Action, ActionName, JobType } from "./actions";
 import { Response } from "lambda-api";
 import { executeListDeploysCommand } from "../services/executors/listDeploysExecutor";
 
 export class ListDeploysAction implements Action {
   readonly actionName = ActionName.LIST_DEPLOYS;
+  readonly type = JobType.DEPLOYMENT;
+  readonly triggeredBy: string;
   readonly deploymentProject: string;
   readonly env: string;
 
-  constructor(command: string) {
+  constructor(command: string, triggeredBy: string) {
     const listDeploysCommand = new Command()
       .name(this.actionName)
       .description("List the deployments in a service environment.")
@@ -33,6 +35,7 @@ export class ListDeploysAction implements Action {
 
     this.deploymentProject = options.service!;
     this.env = options.env!;
+    this.triggeredBy = triggeredBy;
   }
 
   async process(response: Response): Promise<void> {

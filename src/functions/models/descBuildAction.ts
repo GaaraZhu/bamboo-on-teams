@@ -1,4 +1,4 @@
-import { Action, ActionName } from "./actions";
+import { Action, ActionName, JobType } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Response } from "lambda-api";
@@ -6,9 +6,11 @@ import { executeDescBuildCommand } from "../services/executors/descBuildExecutor
 
 export class DescBuildAction implements Action {
   readonly actionName = ActionName.DESC_BUILD;
+  readonly type = JobType.BUILD;
+  readonly triggeredBy: string;
   build: string;
 
-  constructor(command: string) {
+  constructor(command: string, triggeredBy: string) {
     const lastBuildCommand = new Command()
       .name(this.actionName)
       .description("Describe a build.")
@@ -29,6 +31,7 @@ export class DescBuildAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     lastBuildCommand.parse(commandInput);
     this.build = lastBuildCommand.opts().build;
+    this.triggeredBy = triggeredBy;
   }
 
   async process(response: Response): Promise<void> {

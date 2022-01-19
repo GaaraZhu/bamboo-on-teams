@@ -1,4 +1,4 @@
-import { Action, ActionName } from "./actions";
+import { Action, ActionName, JobType } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Response } from "lambda-api";
@@ -6,11 +6,13 @@ import { executeDeployLatestCommand } from "../services/executors/deployLatestBu
 
 export class DeployLatestBuildAction implements Action {
   readonly actionName = ActionName.DEPLOY_LATEST_BUILD;
+  readonly type = JobType.DEPLOYMENT;
+  readonly triggeredBy: string;
   service: string;
   branch: string;
   env: string;
 
-  constructor(command: string) {
+  constructor(command: string, triggeredBy: string) {
     const deployLatestCommand = new Command()
       .name(this.actionName)
       .description(
@@ -43,6 +45,7 @@ export class DeployLatestBuildAction implements Action {
     this.service = options.service;
     this.branch = options.branch;
     this.env = options.env;
+    this.triggeredBy = triggeredBy;
   }
 
   async process(response: Response): Promise<void> {

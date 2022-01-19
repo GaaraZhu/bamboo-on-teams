@@ -1,14 +1,16 @@
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
-import { Action, ActionName } from "./actions";
+import { Action, ActionName, JobType } from "./actions";
 import { Response } from "lambda-api";
 import { executeListEnvironmentsCommand } from "../services/executors/listEnvironmentsExecutor";
 
 export class ListEnvironmentsAction implements Action {
   readonly actionName = ActionName.LIST_ENVS;
+  readonly type = JobType.DEPLOYMENT;
+  readonly triggeredBy: string;
   readonly deploymentProject: string;
 
-  constructor(command: string) {
+  constructor(command: string, triggeredBy: string) {
     const listEnvsCommand = new Command()
       .name(this.actionName)
       .description("List available environments for a service.")
@@ -28,6 +30,7 @@ export class ListEnvironmentsAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     listEnvsCommand.parse(commandInput);
     this.deploymentProject = listEnvsCommand.opts().service!;
+    this.triggeredBy = triggeredBy;
   }
 
   async process(response: Response): Promise<void> {

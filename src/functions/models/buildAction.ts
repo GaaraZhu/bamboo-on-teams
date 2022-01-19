@@ -1,4 +1,4 @@
-import { Action, ActionName } from "./actions";
+import { Action, ActionName, JobType } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Response } from "lambda-api";
@@ -6,10 +6,12 @@ import { executeBuildCommand } from "../services/executors/buildExecutor";
 
 export class BuildAction implements Action {
   readonly actionName = ActionName.BUILD;
+  readonly type = JobType.BUILD;
+  readonly triggeredBy: string;
   service: string;
   branch: string;
 
-  constructor(command: string) {
+  constructor(command: string, triggeredBy: string) {
     const buildCommand = new Command()
       .name(this.actionName)
       .description("Trigger a branch build for a service.")
@@ -37,6 +39,7 @@ export class BuildAction implements Action {
     buildCommand.parse(commandInput);
     this.service = buildCommand.opts().service;
     this.branch = buildCommand.opts().branch;
+    this.triggeredBy = triggeredBy;
   }
 
   async process(response: Response): Promise<void> {
