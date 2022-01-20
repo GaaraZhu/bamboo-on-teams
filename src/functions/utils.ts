@@ -45,7 +45,6 @@ export const startChecker = async (
   branch: string,
   triggeredBy: string,
 ): Promise<void> => {
-  console.log("222");
   const stepFunctions: StepFunctions = new StepFunctions({
     endpoint: process.env.STEP_FUNCTIONS_ENDPOINT,
     region: process.env.REGION,
@@ -58,7 +57,6 @@ export const startChecker = async (
     resultUrl = (result as DeployResult).deployment.link;
     buildNumber = (result as DeployResult).build.buildNumber;
   }
-  console.log("333");
   const inputData: JobCheckingInput = {
     resultKey: resultKey,
     resultUrl: resultUrl,
@@ -75,7 +73,6 @@ export const startChecker = async (
     input: JSON.stringify(inputData),
     traceHeader: resultKey,
   };
-  console.log("444");
   const stepFunctionsResult: PromiseResult<StartExecutionOutput, AWSError> =
     await stepFunctions.startExecution(input).promise();
   if (stepFunctionsResult?.$response?.error) {
@@ -85,7 +82,6 @@ export const startChecker = async (
       )}`
     );
   }
-  console.log("555");
 };
 
 export const axiosGet = async (
