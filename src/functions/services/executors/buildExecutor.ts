@@ -2,6 +2,7 @@ import { Response } from "lambda-api";
 import { getBranch } from "./listPlanBranchesExecutor";
 import { BuildAction } from "../../models/buildAction";
 import { axiosPost, startChecker } from "../../utils";
+import { JobType } from "../../models/actions";
 
 export const executeBuildCommand = async (
   action: BuildAction,
@@ -9,7 +10,7 @@ export const executeBuildCommand = async (
 ): Promise<void> => {
   const buildResult = await build(action.service, action.branch);
   response.status(200).json(buildResult);
-  await startChecker(buildResult, action);
+  await startChecker(buildResult, JobType.BUILD, action.service, action.branch, action.triggeredBy);
 };
 
 const build = async (

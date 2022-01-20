@@ -5,7 +5,8 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { axiosGet, prodEnvCheck } from "../../utils";
+import { axiosGet, prodEnvCheck, startChecker } from "../../utils";
+import { JobType } from "../../models/actions";
 
 export const executeDeployLatestCommand = async (
   action: DeployLatestBuildAction,
@@ -55,8 +56,7 @@ export const executeDeployLatestCommand = async (
   // deploy the release to the environment
   const env = await getEnvironment(project.id, action.env);
   const deployment = await deployRelease(env.id, targetRelease.id);
-
-  response.status(200).json({
+  const deployResult: DeployResult = {
     service: action.service,
     branch: action.branch,
     environment: action.env,
@@ -70,7 +70,10 @@ export const executeDeployLatestCommand = async (
       id: deployment.deploymentResultId,
       link: deployment.link.href,
     },
-  });
+  };
+  response.status(200).json(deployResult);
+  console.log("1111");
+  await startChecker(deployResult, JobType.DEPLOYMENT, action.service, action.branch, action.triggeredBy);
 };
 
 export const getBuildReleases = async (
@@ -108,3 +111,19 @@ export const getLatestSuccessBuild = async (
       }
     : undefined;
 };
+
+export interface DeployResult {
+  service: string;
+  branch: string;
+  environment: string;
+  build: {
+    buildNumber: string;
+    buildRelativeTime: string;
+    vcsRevisionKey?: string;
+    release: string;
+  };
+  deployment: {
+    id: string;
+    link: string;
+  };
+}

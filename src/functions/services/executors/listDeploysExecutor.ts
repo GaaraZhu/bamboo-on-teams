@@ -13,6 +13,25 @@ export const executeListDeploysCommand = async (
   response.status(200).json(await listDeploys(environment.id));
 };
 
+export const getDeploy = async (id: string): Promise<Deploy> => {
+  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/result/${id}`;
+  const { data } = await axiosGet(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+    },
+  });
+
+  return data;
+};
+
+export interface Deploy {
+  id: string;
+  lifeCycleState: string;
+  deploymentState: string;
+  finishedDate: string;
+  deploymentVersionName: string;
+}
+
 export const listDeploys = async (environmentId: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/environment/${environmentId}/results`;
   const { data, status, statusText } = await axiosGet(url, {
