@@ -1,7 +1,10 @@
 import { axiosPost } from "../../services/axiosService";
 import { Build, getBuild } from "../../services/executors/descBuildExecutor";
 import { JobType } from "../../models/actions";
-import { Deploy, getDeploy } from "../../services/executors/listDeploysExecutor";
+import {
+  Deploy,
+  getDeploy,
+} from "../../services/executors/listDeploysExecutor";
 
 export class RetriableError extends Error {
   constructor() {
@@ -29,7 +32,9 @@ export const checkJobStatus = async (
 
   if (JobType.BUILD === event.jobType) {
     const build = await getBuild(event.resultKey);
-    if (!["FINISHED", "NOT_BUILT"].includes(build.lifeCycleState.toUpperCase())) {
+    if (
+      !["FINISHED", "NOT_BUILT"].includes(build.lifeCycleState.toUpperCase())
+    ) {
       throw new RetriableError();
     }
 
@@ -70,7 +75,9 @@ const sendBuildNotification = async (
               "value": "${build.buildNumber}"
           }, {
               "name": "Build State",
-              "value": "<span style=${isSucceed? 'color:green;' : "color:red;"}>${build.buildState}</span>"
+              "value": "<span style=${
+                isSucceed ? "color:green;" : "color:red;"
+              }>${build.buildState}</span>"
           }, {
               "name": "Build Relative Time",
               "value": "${build.buildRelativeTime}"
@@ -118,7 +125,9 @@ const sendDeployNotification = async (
               "value": "${event.buildNumber}"
           }, {
               "name": "Deployment State",
-              "value": "<span style=${isSucceed? 'color:green;' : "color:red;"}>${deploy.deploymentState}</span>"
+              "value": "<span style=${
+                isSucceed ? "color:green;" : "color:red;"
+              }>${deploy.deploymentState}</span>"
           }, {
             "name": "Url",
             "value": "${deploymentPageUrl}"

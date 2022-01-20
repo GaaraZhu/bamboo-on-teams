@@ -9,7 +9,6 @@ import {
 import { JobType } from "./models/actions";
 import { JobCheckingInput } from "./api/handlers/statusChecker";
 import { BuildResult } from "./services/executors/buildExecutor";
-import { BuildAction } from "./models/buildAction";
 import { DeployResult } from "./services/executors/deployLatestBuildExecutor";
 
 export type Class<T> = {
@@ -42,7 +41,7 @@ export const startChecker = async (
   jobType: JobType,
   service: string,
   branch: string,
-  triggeredBy: string,
+  triggeredBy: string
 ): Promise<void> => {
   const stepFunctions: StepFunctions = new StepFunctions({
     endpoint: process.env.STEP_FUNCTIONS_ENDPOINT,

@@ -11,7 +11,13 @@ export const executeBuildCommand = async (
 ): Promise<void> => {
   const buildResult = await build(action.service, action.branch);
   response.status(200).json(buildResult);
-  await startChecker(buildResult, JobType.BUILD, action.service, action.branch, action.triggeredBy);
+  await startChecker(
+    buildResult,
+    JobType.BUILD,
+    action.service,
+    action.branch,
+    action.triggeredBy
+  );
 };
 
 const build = async (

@@ -73,7 +73,13 @@ export const executeDeployLatestCommand = async (
     },
   };
   response.status(200).json(deployResult);
-  await startChecker(deployResult, JobType.DEPLOYMENT, action.service, action.branch, action.triggeredBy);
+  await startChecker(
+    deployResult,
+    JobType.DEPLOYMENT,
+    action.service,
+    action.branch,
+    action.triggeredBy
+  );
 };
 
 export const getBuildReleases = async (
