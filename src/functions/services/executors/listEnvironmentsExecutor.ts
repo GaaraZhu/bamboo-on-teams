@@ -1,7 +1,7 @@
 import { Response } from "lambda-api";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { ListEnvironmentsAction } from "../../models/listEnvironmentsAction";
-import { axiosGet } from "../../utils";
+import { axiosGet } from "../axiosService";
 
 export const executeListEnvironmentsCommand = async (
   action: ListEnvironmentsAction,

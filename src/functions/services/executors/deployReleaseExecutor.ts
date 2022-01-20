@@ -3,7 +3,8 @@ import { DeployReleaseAction } from "../../models/deployReleaseAction";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getRelease } from "./listReleasesExecutor";
-import { axiosPost, prodEnvCheck } from "../../utils";
+import { prodEnvCheck } from "../../utils";
+import { axiosPost } from "../axiosService";
 
 export const executeDeployReleaseCommand = async (
   action: DeployReleaseAction,

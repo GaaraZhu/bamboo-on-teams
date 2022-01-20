@@ -4,7 +4,7 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { PromoteReleaseAction } from "../../models/promoteReleaseAction";
 import { listDeploys } from "./listDeploysExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
-import { axiosPost } from "../../utils";
+import { axiosPost } from "../axiosService";
 
 export const executePromoteReleaseCommand = async (
   action: PromoteReleaseAction,

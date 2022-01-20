@@ -1,7 +1,7 @@
 import { Response } from "lambda-api";
 import { CreateReleaseAction } from "../../models/createReleaseAction";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
-import { axiosPost } from "../../utils";
+import { axiosPost } from "../axiosService";
 
 export const executeCreateReleaseCommand = async (
   action: CreateReleaseAction,

@@ -1,7 +1,8 @@
 import { Response } from "lambda-api";
 import { getBranch } from "./listPlanBranchesExecutor";
 import { BuildAction } from "../../models/buildAction";
-import { axiosPost, startChecker } from "../../utils";
+import { axiosPost } from "../axiosService";
+import { startChecker } from "../../utils";
 import { JobType } from "../../models/actions";
 
 export const executeBuildCommand = async (

@@ -5,7 +5,8 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { axiosGet, prodEnvCheck, startChecker } from "../../utils";
+import { prodEnvCheck, startChecker } from "../../utils";
+import { axiosGet } from "../axiosService";
 import { JobType } from "../../models/actions";
 
 export const executeDeployLatestCommand = async (

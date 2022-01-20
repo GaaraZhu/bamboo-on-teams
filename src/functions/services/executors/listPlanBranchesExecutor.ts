@@ -1,6 +1,6 @@
 import { Response } from "lambda-api";
 import { ListBranchesAction } from "../../models/listBranchesAction";
-import { axiosGet } from "../../utils";
+import { axiosGet } from "../axiosService";
 import { getPlan } from "./listPlansExecutor";
 
 export const executeListBranchesCommand = async (

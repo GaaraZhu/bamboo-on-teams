@@ -1,6 +1,6 @@
 import { Response } from "lambda-api";
 import { ListDeploysAction } from "../../models/listDeploysAction";
-import { axiosGet } from "../../utils";
+import { axiosGet } from "../axiosService";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 

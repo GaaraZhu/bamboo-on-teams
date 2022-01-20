@@ -1,6 +1,6 @@
 import { Response } from "lambda-api";
 import { DescBuildAction } from "../../models/descBuildAction";
-import { axiosGet } from "../../utils";
+import { axiosGet } from "../axiosService";
 
 export const executeDescBuildCommand = async (
   action: DescBuildAction,

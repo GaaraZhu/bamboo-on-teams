@@ -1,4 +1,4 @@
-import { axiosPost } from "../../utils";
+import { axiosPost } from "../../services/axiosService";
 import { Build, getBuild } from "../../services/executors/descBuildExecutor";
 import { JobType } from "../../models/actions";
 import { Deploy, getDeploy } from "../../services/executors/listDeploysExecutor";
