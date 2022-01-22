@@ -1,6 +1,5 @@
 import { axiosPost } from "../../services/axiosService";
 import { Build, getBuild } from "../../services/executors/descBuildExecutor";
-import { JobType } from "../../models/actions";
 import {
   Deploy,
   getDeploy,
@@ -70,6 +69,13 @@ export const checkJobStatus = async (
     }
 
     await sendDeployBuildNotification(deploy, event as DeployBuildJobCheckerInput);
+  } else if (CheckerInputType.DEPLOY_RELEASE === event.type) {
+    const deploy = await getDeploy(event.resultKey);
+    if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
+      throw new RetriableError();
+    }
+
+    await sendDeployReleaseNotification(deploy, event as DeployReleaseJobCheckerInput);
   }
 };
 
@@ -147,6 +153,50 @@ const sendDeployBuildNotification = async (
           }, {
               "name": "Deployed Build Number",
               "value": "${event.buildNumber}"
+          }, {
+              "name": "Deployment State",
+              "value": "<span style=${
+                isSucceed ? "color:green;" : "color:red;"
+              }>${deploy.deploymentState}</span>"
+          }, {
+            "name": "Url",
+            "value": "${deploymentPageUrl}"
+          }],
+          "markdown": true
+      }]
+  }`;
+  const url = process.env.NOTIFICATION_URL!;
+  await axiosPost(url, notification, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+const sendDeployReleaseNotification = async (
+  deploy: Deploy,
+  event: DeployReleaseJobCheckerInput
+): Promise<void> => {
+  const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
+  const deploymentPageUrl = `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${deploy.id}`;
+  const notification = `{
+      "@type": "MessageCard",
+      "@context": "http://schema.org/extensions",
+      "themeColor": "0076D7",
+      "summary": "Bamboo deploy job finished",
+      "sections": [{
+          "activityTitle": "Bamboo deploy job finished",
+          "activitySubtitle": "triggered by ${event.triggeredBy}",
+          "activityImage": "https://toppng.com/uploads/preview/upload-11550726047fmvjjkr5mz.png",
+          "facts": [{
+              "name": "Service",
+              "value": "${event.service}"
+          },{
+              "name": "Release",
+              "value": "${event.release}"
+          }, {
+            "name": "Environment",
+            "value": "${event.environment}"
           }, {
               "name": "Deployment State",
               "value": "<span style=${
