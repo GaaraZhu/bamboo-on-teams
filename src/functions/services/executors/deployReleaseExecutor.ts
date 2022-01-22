@@ -21,7 +21,7 @@ export const executeDeployReleaseCommand = async (
 
     // start async job status checker and push the result to MS Teams
     const checkerInput: DeployReleaseJobCheckerInput = {
-      type: CheckerInputType.BUILD,
+      type: CheckerInputType.DEPLOY_RELEASE,
       resultKey: deployment.deploymentResultId,
       resultUrl: deployment.link.href,
       service: action.service,
