@@ -10,7 +10,7 @@ export class DeployReleaseAction implements Action {
   readonly triggeredBy: string;
   env: string;
   releaseName: string;
-  deploymentProject: string;
+  service: string;
 
   constructor(command: string, triggeredBy: string) {
     const buildCommand = new Command()
@@ -40,7 +40,7 @@ export class DeployReleaseAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     buildCommand.parse(commandInput);
     const options = buildCommand.opts();
-    this.deploymentProject = options.service;
+    this.service = options.service;
     this.env = options.env;
     this.releaseName = options.release;
     this.triggeredBy = triggeredBy;

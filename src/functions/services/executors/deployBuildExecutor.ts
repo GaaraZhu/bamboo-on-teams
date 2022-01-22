@@ -3,10 +3,11 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { prodEnvCheck } from "../../utils";
+import { prodEnvCheck, startCheckerExecution } from "../../utils";
 import { axiosGet } from "../axiosService";
 import { DeployBuildAction } from "../../models/deployBuildAction";
 import { getBuild } from "./descBuildExecutor";
+import { CheckerInputType, DeployBuildJobCheckerInput } from "../../api/handlers/statusChecker";
 
 export const executeDeployBuildCommand = async (
   action: DeployBuildAction,
@@ -60,6 +61,19 @@ export const executeDeployBuildCommand = async (
       link: deployment.link.href,
     },
   });
+
+  // start async job status checker and push the result to MS Teams
+  const checkerInput: DeployBuildJobCheckerInput = {
+    type: CheckerInputType.BUILD,
+    resultKey: deployment.deploymentResultId,
+    resultUrl: deployment.link.href,
+    service: action.service,
+    branch: build.branch.name,
+    buildNumber: build.buildNumber,
+    environment: action.env,
+    triggeredBy: action.triggeredBy,
+  }
+  await startCheckerExecution(deployment.deploymentResultId, checkerInput);
 };
 
 export const getBuildReleases = async (
