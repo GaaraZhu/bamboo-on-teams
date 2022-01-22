@@ -5,9 +5,10 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { prodEnvCheck, startChecker } from "../../utils";
+import { prodEnvCheck, startCheckerExecution } from "../../utils";
 import { axiosGet } from "../axiosService";
 import { JobType } from "../../models/actions";
+import { CheckerInputType, DeployBuildJobCheckerInput } from "../../api/handlers/statusChecker";
 
 export const executeDeployLatestCommand = async (
   action: DeployLatestBuildAction,
@@ -73,13 +74,19 @@ export const executeDeployLatestCommand = async (
     },
   };
   response.status(200).json(deployResult);
-  await startChecker(
-    deployResult,
-    JobType.DEPLOYMENT,
-    action.service,
-    action.branch,
-    action.triggeredBy
-  );
+
+  // start async job status checker and push the result to MS Teams
+  const checkerInput: DeployBuildJobCheckerInput = {
+    type: CheckerInputType.BUILD,
+    resultKey: deployment.deploymentResultId,
+    resultUrl: deployment.link.href,
+    service: action.service,
+    branch: action.branch,
+    buildNumber: latestBuild.buildNumber,
+    environment: action.env,
+    triggeredBy: action.triggeredBy,
+  }
+  await startCheckerExecution(deployment.deploymentResultId, checkerInput);
 };
 
 export const getBuildReleases = async (
@@ -120,11 +127,11 @@ export const getLatestSuccessBuild = async (
 
 export interface DeployResult {
   service: string;
-  branch: string;
+  branch?: string;
   environment: string;
   build: {
-    buildNumber: string;
-    buildRelativeTime: string;
+    buildNumber?: string;
+    buildRelativeTime?: string;
     vcsRevisionKey?: string;
     release: string;
   };

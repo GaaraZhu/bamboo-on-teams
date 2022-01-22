@@ -7,7 +7,7 @@ import {
   StartExecutionOutput,
 } from "aws-sdk/clients/stepfunctions";
 import { JobType } from "./models/actions";
-import { JobCheckingInput } from "./api/handlers/statusChecker";
+import { BuildJobCheckerInput, DeployBuildJobCheckerInput, DeployReleaseJobCheckerInput } from "./api/handlers/statusChecker";
 import { BuildResult } from "./services/executors/buildExecutor";
 import { DeployResult } from "./services/executors/deployLatestBuildExecutor";
 
@@ -36,47 +36,26 @@ export const prodEnvCheck = (env: string): void => {
 };
 
 // start the statusChecker step function to check job status asynchronizely, and push the result through the configured Teams connector
-export const startChecker = async (
-  result: BuildResult | DeployResult,
-  jobType: JobType,
-  service: string,
-  branch: string,
-  triggeredBy: string
+export const startCheckerExecution = async (
+  executionId: string,
+  checkerInput: BuildJobCheckerInput | DeployBuildJobCheckerInput | DeployReleaseJobCheckerInput,
 ): Promise<void> => {
+  const input: StartExecutionInput = {
+    stateMachineArn: process.env.STATUS_CHECKER_ARN!,
+    name: executionId,
+    input: JSON.stringify(checkerInput),
+    traceHeader: executionId,
+  };
   const stepFunctions: StepFunctions = new StepFunctions({
     endpoint: process.env.STEP_FUNCTIONS_ENDPOINT,
     region: process.env.REGION,
   });
-  let resultKey = (result as BuildResult).buildResultKey;
-  let resultUrl = (result as BuildResult).link?.href;
-  let buildNumber = (result as BuildResult).buildNumber;
-  if (JobType.DEPLOYMENT === jobType) {
-    resultKey = (result as DeployResult).deployment.id.toString();
-    resultUrl = (result as DeployResult).deployment.link;
-    buildNumber = (result as DeployResult).build.buildNumber;
-  }
-  const inputData: JobCheckingInput = {
-    resultKey: resultKey,
-    resultUrl: resultUrl,
-    service: service,
-    branch: branch,
-    buildNumber: buildNumber,
-    triggeredBy: triggeredBy,
-    environment: (result as DeployResult).environment,
-    jobType: jobType,
-  };
-  const input: StartExecutionInput = {
-    stateMachineArn: process.env.STATUS_CHECKER_ARN!,
-    name: resultKey,
-    input: JSON.stringify(inputData),
-    traceHeader: resultKey,
-  };
   const stepFunctionsResult: PromiseResult<StartExecutionOutput, AWSError> =
     await stepFunctions.startExecution(input).promise();
   if (stepFunctionsResult?.$response?.error) {
     console.log(
       `Failed to start stepFunction to check status for build job: ${JSON.stringify(
-        result
+        checkerInput
       )}`
     );
   }

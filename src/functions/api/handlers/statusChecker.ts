@@ -13,24 +13,48 @@ export class RetriableError extends Error {
   }
 }
 
-export interface JobCheckingInput {
+export enum CheckerInputType {
+  BUILD, DEPLOY_BUILD, DEPLOY_RELEASE
+}
+
+export interface BuildJobCheckerInput {
+  type: CheckerInputType;
   resultKey: string;
   resultUrl: string;
   service: string;
   branch: string;
   buildNumber: string;
   triggeredBy: string;
-  environment?: string;
-  jobType: JobType;
+}
+
+export interface DeployBuildJobCheckerInput {
+  type: CheckerInputType;
+  resultKey: string;
+  resultUrl: string;
+  service: string;
+  branch: string;
+  buildNumber: string;
+  environment: string;
+  triggeredBy: string;
+}
+
+export interface DeployReleaseJobCheckerInput {
+  type: CheckerInputType;
+  resultKey: string;
+  resultUrl: string;
+  service: string;
+  release: string;
+  environment: string;
+  triggeredBy: string;
 }
 
 export const checkJobStatus = async (
-  event: JobCheckingInput,
+  event: BuildJobCheckerInput | DeployBuildJobCheckerInput | DeployReleaseJobCheckerInput,
   context: any
 ): Promise<void> => {
   console.log(`checking job status: ${JSON.stringify(event)}`);
 
-  if (JobType.BUILD === event.jobType) {
+  if (CheckerInputType.BUILD === event.type) {
     const build = await getBuild(event.resultKey);
     if (
       !["FINISHED", "NOT_BUILT"].includes(build.lifeCycleState.toUpperCase())
@@ -38,20 +62,20 @@ export const checkJobStatus = async (
       throw new RetriableError();
     }
 
-    await sendBuildNotification(build, event);
-  } else {
+    await sendBuildNotification(build, event as BuildJobCheckerInput);
+  } else if (CheckerInputType.DEPLOY_BUILD === event.type) {
     const deploy = await getDeploy(event.resultKey);
     if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
       throw new RetriableError();
     }
 
-    await sendDeployNotification(deploy, event);
+    await sendDeployBuildNotification(deploy, event as DeployBuildJobCheckerInput);
   }
 };
 
 const sendBuildNotification = async (
   build: Build,
-  event: JobCheckingInput
+  event: BuildJobCheckerInput
 ): Promise<void> => {
   const isSucceed = build.buildState.toUpperCase() === "SUCCESSFUL";
   const buildPageUrl = `https://${process.env.BAMBOO_HOST_URL}/browse/${build.key}`;
@@ -96,9 +120,9 @@ const sendBuildNotification = async (
   });
 };
 
-const sendDeployNotification = async (
+const sendDeployBuildNotification = async (
   deploy: Deploy,
-  event: JobCheckingInput
+  event: DeployBuildJobCheckerInput
 ): Promise<void> => {
   const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
   const deploymentPageUrl = `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${deploy.id}`;

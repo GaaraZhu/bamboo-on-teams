@@ -5,6 +5,9 @@ import { PromoteReleaseAction } from "../../models/promoteReleaseAction";
 import { listDeploys } from "./listDeploysExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { axiosPost } from "../axiosService";
+import { startCheckerExecution } from "../../utils";
+import { DeployResult } from "./deployLatestBuildExecutor";
+import { CheckerInputType, DeployReleaseJobCheckerInput } from "../../api/handlers/statusChecker";
 
 export const executePromoteReleaseCommand = async (
   action: PromoteReleaseAction,
@@ -22,9 +25,33 @@ export const executePromoteReleaseCommand = async (
     };
   }
   const targetEnv = await getEnvironment(project.id, action.targetEnv);
+  const deployment = await deployRelease(targetEnv.id, lastSuccessDeploy.release.id);
+  const deployResult: DeployResult = {
+    service: action.service,
+    environment: action.targetEnv,
+    build: {
+      release: lastSuccessDeploy.release.name,
+    },
+    deployment: {
+      id: deployment.deploymentResultId,
+      link: deployment.link.href,
+    },
+  };
   response
     .status(200)
-    .json(await deployRelease(targetEnv.id, lastSuccessDeploy.release.id));
+    .json(deployment);
+
+  // start async job status checker and push the result to MS Teams
+  const checkerInput: DeployReleaseJobCheckerInput = {
+    type: CheckerInputType.BUILD,
+    resultKey: deployment.deploymentResultId,
+    resultUrl: deployment.link.href,
+    service: action.service,
+    release: lastSuccessDeploy.release.name,
+    environment: action.targetEnv,
+    triggeredBy: action.triggeredBy,
+  }
+  await startCheckerExecution(deployment.deploymentResultId, checkerInput);
 };
 
 export const deploy = async (
