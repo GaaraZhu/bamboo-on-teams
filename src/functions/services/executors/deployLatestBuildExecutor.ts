@@ -7,7 +7,6 @@ import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
 import { prodEnvCheck, startCheckerExecution } from "../../utils";
 import { axiosGet } from "../axiosService";
-import { JobType } from "../../models/actions";
 import {
   CheckerInputType,
   DeployBuildJobCheckerInput,

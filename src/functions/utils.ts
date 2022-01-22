@@ -6,14 +6,11 @@ import {
   StartExecutionInput,
   StartExecutionOutput,
 } from "aws-sdk/clients/stepfunctions";
-import { JobType } from "./models/actions";
 import {
   BuildJobCheckerInput,
   DeployBuildJobCheckerInput,
   DeployReleaseJobCheckerInput,
 } from "./api/handlers/statusChecker";
-import { BuildResult } from "./services/executors/buildExecutor";
-import { DeployResult } from "./services/executors/deployLatestBuildExecutor";
 
 export type Class<T> = {
   new (command: string, triggeredBy: string): T;
