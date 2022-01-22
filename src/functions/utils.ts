@@ -42,9 +42,9 @@ export const startCheckerExecution = async (
 ): Promise<void> => {
   const input: StartExecutionInput = {
     stateMachineArn: process.env.STATUS_CHECKER_ARN!,
-    name: executionId,
+    name: executionId.toString(),
     input: JSON.stringify(checkerInput),
-    traceHeader: executionId,
+    traceHeader: executionId.toString(),
   };
   const stepFunctions: StepFunctions = new StepFunctions({
     endpoint: process.env.STEP_FUNCTIONS_ENDPOINT,
