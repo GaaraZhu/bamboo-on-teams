@@ -24,7 +24,7 @@ export class DeployBuildAction implements Action {
       )
       .requiredOption("-e, --env <env>", "env name, e.g. dev", trim)
       .requiredOption(
-        "-bk, --build-key <buildKey>",
+        "-b, --build-key <buildKey>",
         "bamboo build key, e.g. API-CPV1-30",
         trim
       );
