@@ -23,7 +23,7 @@ export const getBuild = async (key: string): Promise<Build> => {
     service: data.master?.shortName,
     branch: {
       key: data.plan?.key,
-      name: data.master? data.plan?.shortName : "master",
+      name: data.master ? data.plan?.shortName : "master",
     },
     lifeCycleState: data.lifeCycleState,
     buildState: data.buildState,

@@ -7,7 +7,11 @@ import {
   StartExecutionOutput,
 } from "aws-sdk/clients/stepfunctions";
 import { JobType } from "./models/actions";
-import { BuildJobCheckerInput, DeployBuildJobCheckerInput, DeployReleaseJobCheckerInput } from "./api/handlers/statusChecker";
+import {
+  BuildJobCheckerInput,
+  DeployBuildJobCheckerInput,
+  DeployReleaseJobCheckerInput,
+} from "./api/handlers/statusChecker";
 import { BuildResult } from "./services/executors/buildExecutor";
 import { DeployResult } from "./services/executors/deployLatestBuildExecutor";
 
@@ -38,7 +42,10 @@ export const prodEnvCheck = (env: string): void => {
 // start the statusChecker step function to check job status asynchronizely, and push the result through the configured Teams connector
 export const startCheckerExecution = async (
   executionId: string,
-  checkerInput: BuildJobCheckerInput | DeployBuildJobCheckerInput | DeployReleaseJobCheckerInput,
+  checkerInput:
+    | BuildJobCheckerInput
+    | DeployBuildJobCheckerInput
+    | DeployReleaseJobCheckerInput
 ): Promise<void> => {
   const input: StartExecutionInput = {
     stateMachineArn: process.env.STATUS_CHECKER_ARN!,

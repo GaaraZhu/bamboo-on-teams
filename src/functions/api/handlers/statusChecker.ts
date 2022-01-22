@@ -13,7 +13,9 @@ export class RetriableError extends Error {
 }
 
 export enum CheckerInputType {
-  BUILD, DEPLOY_BUILD, DEPLOY_RELEASE
+  BUILD,
+  DEPLOY_BUILD,
+  DEPLOY_RELEASE,
 }
 
 export interface BuildJobCheckerInput {
@@ -48,7 +50,10 @@ export interface DeployReleaseJobCheckerInput {
 }
 
 export const checkJobStatus = async (
-  event: BuildJobCheckerInput | DeployBuildJobCheckerInput | DeployReleaseJobCheckerInput,
+  event:
+    | BuildJobCheckerInput
+    | DeployBuildJobCheckerInput
+    | DeployReleaseJobCheckerInput,
   context: any
 ): Promise<void> => {
   console.log(`checking job status: ${JSON.stringify(event)}`);
@@ -68,14 +73,20 @@ export const checkJobStatus = async (
       throw new RetriableError();
     }
 
-    await sendDeployBuildNotification(deploy, event as DeployBuildJobCheckerInput);
+    await sendDeployBuildNotification(
+      deploy,
+      event as DeployBuildJobCheckerInput
+    );
   } else if (CheckerInputType.DEPLOY_RELEASE === event.type) {
     const deploy = await getDeploy(event.resultKey);
     if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
       throw new RetriableError();
     }
 
-    await sendDeployReleaseNotification(deploy, event as DeployReleaseJobCheckerInput);
+    await sendDeployReleaseNotification(
+      deploy,
+      event as DeployReleaseJobCheckerInput
+    );
   }
 };
 

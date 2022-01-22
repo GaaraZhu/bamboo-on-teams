@@ -8,7 +8,10 @@ import { createRelease } from "./createReleaseExecutor";
 import { prodEnvCheck, startCheckerExecution } from "../../utils";
 import { axiosGet } from "../axiosService";
 import { JobType } from "../../models/actions";
-import { CheckerInputType, DeployBuildJobCheckerInput } from "../../api/handlers/statusChecker";
+import {
+  CheckerInputType,
+  DeployBuildJobCheckerInput,
+} from "../../api/handlers/statusChecker";
 
 export const executeDeployLatestCommand = async (
   action: DeployLatestBuildAction,
@@ -85,7 +88,7 @@ export const executeDeployLatestCommand = async (
     buildNumber: latestBuild.buildNumber,
     environment: action.env,
     triggeredBy: action.triggeredBy,
-  }
+  };
   await startCheckerExecution(deployment.deploymentResultId, checkerInput);
 };
 

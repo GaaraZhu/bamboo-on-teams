@@ -3,7 +3,10 @@ import { getBranch } from "./listPlanBranchesExecutor";
 import { BuildAction } from "../../models/buildAction";
 import { axiosPost } from "../axiosService";
 import { startCheckerExecution } from "../../utils";
-import { BuildJobCheckerInput, CheckerInputType } from "../../api/handlers/statusChecker";
+import {
+  BuildJobCheckerInput,
+  CheckerInputType,
+} from "../../api/handlers/statusChecker";
 
 export const executeBuildCommand = async (
   action: BuildAction,
@@ -21,7 +24,7 @@ export const executeBuildCommand = async (
     branch: action.branch,
     buildNumber: buildResult.buildNumber,
     triggeredBy: action.triggeredBy,
-  }
+  };
   await startCheckerExecution(buildResult.buildResultKey, checkerInput);
 };
 
