@@ -46,7 +46,7 @@ export const sanitizeActionName = (
 
 export enum JobType {
   BUILD,
-  DEPLOYMENT,
+  Deploy,
   OTHERS,
 }
 
@@ -74,4 +74,27 @@ export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.LIST_RELEASES]: ListReleasesAction,
   [ActionName.PROMOTE_RELEASE]: PromoteReleaseAction,
   [ActionName.CREATE_BRANCH]: createBranchAction,
+};
+
+export const actionGroupLookup: Record<JobType, ActionName[]> = {
+  [JobType.BUILD]: [
+    ActionName.LIST_PLANS,
+    ActionName.LIST_BRANCHES,
+    ActionName.LIST_BUILDS,
+    ActionName.DESC_BUILD,
+    ActionName.BUILD,
+    ActionName.CREATE_BRANCH,
+  ],
+  [JobType.Deploy]: [
+    ActionName.LIST_DEPLOY_PROJECTS,
+    ActionName.LIST_ENVS,
+    ActionName.LIST_RELEASES,
+    ActionName.LIST_DEPLOYS,
+    ActionName.CREATE_RELEASE,
+    ActionName.DEPLOY_LATEST_BUILD,
+    ActionName.DEPLOY_RELEASE,
+    ActionName.DEPLOY_BUILD,
+    ActionName.PROMOTE_RELEASE,
+  ],
+  [JobType.OTHERS]: [ActionName.HELP],
 };

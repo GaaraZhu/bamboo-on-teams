@@ -6,7 +6,7 @@ import { executePromoteReleaseCommand } from "../services/executors/promoteRelea
 
 export class PromoteReleaseAction implements Action {
   readonly actionName = ActionName.PROMOTE_RELEASE;
-  readonly type = JobType.DEPLOYMENT;
+  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
   service: string;
   sourceEnv: string;

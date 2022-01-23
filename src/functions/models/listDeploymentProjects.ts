@@ -5,7 +5,7 @@ import { executeListDeploymentProjectsCommand } from "../services/executors/list
 
 export class ListDeploymentProjectsAction implements Action {
   readonly actionName = ActionName.LIST_DEPLOY_PROJECTS;
-  readonly type = JobType.DEPLOYMENT;
+  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
 
   constructor(triggeredBy: string) {

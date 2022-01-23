@@ -6,7 +6,7 @@ import { executeDeployBuildCommand } from "../services/executors/deployBuildExec
 
 export class DeployBuildAction implements Action {
   readonly actionName = ActionName.DEPLOY_BUILD;
-  readonly type = JobType.DEPLOYMENT;
+  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
   service: string;
   env: string;

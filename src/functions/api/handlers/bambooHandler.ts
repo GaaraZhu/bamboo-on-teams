@@ -16,9 +16,7 @@ export const handle = async (
     console.log(
       `Failed to execute ACTION ${body.text} due to ${JSON.stringify(err)}`
     );
-    response.status(err.status || 500).json({
-      message: err.message,
-    });
+    response.status(err.status || 500).json(err.message);
   }
   console.log(`Action: ${body.text} finished`);
 };

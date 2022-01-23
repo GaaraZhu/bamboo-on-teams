@@ -6,7 +6,7 @@ import { executeListEnvironmentsCommand } from "../services/executors/listEnviro
 
 export class ListEnvironmentsAction implements Action {
   readonly actionName = ActionName.LIST_ENVS;
-  readonly type = JobType.DEPLOYMENT;
+  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
   readonly deploymentProject: string;
 

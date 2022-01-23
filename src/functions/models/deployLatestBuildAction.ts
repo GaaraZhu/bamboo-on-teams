@@ -6,7 +6,7 @@ import { executeDeployLatestCommand } from "../services/executors/deployLatestBu
 
 export class DeployLatestBuildAction implements Action {
   readonly actionName = ActionName.DEPLOY_LATEST_BUILD;
-  readonly type = JobType.DEPLOYMENT;
+  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
   service: string;
   branch: string;

@@ -6,7 +6,7 @@ import { executeListDeploysCommand } from "../services/executors/listDeploysExec
 
 export class ListDeploysAction implements Action {
   readonly actionName = ActionName.LIST_DEPLOYS;
-  readonly type = JobType.DEPLOYMENT;
+  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
   readonly deploymentProject: string;
   readonly env: string;

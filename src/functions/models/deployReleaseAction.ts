@@ -6,7 +6,7 @@ import { executeDeployReleaseCommand } from "../services/executors/deployRelease
 
 export class DeployReleaseAction implements Action {
   readonly actionName = ActionName.DEPLOY_RELEASE;
-  readonly type = JobType.DEPLOYMENT;
+  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
   env: string;
   releaseName: string;

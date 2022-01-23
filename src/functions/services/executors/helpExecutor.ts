@@ -1,6 +1,6 @@
 import { Response } from "lambda-api";
 import { HelpAction } from "../../models/helpAction";
-import { ActionName } from "../../models/actions";
+import { actionGroupLookup, ActionName, JobType } from "../../models/actions";
 
 export const executeHelpCommand = async (
   action: HelpAction,
@@ -21,7 +21,14 @@ export const executeHelpCommand = async (
     <div>
     <div>
     <div>AVAILABLE COMMANDS</div>
-    <div>* ${Object.values(ActionName).join("</div><div>* ")}</div>
+    <div>1. Build commands</div>
+    <div>* ${actionGroupLookup[JobType.BUILD].join("</div><div>* ")}</div>
+    <div>&nbsp;</div>
+    <div>2. Deploy commands</div>
+    <div>* ${actionGroupLookup[JobType.Deploy].join("</div><div>* ")}</div>
+    <div>&nbsp;</div>
+    <div>3. Other commands</div>
+    <div>* ${actionGroupLookup[JobType.OTHERS].join("</div><div>* ")}</div>
     <div>&nbsp;</div>
     </div>
     </div>
