@@ -4,7 +4,7 @@ import { Action, ActionName, JobType } from "./actions";
 import { Response } from "lambda-api";
 import { executeCreateBranchCommand } from "../services/executors/createPlanBranchExecutor";
 
-export class createBranchAction implements Action {
+export class CreateBranchAction implements Action {
   readonly actionName = ActionName.CREATE_BRANCH;
   readonly type = JobType.BUILD;
   readonly triggeredBy: string;

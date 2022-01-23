@@ -14,7 +14,7 @@ import { ListPlansAction } from "./listPlansAction";
 import { ListReleasesAction } from "./listReleasesAction";
 import { PromoteReleaseAction } from "./promoteReleaseAction";
 import { DeployBuildAction } from "./deployBuildAction";
-import { createBranchAction } from "./createBranchAction";
+import { CreateBranchAction } from "./createBranchAction";
 import { HelpAction } from "./helpAction";
 
 export enum ActionName {
@@ -73,7 +73,7 @@ export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.LIST_PLANS]: ListPlansAction,
   [ActionName.LIST_RELEASES]: ListReleasesAction,
   [ActionName.PROMOTE_RELEASE]: PromoteReleaseAction,
-  [ActionName.CREATE_BRANCH]: createBranchAction,
+  [ActionName.CREATE_BRANCH]: CreateBranchAction,
 };
 
 export const actionGroupLookup: Record<JobType, ActionName[]> = {
