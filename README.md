@@ -1,5 +1,29 @@
 # BAMBOO-ON-TEAMS #
-A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams
+A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
+
+# SETUP #
+1. Create an [incoming webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) in Teams to received job notification and
+copy the URL out as the `notificationURL` parameter value.
+
+2. Create an [outgoing webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-outgoing-webhook?tabs=urljsonpayload%2Cdotnet) in Teams to point to the Bamboo-on-Teams service URL, and copy the HMAC token out as the `teamsHMACSharedToken` parameter value.
+
+3. Create a [personal access token](/bamboo-on-terams/teamsNotificationURL) for the dedicated bamboo account, and copy it out as the `bambooAPIToken` parameter value.
+
+4. Configure required parameters in SSM
+```
+/bamboo-on-teams/accountId
+/bamboo-on-teams/deploymentBucket
+/bamboo-on-teams/securityGroupId
+/bamboo-on-teams/subnetId
+/bamboo-on-teams/bambooAPIToken
+/bamboo-on-teams/bambooHostUrl
+/bamboo-on-teams/bambooProjectId
+/bamboo-on-teams/teamsHMACSharedToken
+/bamboo-on-terams/teamsNotificationURL
+```
+5. Deploy Bamboo-on-Teams through npm deploy script.
+
+6. In Teams channel, tag the outgoing webhook and run commands.
 
 # SYNOPSIS #
 \<command\> [options]
