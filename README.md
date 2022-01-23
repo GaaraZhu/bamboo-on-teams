@@ -1,7 +1,7 @@
 # BAMBOO-ON-TEAMS #
 A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
-# SETUP #
+## Setup ##
 1. Create an [incoming webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) in Teams to received job notification and
 copy the URL out as the `notificationURL` parameter value.
 
@@ -25,13 +25,13 @@ copy the URL out as the `notificationURL` parameter value.
 
 6. In Teams channel, tag the outgoing webhook and run commands.
 
-# SYNOPSIS #
+## Synopsis ##
 \<command\> [options]
 
 Use "<command> help" for information on a specific command. The synopsis for each command shows its options and their usage.
 
-# AVAILABLE COMMANDS #
-## Build commands ##
+## Available commands ##
+### Build commands ###
 * list-plans
 * list-branches
 * list-builds
@@ -39,7 +39,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * create-branch
 * build
 
-## Deploy commands ##
+### Deploy commands ###
 * list-projects
 * list-envs
 * list-releases
@@ -50,16 +50,16 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * deploy-build
 * promote-release
 
-## Other commands ##
+### Other commands ###
 * help
 
-# COMMAND USAGE #
-## list-plans ##
+## Command usage ##
+### list-plans ###
 ```
 Usage: list-plans
 List bamboo plans.
 ```
-## list-branches ##
+### list-branches ###
 ```
 Usage: list-branches [options]
 List branch plans for a service.
@@ -67,7 +67,7 @@ Options:
   -s, --service <service>  service name, e.g. customers-v1
   -h, --help               display help for command
 ```
-## list-builds ##
+### list-builds ###
 ```
 Usage: list-builds [options]
 List builds for a service in a branch plan.
@@ -76,7 +76,7 @@ Options:
   -b, --branch <branch>    bamboo branch name, e.g. release-1.0.0
   -h, --help               display help for command
 ```
-## desc-build ##
+### desc-build ###
 ```
 Usage: desc-build [options]
 Describe a build.
@@ -84,7 +84,7 @@ Options:
   -b, --build <build>  build key, e.g. API-CCV28-1
   -h, --help           display help for command
 ```
-## create-branch ##
+### create-branch ###
 ```
 Usage: create-branch [options
 Create branch for a plan.
@@ -93,7 +93,7 @@ Options:
   -b, --branch <branch>    vcsBranch name, e.g. master
   -h, --help               display help for command
 ```
-## build ##
+### build ###
 ```
 Usage: build [options]
 Trigger a branch build for a service.
@@ -102,12 +102,12 @@ Options:
   -b, --branch <branch>    bamboo branch name, e.g. master
   -h, --help               display help for command
 ```
-## list-projects ##
+### list-projects ###
 ```
 Usage: list-projects
 List deployment projects.
 ```
-## list-envs ##
+### list-envs ###
 ```
 Usage: list-envs [options]
 List available environments for a service.
@@ -115,7 +115,7 @@ Options:
   -s, --service <service>  service name, e.g. customers-v1
   -h, --help               display help for command
 ```
-## list-releases ##
+### list-releases ###
 ```
 Usage: list-releases [options]
 List the releases created from a service branch.
@@ -124,7 +124,7 @@ Options:
   -b, --branch <branch>    bamboo branch name, e.g. release-1.0.0
   -h, --help               display help for command
 ```
-## list-deploys ##
+### list-deploys ###
 ```
 Usage: list-deploys [options]
 List the deployments in a service environment.
@@ -133,7 +133,7 @@ Options:
   -e, --env <env>          env name, e.g. dev
   -h, --help               display help for command
 ```
-## create-release ##
+### create-release ###
 ```
 Usage: create-release [options]
 Create a release for a service build.
@@ -143,7 +143,7 @@ Options:
   -r, --release <release>  release name, e.g. v1.0.0
   -h, --help               display help for command
 ```
-## deploy-latest ##
+### deploy-latest ###
 ```
 Usage: deploy-latest [options]
 Deploy the service with the latest build in a branch to an environment.
@@ -153,7 +153,7 @@ Options:
   -e, --env <env>          env name, e.g. dev
   -h, --help               display help for command
 ```
-## deploy-release ##
+### deploy-release ###
 ```
 Usage: deploy-release [options]
 Deploy a release to a service environment.
@@ -163,7 +163,7 @@ Options:
   -r, --release <release>  release name, e.g. v1.0.0
   -h, --help               display help for command
 ```
-## deploy-build ##
+### deploy-build ###
 ```
 Usage: deploy-build [options]
 Deploy a service build to an environment.
@@ -173,7 +173,7 @@ Options:
   -b, --build-key <buildKey>  bamboo build key, e.g. API-CPV1-30
   -h, --help                  display help for command
 ```
-## promote-release ##
+### promote-release ###
 ```
 Usage: promote-release [options]
 promote the release from one environment to another.
@@ -183,3 +183,9 @@ Options:
   -te, --target-env <targetEnv>  target environment name, e.g. test
   -h, --help                     display help for command
 ```
+
+## Contribution ##
+Your contributions are always welcome!
+
+## License ##
+This work is licensed under [MIT](https://opensource.org/licenses/MIT).
