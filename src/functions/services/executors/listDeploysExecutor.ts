@@ -32,7 +32,7 @@ export interface Deploy {
 
 export const listDeploys = async (environmentId: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/environment/${environmentId}/results`;
-  const { data, status, statusText } = await axiosGet(url, {
+  const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },

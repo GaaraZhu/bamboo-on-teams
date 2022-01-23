@@ -31,7 +31,7 @@ export const getEnvironment = async (
 
 const listEnvironments = async (projectId: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}`;
-  const { data, status, statusText } = await axiosGet(url, {
+  const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
     },

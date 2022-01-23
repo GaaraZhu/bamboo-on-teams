@@ -62,7 +62,7 @@ export const deploy = async (
   releaseId: string
 ): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/queue/deployment/?environmentId=${envId}&versionId=${releaseId}`;
-  const { data, status, statusText } = await axiosPost(url, undefined, {
+  const { data } = await axiosPost(url, undefined, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
       "Content-Type": "application/json",
