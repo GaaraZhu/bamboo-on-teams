@@ -1,6 +1,5 @@
 import { Command, CommanderError } from "commander";
 import { Action, ActionName, JobType } from "./actions";
-import { Response } from "lambda-api";
 import { executeListDeploymentProjectsCommand } from "../services/executors/listDeploymentProjectsExecutor";
 
 export class ListDeploymentProjectsAction implements Action {
@@ -24,7 +23,7 @@ export class ListDeploymentProjectsAction implements Action {
     this.triggeredBy = triggeredBy;
   }
 
-  async process(response: Response): Promise<void> {
-    return await executeListDeploymentProjectsCommand(this, response);
+  async process(): Promise<any> {
+    return await executeListDeploymentProjectsCommand(this);
   }
 }

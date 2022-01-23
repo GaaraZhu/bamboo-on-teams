@@ -1,12 +1,10 @@
-import { Response } from "lambda-api";
 import { getPlan } from "./listPlansExecutor";
 import { CreateBranchAction } from "../../models/createBranchAction";
 import { axiosGet, axiosPut } from "../axiosService";
 
 export const executeCreateBranchCommand = async (
-  action: CreateBranchAction,
-  response: Response
-): Promise<void> => {
+  action: CreateBranchAction
+): Promise<any> => {
   const plan = await getPlan(action.planName);
   const vscBranches = await getAllBranches(plan.key);
   const vscBranch: string = vscBranches.find(
@@ -17,8 +15,7 @@ export const executeCreateBranchCommand = async (
       `Unknown vsc branch provided ${action.vscBranch}, available branches: ${vscBranches}`
     );
   }
-  const branch = await createPlanBranch(plan.key, vscBranch);
-  response.status(200).json(branch);
+  return await createPlanBranch(plan.key, vscBranch);
 };
 
 const getAllBranches = async (planKey: string): Promise<any> => {

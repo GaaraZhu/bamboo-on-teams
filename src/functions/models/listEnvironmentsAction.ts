@@ -1,7 +1,6 @@
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Action, ActionName, JobType } from "./actions";
-import { Response } from "lambda-api";
 import { executeListEnvironmentsCommand } from "../services/executors/listEnvironmentsExecutor";
 
 export class ListEnvironmentsAction implements Action {
@@ -33,7 +32,7 @@ export class ListEnvironmentsAction implements Action {
     this.triggeredBy = triggeredBy;
   }
 
-  async process(response: Response): Promise<void> {
-    return await executeListEnvironmentsCommand(this, response);
+  async process(): Promise<any> {
+    return await executeListEnvironmentsCommand(this);
   }
 }

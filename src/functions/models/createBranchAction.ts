@@ -40,7 +40,7 @@ export class CreateBranchAction implements Action {
     this.triggeredBy = triggeredBy;
   }
 
-  async process(response: Response): Promise<void> {
-    return await executeCreateBranchCommand(this, response);
+  async process(): Promise<any> {
+    return await executeCreateBranchCommand(this);
   }
 }

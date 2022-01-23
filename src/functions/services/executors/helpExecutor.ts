@@ -1,11 +1,7 @@
-import { Response } from "lambda-api";
 import { HelpAction } from "../../models/helpAction";
 import { actionGroupLookup, ActionName, JobType } from "../../models/actions";
 
-export const executeHelpCommand = async (
-  action: HelpAction,
-  response: Response
-): Promise<void> => {
+export const executeHelpCommand = async (action: HelpAction): Promise<any> => {
   const help = `
   <div>
     <div>NAME</div>
@@ -34,5 +30,5 @@ export const executeHelpCommand = async (
     </div>
   </div>
 `;
-  response.status(200).html(help);
+  return help;
 };

@@ -1,4 +1,3 @@
-import { Response } from "lambda-api";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
@@ -14,9 +13,8 @@ import {
 import { DeployResult } from "./deployLatestBuildExecutor";
 
 export const executeDeployBuildCommand = async (
-  action: DeployBuildAction,
-  response: Response
-): Promise<void> => {
+  action: DeployBuildAction
+): Promise<any> => {
   // 1. check environment availability
   prodEnvCheck(action.env);
 
@@ -65,7 +63,6 @@ export const executeDeployBuildCommand = async (
       link: deployment.link.href,
     },
   };
-  response.status(200).json(deployResult);
 
   // start async job status checker and push the result to MS Teams
   const checkerInput: DeployBuildJobCheckerInput = {
@@ -79,6 +76,8 @@ export const executeDeployBuildCommand = async (
     triggeredBy: action.triggeredBy,
   };
   await startCheckerExecution(deployment.deploymentResultId, checkerInput);
+
+  return deployResult;
 };
 
 export const getBuildReleases = async (

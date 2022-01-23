@@ -1,4 +1,3 @@
-import { Response } from "lambda-api";
 import { getBranch } from "./listPlanBranchesExecutor";
 import { DeployLatestBuildAction } from "../../models/deployLatestBuildAction";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
@@ -13,9 +12,8 @@ import {
 } from "../../api/handlers/statusChecker";
 
 export const executeDeployLatestCommand = async (
-  action: DeployLatestBuildAction,
-  response: Response
-): Promise<void> => {
+  action: DeployLatestBuildAction
+): Promise<any> => {
   // 1. check environment availability
   prodEnvCheck(action.env);
 
@@ -23,10 +21,10 @@ export const executeDeployLatestCommand = async (
   const branch = await getBranch(action.service, action.branch);
   const latestBuild = await getLatestSuccessBuild(branch.key);
   if (!latestBuild) {
-    response.status(400).json({
+    throw {
+      status: 400,
       message: `No success build found for service ${action.service} in branch ${action.branch}`,
-    });
-    return;
+    };
   }
 
   // get all releases for the service branch
@@ -75,7 +73,6 @@ export const executeDeployLatestCommand = async (
       link: deployment.link.href,
     },
   };
-  response.status(200).json(deployResult);
 
   // start async job status checker and push the result to MS Teams
   const checkerInput: DeployBuildJobCheckerInput = {
@@ -89,6 +86,8 @@ export const executeDeployLatestCommand = async (
     triggeredBy: action.triggeredBy,
   };
   await startCheckerExecution(deployment.deploymentResultId, checkerInput);
+
+  return deployResult;
 };
 
 export const getBuildReleases = async (

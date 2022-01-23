@@ -1,12 +1,10 @@
 import { ListPlansAction } from "../../models/listPlansAction";
-import { Response } from "lambda-api";
 import { axiosGet } from "../axiosService";
 
 export const executeListPlansCommand = async (
-  action: ListPlansAction,
-  response: Response
-): Promise<void> => {
-  response.status(200).json((await listPlans()).map((p: any) => p.name));
+  action: ListPlansAction
+): Promise<any> => {
+  return (await listPlans()).map((p: any) => p.name);
 };
 
 export const getPlan = async (planName: string): Promise<any> => {

@@ -1,14 +1,12 @@
-import { Response } from "lambda-api";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { ListEnvironmentsAction } from "../../models/listEnvironmentsAction";
 import { axiosGet } from "../axiosService";
 
 export const executeListEnvironmentsCommand = async (
-  action: ListEnvironmentsAction,
-  response: Response
-): Promise<void> => {
+  action: ListEnvironmentsAction
+): Promise<any> => {
   const project = await getDeploymentProject(action.deploymentProject);
-  response.status(200).json(await listEnvironments(project.id));
+  return await listEnvironments(project.id);
 };
 
 export const getEnvironment = async (

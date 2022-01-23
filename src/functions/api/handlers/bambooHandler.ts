@@ -11,7 +11,8 @@ export const handle = async (
   );
   try {
     const action = await CommandParser.build().parse(body.text, body.from.name);
-    await action.process(response);
+    const result = await action.process();
+    response.status(200).json(result);
   } catch (err: any) {
     console.log(
       `Failed to execute ACTION ${body.text} due to ${JSON.stringify(err)}`

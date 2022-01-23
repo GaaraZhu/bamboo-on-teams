@@ -1,21 +1,15 @@
-import { Response } from "lambda-api";
 import { ListReleasesAction } from "../../models/listReleasesAction";
 import { axiosGet } from "../axiosService";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 
 export const executeListReleasesCommand = async (
-  action: ListReleasesAction,
-  response: Response
-): Promise<void> => {
+  action: ListReleasesAction
+): Promise<any> => {
   const project = await getDeploymentProject(action.deploymentProject);
-  response
-    .status(200)
-    .json(
-      (await listReleases(project.id)).filter(
-        (r: any) =>
-          r.planBranchName.toUpperCase() === action.planBranch.toUpperCase()
-      )
-    );
+  return (await listReleases(project.id)).filter(
+    (r: any) =>
+      r.planBranchName.toUpperCase() === action.planBranch.toUpperCase()
+  );
 };
 
 export const getRelease = async (

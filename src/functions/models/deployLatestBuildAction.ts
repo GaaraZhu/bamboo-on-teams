@@ -1,7 +1,6 @@
 import { Action, ActionName, JobType } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
-import { Response } from "lambda-api";
 import { executeDeployLatestCommand } from "../services/executors/deployLatestBuildExecutor";
 
 export class DeployLatestBuildAction implements Action {
@@ -48,7 +47,7 @@ export class DeployLatestBuildAction implements Action {
     this.triggeredBy = triggeredBy;
   }
 
-  async process(response: Response): Promise<void> {
-    return await executeDeployLatestCommand(this, response);
+  async process(): Promise<any> {
+    return await executeDeployLatestCommand(this);
   }
 }

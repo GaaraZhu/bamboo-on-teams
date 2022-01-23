@@ -1,4 +1,3 @@
-import { Response } from "lambda-api";
 import { getBranch } from "./listPlanBranchesExecutor";
 import { BuildAction } from "../../models/buildAction";
 import { axiosPost } from "../axiosService";
@@ -9,11 +8,9 @@ import {
 } from "../../api/handlers/statusChecker";
 
 export const executeBuildCommand = async (
-  action: BuildAction,
-  response: Response
-): Promise<void> => {
+  action: BuildAction
+): Promise<any> => {
   const buildResult = await build(action.service, action.branch);
-  response.status(200).json(buildResult);
 
   // start async job status checker and push the result to MS Teams
   const checkerInput: BuildJobCheckerInput = {
@@ -26,6 +23,7 @@ export const executeBuildCommand = async (
     triggeredBy: action.triggeredBy,
   };
   await startCheckerExecution(buildResult.buildResultKey, checkerInput);
+  return buildResult;
 };
 
 const build = async (

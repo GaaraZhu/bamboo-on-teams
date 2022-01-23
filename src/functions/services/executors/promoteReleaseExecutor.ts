@@ -1,4 +1,3 @@
-import { Response } from "lambda-api";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { PromoteReleaseAction } from "../../models/promoteReleaseAction";
@@ -13,9 +12,8 @@ import {
 } from "../../api/handlers/statusChecker";
 
 export const executePromoteReleaseCommand = async (
-  action: PromoteReleaseAction,
-  response: Response
-): Promise<void> => {
+  action: PromoteReleaseAction
+): Promise<any> => {
   const project = await getDeploymentProject(action.service);
   const sourceEnv = await getEnvironment(project.id, action.sourceEnv);
   const lastSuccessDeploy = (await listDeploys(sourceEnv.id))?.find(
@@ -43,7 +41,6 @@ export const executePromoteReleaseCommand = async (
       link: deployment.link.href,
     },
   };
-  response.status(200).json(deployment);
 
   // start async job status checker and push the result to MS Teams
   const checkerInput: DeployReleaseJobCheckerInput = {
@@ -56,6 +53,8 @@ export const executePromoteReleaseCommand = async (
     triggeredBy: action.triggeredBy,
   };
   await startCheckerExecution(deployment.deploymentResultId, checkerInput);
+
+  return deployResult;
 };
 
 export const deploy = async (

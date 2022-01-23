@@ -50,7 +50,7 @@ export class CreateReleaseAction implements Action {
     this.triggeredBy = triggeredBy;
   }
 
-  async process(response: Response): Promise<void> {
-    return await executeCreateReleaseCommand(this, response);
+  async process(): Promise<any> {
+    return await executeCreateReleaseCommand(this);
   }
 }

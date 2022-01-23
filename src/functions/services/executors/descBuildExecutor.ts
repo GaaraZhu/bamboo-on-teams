@@ -1,12 +1,10 @@
-import { Response } from "lambda-api";
 import { DescBuildAction } from "../../models/descBuildAction";
 import { axiosGet } from "../axiosService";
 
 export const executeDescBuildCommand = async (
-  action: DescBuildAction,
-  response: Response
-): Promise<void> => {
-  response.status(200).json(await getBuild(action.build));
+  action: DescBuildAction
+): Promise<any> => {
+  return await getBuild(action.build);
 };
 
 export const getBuild = async (key: string): Promise<Build> => {

@@ -54,7 +54,7 @@ export interface Action {
   actionName: ActionName;
   triggeredBy: string;
   type: JobType;
-  process(response: Response): Promise<void>;
+  process(): Promise<any>;
 }
 
 export const actionLookup: Record<ActionName, Class<Action>> = {

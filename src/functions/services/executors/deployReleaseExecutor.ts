@@ -1,4 +1,3 @@
-import { Response } from "lambda-api";
 import { DeployReleaseAction } from "../../models/deployReleaseAction";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
@@ -11,16 +10,14 @@ import {
 } from "../../api/handlers/statusChecker";
 
 export const executeDeployReleaseCommand = async (
-  action: DeployReleaseAction,
-  response: Response
-): Promise<void> => {
+  action: DeployReleaseAction
+): Promise<any> => {
   prodEnvCheck(action.env);
 
   const project = await getDeploymentProject(action.service);
   const env = await getEnvironment(project.id, action.env);
   const release = await getRelease(project.id, action.releaseName);
   const deployment = await deployRelease(env.id, release.id);
-  response.status(200).json(deployment);
 
   // start async job status checker and push the result to MS Teams
   const checkerInput: DeployReleaseJobCheckerInput = {
@@ -33,6 +30,8 @@ export const executeDeployReleaseCommand = async (
     triggeredBy: action.triggeredBy,
   };
   await startCheckerExecution(deployment.deploymentResultId, checkerInput);
+
+  return deployment;
 };
 
 export const deployRelease = async (

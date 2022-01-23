@@ -1,6 +1,5 @@
 import { Command, CommanderError } from "commander";
 import { Action, ActionName, JobType } from "./actions";
-import { Response } from "lambda-api";
 import { executeHelpCommand } from "../services/executors/helpExecutor";
 
 export class HelpAction implements Action {
@@ -26,7 +25,7 @@ export class HelpAction implements Action {
     this.triggeredBy = triggeredBy;
   }
 
-  async process(response: Response): Promise<void> {
-    return await executeHelpCommand(this, response);
+  async process(): Promise<any> {
+    return await executeHelpCommand(this);
   }
 }

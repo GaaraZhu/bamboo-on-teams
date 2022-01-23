@@ -1,16 +1,12 @@
-import { Response } from "lambda-api";
 import { CreateReleaseAction } from "../../models/createReleaseAction";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { axiosPost } from "../axiosService";
 
 export const executeCreateReleaseCommand = async (
-  action: CreateReleaseAction,
-  response: Response
-): Promise<void> => {
+  action: CreateReleaseAction
+): Promise<any> => {
   const project = await getDeploymentProject(action.deploymentProject);
-  response
-    .status(200)
-    .json(await createRelease(project.id, action.buildKey, action.releaseName));
+  return await createRelease(project.id, action.buildKey, action.releaseName);
 };
 
 export const createRelease = async (

@@ -1,14 +1,12 @@
-import { Response } from "lambda-api";
 import { ListBuildsAction } from "../../models/listBuildsAction";
 import { axiosGet } from "../axiosService";
 import { getBranch } from "./listPlanBranchesExecutor";
 
 export const executeListBuildsCommand = async (
-  action: ListBuildsAction,
-  response: Response
-): Promise<void> => {
+  action: ListBuildsAction
+): Promise<any> => {
   const branch = await getBranch(action.planName, action.branchName);
-  response.status(200).json(await listPlanBranchBuilds(branch.key));
+  return await listPlanBranchBuilds(branch.key);
 };
 
 export const listPlanBranchBuilds = async (branchKey: string): Promise<any> => {

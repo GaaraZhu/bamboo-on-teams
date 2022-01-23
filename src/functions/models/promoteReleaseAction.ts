@@ -1,7 +1,6 @@
 import { Action, ActionName, JobType } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
-import { Response } from "lambda-api";
 import { executePromoteReleaseCommand } from "../services/executors/promoteReleaseExecutor";
 
 export class PromoteReleaseAction implements Action {
@@ -51,7 +50,7 @@ export class PromoteReleaseAction implements Action {
     this.triggeredBy = triggeredBy;
   }
 
-  async process(response: Response): Promise<void> {
-    return await executePromoteReleaseCommand(this, response);
+  async process(): Promise<any> {
+    return await executePromoteReleaseCommand(this);
   }
 }
