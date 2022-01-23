@@ -12,6 +12,7 @@ provider:
     name: ${ssm:/bamboo-on-teams/deploymentBucket}
     serverSideEncryption: AES256
 
+  # VPC configuration for functions to access the private Bamboo API which can be removed if Bamboo is public available.
   vpc:
     securityGroupIds:
       - ${ssm:/bamboo-on-teams/securityGroupId}
