@@ -1,4 +1,4 @@
-# BAMBOO-ON-TEAMS #
+# Bamboo-on-Teams ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) #
 A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
 ## Setup ##
