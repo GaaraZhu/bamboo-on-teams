@@ -1,8 +1,9 @@
-# bamboo-on-teams
+# BAMBOO-ON-TEAMS #
 A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams
 
 # SYNOPSIS #
-<command> \[options\]
+\<command\> [options]
+
 Use "<command> help" for information on a specific command. The synopsis for each command shows its options and their usage.
 
 # AVAILABLE COMMANDS #
