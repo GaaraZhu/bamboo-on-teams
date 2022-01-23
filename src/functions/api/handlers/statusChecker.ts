@@ -115,6 +115,9 @@ const sendBuildNotification = async (
               "name": "Build Number",
               "value": "${build.buildNumber}"
           }, {
+              "name": "Build Key",
+              "value": "${build.key}"
+          }, {
               "name": "Build State",
               "value": "<span style=${
                 isSucceed ? "color:green;" : "color:red;"
