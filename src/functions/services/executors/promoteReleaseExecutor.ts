@@ -4,12 +4,12 @@ import { PromoteReleaseAction } from "../../models/promoteReleaseAction";
 import { listDeploys } from "./listDeploysExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { axiosPost } from "../axiosService";
-import { startCheckerExecution } from "../../utils";
 import { DeployResult } from "./deployLatestBuildExecutor";
 import {
   CheckerInputType,
   DeployReleaseJobCheckerInput,
 } from "../../api/handlers/statusChecker";
+import { startCheckerExecution } from "../stepFunctionService";
 
 export const executePromoteReleaseCommand = async (
   action: PromoteReleaseAction

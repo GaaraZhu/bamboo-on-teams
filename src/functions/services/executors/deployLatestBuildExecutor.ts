@@ -4,12 +4,13 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { prodEnvCheck, startCheckerExecution } from "../../utils";
+import { prodEnvCheck } from "../../utils";
 import { axiosGet } from "../axiosService";
 import {
   CheckerInputType,
   DeployBuildJobCheckerInput,
 } from "../../api/handlers/statusChecker";
+import { startCheckerExecution } from "../stepFunctionService";
 
 export const executeDeployLatestCommand = async (
   action: DeployLatestBuildAction

@@ -2,7 +2,7 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { prodEnvCheck, startCheckerExecution } from "../../utils";
+import { prodEnvCheck } from "../../utils";
 import { axiosGet } from "../axiosService";
 import { DeployBuildAction } from "../../models/deployBuildAction";
 import { getBuild } from "./descBuildExecutor";
@@ -11,6 +11,7 @@ import {
   DeployBuildJobCheckerInput,
 } from "../../api/handlers/statusChecker";
 import { DeployResult } from "./deployLatestBuildExecutor";
+import { startCheckerExecution } from "../stepFunctionService";
 
 export const executeDeployBuildCommand = async (
   action: DeployBuildAction

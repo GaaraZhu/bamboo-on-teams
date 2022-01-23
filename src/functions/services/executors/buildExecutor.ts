@@ -1,11 +1,11 @@
 import { getBranch } from "./listPlanBranchesExecutor";
 import { BuildAction } from "../../models/buildAction";
 import { axiosPost } from "../axiosService";
-import { startCheckerExecution } from "../../utils";
 import {
   BuildJobCheckerInput,
   CheckerInputType,
 } from "../../api/handlers/statusChecker";
+import { startCheckerExecution } from "../stepFunctionService";
 
 export const executeBuildCommand = async (
   action: BuildAction
