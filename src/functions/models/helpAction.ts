@@ -1,10 +1,9 @@
 import { Command, CommanderError } from "commander";
-import { Action, ActionName, JobType } from "./actions";
+import { Action, ActionName } from "./actions";
 import { executeHelpCommand } from "../services/executors/helpExecutor";
 
 export class HelpAction implements Action {
   readonly actionName = ActionName.HELP;
-  readonly type = JobType.OTHERS;
   readonly triggeredBy: string;
   readonly project;
 

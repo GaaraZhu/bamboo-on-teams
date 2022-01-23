@@ -1,12 +1,10 @@
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
-import { Action, ActionName, JobType } from "./actions";
-import { Response } from "lambda-api";
+import { Action, ActionName } from "./actions";
 import { executeCreateBranchCommand } from "../services/executors/createPlanBranchExecutor";
 
 export class CreateBranchAction implements Action {
   readonly actionName = ActionName.CREATE_BRANCH;
-  readonly type = JobType.BUILD;
   readonly triggeredBy: string;
   readonly planName: string;
   readonly vscBranch: string;

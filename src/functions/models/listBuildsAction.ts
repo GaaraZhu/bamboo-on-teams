@@ -1,11 +1,10 @@
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
-import { Action, ActionName, JobType } from "./actions";
+import { Action, ActionName } from "./actions";
 import { executeListBuildsCommand } from "../services/executors/listBuildsExecutor";
 
 export class ListBuildsAction implements Action {
   readonly actionName = ActionName.LIST_BUILDS;
-  readonly type = JobType.BUILD;
   readonly triggeredBy: string;
   readonly planName: string;
   readonly branchName: string;

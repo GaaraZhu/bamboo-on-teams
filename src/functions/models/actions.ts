@@ -53,7 +53,6 @@ export enum JobType {
 export interface Action {
   actionName: ActionName;
   triggeredBy: string;
-  type: JobType;
   process(): Promise<any>;
 }
 

@@ -1,11 +1,10 @@
-import { Action, ActionName, JobType } from "./actions";
+import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executeDeployLatestCommand } from "../services/executors/deployLatestBuildExecutor";
 
 export class DeployLatestBuildAction implements Action {
   readonly actionName = ActionName.DEPLOY_LATEST_BUILD;
-  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
   service: string;
   branch: string;

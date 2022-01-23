@@ -1,11 +1,10 @@
-import { Action, ActionName, JobType } from "./actions";
+import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executePromoteReleaseCommand } from "../services/executors/promoteReleaseExecutor";
 
 export class PromoteReleaseAction implements Action {
   readonly actionName = ActionName.PROMOTE_RELEASE;
-  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
   service: string;
   sourceEnv: string;

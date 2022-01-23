@@ -1,11 +1,10 @@
-import { Action, ActionName, JobType } from "./actions";
+import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executeDescBuildCommand } from "../services/executors/descBuildExecutor";
 
 export class DescBuildAction implements Action {
   readonly actionName = ActionName.DESC_BUILD;
-  readonly type = JobType.BUILD;
   readonly triggeredBy: string;
   build: string;
 

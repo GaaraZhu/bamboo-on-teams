@@ -1,12 +1,10 @@
-import { Action, ActionName, JobType } from "./actions";
+import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
-import { Response } from "lambda-api";
 import { executeCreateReleaseCommand } from "../services/executors/createReleaseExecutor";
 
 export class CreateReleaseAction implements Action {
   readonly actionName = ActionName.CREATE_RELEASE;
-  readonly type = JobType.Deploy;
   readonly triggeredBy: string;
   deploymentProject: string;
   buildKey: string;
