@@ -198,7 +198,7 @@ const sendDeployReleaseNotification = async (
       "sections": [{
           "activityTitle": "Bamboo deploy job finished",
           "activitySubtitle": "triggered by ${event.triggeredBy}",
-          "activityImage": "https://toppng.com/uploads/preview/upload-11550726047fmvjjkr5mz.png",
+          "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg&usqp=CAU",
           "facts": [{
               "name": "Service",
               "value": "${event.service}"
