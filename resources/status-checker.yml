@@ -5,7 +5,7 @@ StatusChecker:
     States:
       DelayTheChecking:
         Type: Wait
-        Seconds: 180
+        Seconds: 300
         Next: CheckStatus
 
       CheckStatus:
@@ -17,7 +17,7 @@ StatusChecker:
               - retriableError
             IntervalSeconds: 30
             BackoffRate: 1
-            MaxAttempts: 34
+            MaxAttempts: 50
         Next: FinalEndState
 
       FinalEndState:
