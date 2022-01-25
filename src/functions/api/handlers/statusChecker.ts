@@ -123,8 +123,11 @@ const sendBuildNotification = async (
                 isSucceed ? "color:green;" : "color:red;"
               }>${build.buildState}</span>"
           }, {
-              "name": "Build Relative Time",
+              "name": "Build Finished Time",
               "value": "${build.buildRelativeTime}"
+          }, {
+            "name": "Build Duration",
+            "value": "${build.buildDuration}"
           }, {
             "name": "Url",
             "value": "${buildPageUrl}"

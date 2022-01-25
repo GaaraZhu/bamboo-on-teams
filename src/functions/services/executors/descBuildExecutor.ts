@@ -26,6 +26,7 @@ export const getBuild = async (key: string): Promise<Build> => {
     lifeCycleState: data.lifeCycleState,
     buildState: data.buildState,
     buildRelativeTime: data.buildRelativeTime,
+    buildDuration: data.buildDurationDescription,
     url: url,
     changes: data.changes?.change?.map((c: any) => ({
       author: c.author,
@@ -45,6 +46,7 @@ export interface Build {
   lifeCycleState: string;
   buildState: string;
   buildRelativeTime: string;
+  buildDuration: string;
   url: string;
   changes: {
     author: string;
