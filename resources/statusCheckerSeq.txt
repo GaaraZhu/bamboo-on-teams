@@ -1,0 +1,33 @@
+title StatusChecker
+
+participant Stepfunctions
+participant Bamboo Rest API
+participant Teams incoming webhook
+participant Chatops channel
+actor User
+
+loop schedule with backoff
+  opt max attempts not reached
+    Stepfunctions->Bamboo Rest API: GET job status
+    activate Bamboo Rest API
+    Bamboo Rest API-->Stepfunctions: job result
+    deactivate Bamboo Rest API
+    opt job is finished
+        Stepfunctions->Teams incoming webhook: POST job result
+        activate Teams incoming webhook
+        Teams incoming webhook->Chatops channel: job result
+        Chatops channel->User: job result
+        deactivate Teams incoming webhook
+        Stepfunctions->Stepfunctions: end()
+    else
+        Stepfunctions->Stepfunctions: waitForRetry()
+    end
+  else
+    Stepfunctions->Teams incoming webhook: POST unknown job result
+    activate Teams incoming webhook
+    Teams incoming webhook->Chatops channel: unknown job result
+    Chatops channel->User: unknown job result
+    deactivate Teams incoming webhook
+    Stepfunctions->Stepfunctions: end()
+  end
+end

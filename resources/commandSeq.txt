@@ -1,0 +1,26 @@
+title Bamboo-On-Teams
+actor User
+participant Chatops channel
+participant Teams outgoing webhook
+participant Bamboo-On-Teams
+participant Bamboo Rest API
+participant Stepfunctions
+
+User->Chatops channel: tag the outgoing webhook\nand post command e.g.**"@bamboo\nbuild -s core-customers-v1 -b master"**
+Teams Channel->Bamboo-On-Teams
+Chatops channel->Teams outgoing webhook: triggers outgoing webhook
+Teams outgoing webhook->Bamboo-On-Teams: POST request with the channel details,\nuser information as well as the message\n(command)
+activate Bamboo-On-Teams
+Bamboo-On-Teams->Bamboo-On-Teams: parse command
+Bamboo-On-Teams->Bamboo Rest API: bamboo operation
+activate Bamboo Rest API
+Bamboo Rest API-->Bamboo-On-Teams: response data
+deactivate Bamboo Rest API
+Bamboo-On-Teams->Bamboo-On-Teams: construct result
+Bamboo-On-Teams-->Teams outgoing webhook: Command execution result
+Teams outgoing webhook-->Chatops channel: Command execution result
+Chatops channel-->User: Command execution result
+
+opt bamboo asynchronise job
+    Bamboo-On-Teams->Stepfunctions: start JobStatusChecker stepfunction execution
+end
