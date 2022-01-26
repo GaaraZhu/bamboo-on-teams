@@ -1,6 +1,13 @@
 # Bamboo-on-Teams ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) #
 A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
+## Workflow
+### user interaction
+ ![command execution](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/commandSeq.png)
+
+### status notification
+ ![status notification](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/statusCheckerSeq.png)
+
 ## Setup ##
 1. Create an [incoming webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) in Teams to received job notification and
 copy the URL out as the `notificationURL` parameter value.
