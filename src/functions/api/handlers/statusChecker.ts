@@ -65,7 +65,11 @@ export const checkJobStatus = async (
       throw new JobHangingError();
     }
     return build;
-  } else if ([CheckerInputType.DEPLOY_BUILD, CheckerInputType.DEPLOY_RELEASE].includes(event.type)) {
+  } else if (
+    [CheckerInputType.DEPLOY_BUILD, CheckerInputType.DEPLOY_RELEASE].includes(
+      event.type
+    )
+  ) {
     const deploy = await getDeploy(event.resultKey);
     if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
       throw new JobHangingError();
@@ -81,11 +85,15 @@ export const notifyJobStatus = async (
   context: any
 ): Promise<void> => {
   console.log(`notifying job status: ${JSON.stringify(event)}`);
+  const jobUrl =
+    CheckerInputType.BUILD === event.type
+      ? `https://${process.env.BAMBOO_HOST_URL}/browse/${event.resultKey}`
+      : `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${event.resultKey}`;
   if (event.error) {
     await sendHangingStatusNotification(
       event.service,
-      event.resultUrl,
-      event.triggeredBy
+      event.triggeredBy,
+      jobUrl
     );
     return;
   }
@@ -93,27 +101,30 @@ export const notifyJobStatus = async (
   if (CheckerInputType.BUILD === event.type) {
     await sendBuildNotification(
       event.result as Build,
-      event as BuildJobCheckerInput
+      event as BuildJobCheckerInput,
+      jobUrl
     );
   } else if (CheckerInputType.DEPLOY_BUILD === event.type) {
     await sendDeployBuildNotification(
       event.result as Deploy,
-      event as DeployBuildJobCheckerInput
+      event as DeployBuildJobCheckerInput,
+      jobUrl
     );
   } else if (CheckerInputType.DEPLOY_RELEASE === event.type) {
     await sendDeployReleaseNotification(
       event.result as Deploy,
-      event as DeployReleaseJobCheckerInput
+      event as DeployReleaseJobCheckerInput,
+      jobUrl
     );
   }
 };
 
 const sendBuildNotification = async (
   build: Build,
-  event: BuildJobCheckerInput
+  event: BuildJobCheckerInput,
+  jobUrl: string
 ): Promise<void> => {
   const isSucceed = build.buildState.toUpperCase() === "SUCCESSFUL";
-  const buildPageUrl = `https://${process.env.BAMBOO_HOST_URL}/browse/${build.key}`;
   const notification = `{
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
@@ -148,7 +159,7 @@ const sendBuildNotification = async (
             "value": "${build.buildDuration}"
           }, {
             "name": "Url",
-            "value": "${buildPageUrl}"
+            "value": "${jobUrl}"
           }],
           "markdown": true
       }]
@@ -163,10 +174,10 @@ const sendBuildNotification = async (
 
 const sendDeployBuildNotification = async (
   deploy: Deploy,
-  event: DeployBuildJobCheckerInput
+  event: DeployBuildJobCheckerInput,
+  jobUrl: string
 ): Promise<void> => {
   const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
-  const deploymentPageUrl = `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${deploy.id}`;
   const notification = `{
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
@@ -195,7 +206,7 @@ const sendDeployBuildNotification = async (
               }>${deploy.deploymentState}</span>"
           }, {
             "name": "Url",
-            "value": "${deploymentPageUrl}"
+            "value": "${jobUrl}"
           }],
           "markdown": true
       }]
@@ -210,10 +221,10 @@ const sendDeployBuildNotification = async (
 
 const sendDeployReleaseNotification = async (
   deploy: Deploy,
-  event: DeployReleaseJobCheckerInput
+  event: DeployReleaseJobCheckerInput,
+  jobUrl: string
 ): Promise<void> => {
   const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
-  const deploymentPageUrl = `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${deploy.id}`;
   const notification = `{
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
@@ -239,7 +250,7 @@ const sendDeployReleaseNotification = async (
               }>${deploy.deploymentState}</span>"
           }, {
             "name": "Url",
-            "value": "${deploymentPageUrl}"
+            "value": "${jobUrl}"
           }],
           "markdown": true
       }]
@@ -254,8 +265,8 @@ const sendDeployReleaseNotification = async (
 
 const sendHangingStatusNotification = async (
   service: string,
-  url: string,
-  triggered: string
+  triggered: string,
+  jobUrl: string
 ): Promise<void> => {
   const notification = `{
       "@type": "MessageCard",
@@ -271,7 +282,7 @@ const sendHangingStatusNotification = async (
               "value": "${service}"
           },{
               "name": "Url",
-              "value": "${url}"
+              "value": "${jobUrl}"
           }],
           "markdown": true
       }]
