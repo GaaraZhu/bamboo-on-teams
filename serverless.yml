@@ -100,6 +100,9 @@ functions:
   checkStatusFunc:
     name: ${self:service}-${self:provider.stage}-statusChecker
     handler: dist/functions/api/handlers/statusChecker.checkJobStatus
+  notifyStatusFunc:
+    name: ${self:service}-${self:provider.stage}-statusNotifier
+    handler: dist/functions/api/handlers/statusChecker.notifyJobStatus
 
 plugins:
   - serverless-offline

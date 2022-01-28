@@ -55,36 +55,61 @@ export const checkJobStatus = async (
     | DeployBuildJobCheckerInput
     | DeployReleaseJobCheckerInput,
   context: any
-): Promise<void> => {
+): Promise<any> => {
   console.log(`checking job status: ${JSON.stringify(event)}`);
-
   if (CheckerInputType.BUILD === event.type) {
     const build = await getBuild(event.resultKey);
     if (
       !["FINISHED", "NOT_BUILT"].includes(build.lifeCycleState.toUpperCase())
     ) {
-      throw new RetriableError();
+      throw new JobNotFinsihedError();
     }
 
-    await sendBuildNotification(build, event as BuildJobCheckerInput);
+    return build;
   } else if (CheckerInputType.DEPLOY_BUILD === event.type) {
     const deploy = await getDeploy(event.resultKey);
     if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
-      throw new RetriableError();
+      throw new JobNotFinsihedError();
     }
-
-    await sendDeployBuildNotification(
-      deploy,
-      event as DeployBuildJobCheckerInput
-    );
+    return deploy;
   } else if (CheckerInputType.DEPLOY_RELEASE === event.type) {
     const deploy = await getDeploy(event.resultKey);
     if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
-      throw new RetriableError();
+      throw new JobNotFinsihedError();
     }
+    return deploy;
+  }
 
+  return undefined;
+};
+
+export const notifyJobStatus = async (
+  event: any,
+  context: any
+): Promise<void> => {
+  console.log(`notifying job status: ${JSON.stringify(event)}`);
+  if (event.error) {
+    await sendHangingStatusNotification(
+      event.service,
+      event.resultUrl,
+      event.triggeredBy
+    );
+    return;
+  }
+
+  if (CheckerInputType.BUILD === event.type) {
+    await sendBuildNotification(
+      event.result as Build,
+      event as BuildJobCheckerInput
+    );
+  } else if (CheckerInputType.DEPLOY_BUILD === event.type) {
+    await sendDeployBuildNotification(
+      event.result as Deploy,
+      event as DeployBuildJobCheckerInput
+    );
+  } else if (CheckerInputType.DEPLOY_RELEASE === event.type) {
     await sendDeployReleaseNotification(
-      deploy,
+      event.result as Deploy,
       event as DeployReleaseJobCheckerInput
     );
   }
@@ -228,6 +253,37 @@ const sendDeployReleaseNotification = async (
   }`;
   const url = process.env.NOTIFICATION_URL!;
   await axiosPost(url, notification, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+const sendHangingStatusNotification = async (
+  service: string,
+  url: string,
+  triggered: string
+): Promise<void> => {
+  const notification = `{
+      "@type": "MessageCard",
+      "@context": "http://schema.org/extensions",
+      "themeColor": "0076D7",
+      "summary": "Bamboo job is hanging!!!",
+      "sections": [{
+          "activityTitle": "Bamboo job is hanging!!!",
+          "activitySubtitle": "triggered by ${triggered}",
+          "activityImage": "https://i.dlpng.com/static/png/6687341_preview.png",
+          "facts": [{
+              "name": "Service",
+              "value": "${service}"
+          },{
+              "name": "Url",
+              "value": "${url}"
+          }],
+          "markdown": true
+      }]
+  }`;
+  await axiosPost(process.env.NOTIFICATION_URL!, notification, {
     headers: {
       "Content-Type": "application/json",
     },

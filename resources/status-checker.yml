@@ -5,19 +5,31 @@ StatusChecker:
     States:
       DelayTheChecking:
         Type: Wait
-        Seconds: 300
+        Seconds: 5
         Next: CheckStatus
 
       CheckStatus:
         Type: Task
         Resource:
           Fn::GetAtt: [checkStatusFunc, Arn]
+        ResultPath: $.result
         Retry:
           - ErrorEquals:
               - jobNotFinishedError
-            IntervalSeconds: 30
+            IntervalSeconds: 10
             BackoffRate: 1
-            MaxAttempts: 50
+            MaxAttempts: 2
+        Catch:
+          - ErrorEquals:
+              - jobNotFinishedError
+            ResultPath: $.error
+            Next: NotifyResult
+        Next: NotifyResult
+
+      NotifyResult:
+        Type: Task
+        Resource:
+          Fn::GetAtt: [notifyStatusFunc, Arn]
         Next: FinalEndState
 
       FinalEndState:
