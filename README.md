@@ -1,6 +1,12 @@
 # Bamboo-on-Teams ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) #
 A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
+## Features
+* Full set Bamboo operations
+* Result notification
+* Hanging detection
+
+
 ## Workflow
 ### user interaction
 User interacts with Bamboo through Teams outgoing webhook and bamboo-on-teams service.
