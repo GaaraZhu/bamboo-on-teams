@@ -5,10 +5,10 @@ import {
   getDeploy,
 } from "../../services/executors/listDeploysExecutor";
 
-export class JobNotFinsihedError extends Error {
+export class JobHangingError extends Error {
   constructor() {
     super();
-    this.name = "jobNotFinishedError";
+    this.name = "jobHangingError";
   }
 }
 
@@ -62,13 +62,13 @@ export const checkJobStatus = async (
     if (
       !["FINISHED", "NOT_BUILT"].includes(build.lifeCycleState.toUpperCase())
     ) {
-      throw new JobNotFinsihedError();
+      throw new JobHangingError();
     }
     return build;
   } else if ([CheckerInputType.DEPLOY_BUILD, CheckerInputType.DEPLOY_RELEASE].includes(event.type)) {
     const deploy = await getDeploy(event.resultKey);
     if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
-      throw new JobNotFinsihedError();
+      throw new JobHangingError();
     }
     return deploy;
   }
