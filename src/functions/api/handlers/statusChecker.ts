@@ -64,15 +64,8 @@ export const checkJobStatus = async (
     ) {
       throw new JobNotFinsihedError();
     }
-
     return build;
-  } else if (CheckerInputType.DEPLOY_BUILD === event.type) {
-    const deploy = await getDeploy(event.resultKey);
-    if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
-      throw new JobNotFinsihedError();
-    }
-    return deploy;
-  } else if (CheckerInputType.DEPLOY_RELEASE === event.type) {
+  } else if ([CheckerInputType.DEPLOY_BUILD, CheckerInputType.DEPLOY_RELEASE].includes(event.type)) {
     const deploy = await getDeploy(event.resultKey);
     if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
       throw new JobNotFinsihedError();
