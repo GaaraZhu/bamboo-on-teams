@@ -30,8 +30,4 @@ StatusChecker:
         Type: Task
         Resource:
           Fn::GetAtt: [notifyStatusFunc, Arn]
-        Next: FinalEndState
-
-      FinalEndState:
-        Type: Pass
         End: true
