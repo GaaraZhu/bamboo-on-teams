@@ -25,15 +25,30 @@ copy the URL out as the `notificationURL` parameter value.
 
 4. Configure required parameters in SSM
 ```
+# ID of the AWS account in which the stack is going to be created
 /bamboo-on-teams/accountId
+
+# Custom deployment bucket
 /bamboo-on-teams/deploymentBucket
+
+# Personal access token to access the Bamboo REST API
+/bamboo-on-teams/bambooAPIToken
+
+# Bamboo host URL
+/bamboo-on-teams/bambooHostUrl
+
+# Bamboo project ID
+/bamboo-on-teams/bambooProjectId
+
+# The shared HMAC token from Teams outgoing webhook
+/bamboo-on-teams/teamsHMACSharedToken
+
+# Teams incoming webhook URL
+/bamboo-on-terams/teamsNotificationURL
+
+# VPC configuration to access the private bamboo REST API
 /bamboo-on-teams/securityGroupId
 /bamboo-on-teams/subnetId
-/bamboo-on-teams/bambooAPIToken
-/bamboo-on-teams/bambooHostUrl
-/bamboo-on-teams/bambooProjectId
-/bamboo-on-teams/teamsHMACSharedToken
-/bamboo-on-terams/teamsNotificationURL
 ```
 5. Deploy Bamboo-on-Teams through npm deploy script.
 
