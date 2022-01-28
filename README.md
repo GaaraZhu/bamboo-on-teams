@@ -50,7 +50,7 @@ copy the URL out as the `notificationURL` parameter value.
 /bamboo-on-teams/securityGroupId
 /bamboo-on-teams/subnetId
 ```
-5. Deploy Bamboo-on-Teams through npm deploy script.
+5. Build and deploy Bamboo-on-Teams through npm scripts in [package.json](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/package.json).
 
 6. In Teams channel, tag the outgoing webhook and run commands.
 
