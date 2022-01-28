@@ -60,7 +60,7 @@ export const checkJobStatus = async (
   if (CheckerInputType.BUILD === event.type) {
     const build = await getBuild(event.resultKey);
     if (
-      !["FINISHED", "NOT_BUILT"].includes(build.lifeCycleState.toUpperCase())
+      !["FINISHED", "NOTBUILT"].includes(build.lifeCycleState.toUpperCase())
     ) {
       throw new JobHangingError();
     }
