@@ -5,7 +5,7 @@ StatusChecker:
     States:
       DelayTheChecking:
         Type: Wait
-        Seconds: 5
+        Seconds: 150
         Next: CheckStatus
 
       CheckStatus:
@@ -16,9 +16,9 @@ StatusChecker:
         Retry:
           - ErrorEquals:
               - jobHangingError
-            IntervalSeconds: 10
+            IntervalSeconds: 30
             BackoffRate: 1
-            MaxAttempts: 2
+            MaxAttempts: 34
         Catch:
           - ErrorEquals:
               - jobHangingError
