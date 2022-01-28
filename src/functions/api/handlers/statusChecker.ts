@@ -5,10 +5,10 @@ import {
   getDeploy,
 } from "../../services/executors/listDeploysExecutor";
 
-export class RetriableError extends Error {
+export class JobNotFinsihedError extends Error {
   constructor() {
     super();
-    this.name = "retriableError";
+    this.name = "jobNotFinishedError";
   }
 }
 

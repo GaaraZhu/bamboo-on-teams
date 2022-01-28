@@ -14,7 +14,7 @@ StatusChecker:
           Fn::GetAtt: [checkStatusFunc, Arn]
         Retry:
           - ErrorEquals:
-              - retriableError
+              - jobNotFinishedError
             IntervalSeconds: 30
             BackoffRate: 1
             MaxAttempts: 50
