@@ -6,6 +6,7 @@ participant Teams incoming webhook
 participant Chatops channel
 actor User
 
+Stepfunctions->Stepfunctions: delay the checking
 loop schedule with backoff
   opt max attempts not reached
     Stepfunctions->Bamboo Rest API: GET job status
