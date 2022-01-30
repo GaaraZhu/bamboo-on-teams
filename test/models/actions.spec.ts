@@ -10,6 +10,7 @@ import { ListDeploymentProjectsAction } from "../../src/functions/models/listDep
 import { ListReleasesAction } from "../../src/functions/models/listReleasesAction";
 import { ListDeploysAction } from "../../src/functions/models/listDeploysAction";
 import { CreateReleaseAction } from "../../src/functions/models/createReleaseAction";
+import { DeployLatestBuildAction } from "../../src/functions/models/deployLatestBuildAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -636,6 +637,65 @@ Options:
       it(testCase.command, async () => {
         try {
           const actualAction = new CreateReleaseAction(testCase.command, "james");
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
+      });
+    });
+  });
+
+  describe("DeployLatestAction", () => {
+    const helpMessage = `Usage: deploy-latest [options]
+
+Deploy the service with the latest build in a branch to an environment.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -b, --branch <branch>    bamboo branch name, e.g. master
+  -e, --env <env>          env name, e.g. dev
+  -h, --help               display help for command
+`;
+    const testCases = [
+      {
+        command: "deploy-latest -s customers-v1 -b master -e test",
+        expectedAction: {
+          actionName: ActionName.DEPLOY_LATEST_BUILD,
+          service: "customers-v1",
+          branch: "master",
+          env: "test",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "deploy-latest -s customers-v1 -b master -e test",
+        expectedAction: {
+          actionName: ActionName.DEPLOY_LATEST_BUILD,
+          service: "customers-v1",
+          branch: "master",
+          env: "test",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "deploy-latest -s customers-v1 -b -e test",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "deploy-latest",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new DeployLatestBuildAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
