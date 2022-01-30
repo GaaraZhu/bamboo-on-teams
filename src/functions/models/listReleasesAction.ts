@@ -21,7 +21,7 @@ export class ListReleasesAction implements Action {
       )
       .requiredOption(
         "-b, --branch <branch>",
-        "bamboo branch name, e.g. release-1.0.0",
+        "bamboo branch name, e.g. master",
         trim
       );
     listBranchesCommand.exitOverride((_: CommanderError) => {

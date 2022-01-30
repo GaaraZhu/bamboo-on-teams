@@ -7,6 +7,7 @@ import { ListPlansAction } from "../../src/functions/models/listPlansAction";
 import { CreateBranchAction } from "../../src/functions/models/createBranchAction";
 import { ListEnvironmentsAction } from "../../src/functions/models/listEnvironmentsAction";
 import { ListDeploymentProjectsAction } from "../../src/functions/models/listDeploymentProjects";
+import { ListReleasesAction } from "../../src/functions/models/listReleasesAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -380,6 +381,15 @@ Options:
     });
   });
 
+  describe("ListProjectsAction", () => {
+    it("create list projects action correctly", async () => {
+      expect(new ListDeploymentProjectsAction("james")).toEqual({
+        actionName: ActionName.LIST_DEPLOY_PROJECTS,
+        triggeredBy: "james",
+      });
+    });
+  });
+
   describe("ListEnvironmentsAction", () => {
     const helpMessage = `Usage: list-envs [options]
 
@@ -438,13 +448,67 @@ Options:
         }
       });
     });
+  });
 
-    describe("ListProjectsAction", () => {
-      it("create list projects action correctly", async () => {
-        expect(new ListDeploymentProjectsAction("james")).toEqual({
-          actionName: ActionName.LIST_DEPLOY_PROJECTS,
+  describe("ListReleasesAction", () => {
+    const helpMessage = `Usage: list-releases [options]
+
+List the releases created from a service branch.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -b, --branch <branch>    bamboo branch name, e.g. master
+  -h, --help               display help for command
+`;
+    const testCases = [
+      {
+        command: "list-releases -s customers-v1 -b master",
+        expectedAction: {
+          actionName: ActionName.LIST_RELEASES,
+          deploymentProject: "customers-v1",
+          planBranch: "master",
           triggeredBy: "james",
-        });
+        },
+      },
+      {
+        command: "list-releases -scustomers-v1 -bmaster",
+        expectedAction: {
+          actionName: ActionName.LIST_RELEASES,
+          deploymentProject: "customers-v1",
+          planBranch: "master",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "list-releases -s",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "list-releases -scustomers-v1 -b",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "list-releases",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new ListReleasesAction(testCase.command, "james");
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
       });
     });
   });
