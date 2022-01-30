@@ -126,7 +126,7 @@ export const getJobPageUrl = (resultKey: string, isBuild: boolean): string => {
     : `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${resultKey}`;
 };
 
-const sendBuildNotification = async (
+export const sendBuildNotification = async (
   build: Build,
   triggeredBy: string,
   jobUrl: string
@@ -146,7 +146,7 @@ const sendBuildNotification = async (
               "value": "${build.service}"
           },{
               "name": "Branch",
-              "value": "${build.branch}"
+              "value": "${build.branch.name}"
           }, {
               "name": "Build Number",
               "value": "${build.buildNumber}"

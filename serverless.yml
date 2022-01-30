@@ -96,6 +96,11 @@ functions:
           path: ${self:custom.api.urls.command}
           method: post
           cors: true
+      - http:
+          private: false
+          path: ${self:custom.api.urls.notification}
+          method: post
+          cors: true
     handler: dist/functions/api/router.router
   checkStatusFunc:
     name: ${self:service}-${self:provider.stage}-statusChecker
@@ -142,3 +147,4 @@ custom:
     urls:
       prefix: /bamboo-on-teams/v1
       command: ${self:custom.api.urls.prefix}/command
+      notification: ${self:custom.api.urls.prefix}/notification

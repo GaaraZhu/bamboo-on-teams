@@ -1,5 +1,5 @@
 import { Request, Response } from "lambda-api";
-import { handle as handleCommand } from "./handlers/bambooHandler";
+import { handle as handleCommand, handleNotification } from "./handlers/bambooHandler";
 
 //----------------------------------------------------------------------------//
 // Define authentication middleware
@@ -42,6 +42,13 @@ app.post(
   //   verifyHMAC,
   async (request: Request, response: Response) => {
     await handleCommand(request, response);
+  }
+);
+
+app.post(
+  "/notification",
+  async (request: Request, response: Response) => {
+    await handleNotification(request, response);
   }
 );
 

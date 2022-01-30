@@ -17,11 +17,15 @@ export type Class<T> = {
 };
 
 export const trim = (value: string | undefined): any => {
-  if (!value || /^ *$/.test(value)) {
+  if (!value || isEmpty(value)) { //undefined checking to make the compiler happy
     throw new InvalidArgumentError("empty argument");
   }
 
   return value.trim();
+};
+
+export const isEmpty = (value: string | undefined): boolean => {
+  return !value || /^ *$/.test(value);
 };
 
 export const prodEnvCheck = (env: string): void => {

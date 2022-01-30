@@ -1,5 +1,7 @@
 import { Request, Response } from "lambda-api";
 import { CommandParser } from "../../services/commandParser";
+import { getBuild } from "../../services/executors/descBuildExecutor";
+import { getJobPageUrl, sendBuildNotification } from "./statusChecker";
 
 export const handle = async (
   request: Request,
@@ -29,4 +31,34 @@ interface IncomingMessage {
     name: string;
   };
   text: string;
+}
+
+export const handleNotification = async (
+  request: Request,
+  response: Response
+): Promise<void> => {
+  try {
+    const body = request.body;
+    if (body.build) {
+      const buildNotification = body.build as BuildNotification;
+      const build = await getBuild(buildNotification.buildResultKey);
+      const jobUrl = getJobPageUrl(build.key, true);
+      let triggeredBy = "Bamboo";
+      if(buildNotification.triggerSentence && buildNotification.triggerSentence.includes("triggered by ")) {
+        triggeredBy = buildNotification.triggerSentence.split("triggered by ")[1];
+      }
+      await sendBuildNotification(build, triggeredBy, jobUrl);
+      response.status(200).json({});
+    }
+  } catch (err: any) {
+    console.log(
+      `Failed to execute notification request due to ${JSON.stringify(err)}`
+    );
+    response.status(500).json(err.message);
+  }
+};
+
+interface BuildNotification {
+  buildResultKey: string,
+  triggerSentence?: string,
 }
