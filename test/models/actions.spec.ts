@@ -8,6 +8,7 @@ import { CreateBranchAction } from "../../src/functions/models/createBranchActio
 import { ListEnvironmentsAction } from "../../src/functions/models/listEnvironmentsAction";
 import { ListDeploymentProjectsAction } from "../../src/functions/models/listDeploymentProjects";
 import { ListReleasesAction } from "../../src/functions/models/listReleasesAction";
+import { ListDeploysAction } from "../../src/functions/models/listDeploysAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -505,6 +506,69 @@ Options:
       it(testCase.command, async () => {
         try {
           const actualAction = new ListReleasesAction(testCase.command, "james");
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
+      });
+    });
+  });
+
+  describe("ListDeploysAction", () => {
+    const helpMessage = `Usage: list-deploys [options]
+
+List the deployments in a service environment.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -e, --env <env>          env name, e.g. dev
+  -h, --help               display help for command
+`;
+    const testCases = [
+      {
+        command: "list-deploys -s customers-v1 -e test",
+        expectedAction: {
+          actionName: ActionName.LIST_DEPLOYS,
+          deploymentProject: "customers-v1",
+          env: "test",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "list-deploys -scustomers-v1 -etest",
+        expectedAction: {
+          actionName: ActionName.LIST_DEPLOYS,
+          deploymentProject: "customers-v1",
+          env: "test",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "list-deploys -s",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "list-deploys -scustomers-v1 -e",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "list-deploys",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new ListDeploysAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
