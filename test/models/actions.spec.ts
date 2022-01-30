@@ -5,6 +5,7 @@ import { ListBuildsAction } from "../../src/functions/models/listBuildsAction";
 import { ListBranchesAction } from "../../src/functions/models/listBranchesAction";
 import { ListPlansAction } from "../../src/functions/models/listPlansAction";
 import { CreateBranchAction } from "../../src/functions/models/createBranchAction";
+import { ListEnvironmentsAction } from "../../src/functions/models/listEnvironmentsAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -370,6 +371,66 @@ Options:
       it(testCase.command, async () => {
         try {
           const actualAction = new CreateBranchAction(testCase.command, "james");
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
+      });
+    });
+  });
+
+  describe("ListEnvironmentsAction", () => {
+    const helpMessage = `Usage: list-envs [options]
+
+List available environments for a service.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -h, --help               display help for command
+`;
+    const testCases = [
+      {
+        command: "list-envs -s customers-v1",
+        expectedAction: {
+          actionName: ActionName.LIST_ENVS,
+          deploymentProject: "customers-v1",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "list-envs -scustomers-v1",
+        expectedAction: {
+          actionName: ActionName.LIST_ENVS,
+          deploymentProject: "customers-v1",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "list-envs -s",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "list-envs -scustomers-v1 -b",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "list-envs",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new ListEnvironmentsAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
