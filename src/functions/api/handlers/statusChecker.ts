@@ -1,9 +1,11 @@
+import { InvalidArgumentError } from "commander";
 import { axiosPost } from "../../services/axiosService";
 import { Build, getBuild } from "../../services/executors/descBuildExecutor";
 import {
   Deploy,
   getDeploy,
 } from "../../services/executors/listDeploysExecutor";
+import { isEmpty } from "../../utils";
 
 export class JobHangingError extends Error {
   constructor() {
@@ -85,10 +87,7 @@ export const notifyJobStatus = async (
   context: any
 ): Promise<void> => {
   console.log(`notifying job status: ${JSON.stringify(event)}`);
-  const jobUrl =
-    CheckerInputType.BUILD === event.type
-      ? `https://${process.env.BAMBOO_HOST_URL}/browse/${event.resultKey}`
-      : `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${event.resultKey}`;
+  const jobUrl = await getJobPageUrl(event.resultKey, CheckerInputType.BUILD === event.type);
   if (event.error) {
     await sendHangingStatusNotification(
       event.service,
@@ -101,7 +100,7 @@ export const notifyJobStatus = async (
   if (CheckerInputType.BUILD === event.type) {
     await sendBuildNotification(
       event.result as Build,
-      event as BuildJobCheckerInput,
+      event.triggeredBy,
       jobUrl
     );
   } else if (CheckerInputType.DEPLOY_BUILD === event.type) {
@@ -119,9 +118,17 @@ export const notifyJobStatus = async (
   }
 };
 
+export const getJobPageUrl = (resultKey: string, isBuild: boolean): string => {
+  if(isEmpty(resultKey)) {
+    throw new InvalidArgumentError("empty resultKey");
+  }
+  return isBuild? `https://${process.env.BAMBOO_HOST_URL}/browse/${resultKey}`
+    : `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${resultKey}`;
+};
+
 const sendBuildNotification = async (
   build: Build,
-  event: BuildJobCheckerInput,
+  triggeredBy: string,
   jobUrl: string
 ): Promise<void> => {
   const isSucceed = build.buildState.toUpperCase() === "SUCCESSFUL";
@@ -132,14 +139,14 @@ const sendBuildNotification = async (
       "summary": "Bamboo build job finished",
       "sections": [{
           "activityTitle": "Bamboo build job finished",
-          "activitySubtitle": "triggered by ${event.triggeredBy}",
+          "activitySubtitle": "triggered by ${triggeredBy}",
           "activityImage": "https://static.thenounproject.com/png/2714806-200.png",
           "facts": [{
               "name": "Service",
-              "value": "${event.service}"
+              "value": "${build.service}"
           },{
               "name": "Branch",
-              "value": "${event.branch}"
+              "value": "${build.branch}"
           }, {
               "name": "Build Number",
               "value": "${build.buildNumber}"
