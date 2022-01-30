@@ -37,17 +37,19 @@ export const handleNotification = async (
   request: Request,
   response: Response
 ): Promise<void> => {
+  if (process.env.NOTIFICATION_API_WHITELIST_DOMAIN && process.env.NOTIFICATION_API_WHITELIST_DOMAIN !== request.requestContext?.domainName) {
+    response.status(403).json({message: "Forbidden"});
+    return;
+  }
+
   try {
     const body = request.body;
     if (body.build) {
-      const buildNotification = body.build as BuildNotification;
+      const buildNotification = body.build as BambooBuildNotification;
       const build = await getBuild(buildNotification.buildResultKey);
       const jobUrl = getJobPageUrl(build.key, true);
-      let triggeredBy = "Bamboo";
-      if(buildNotification.triggerSentence && buildNotification.triggerSentence.includes("triggered by ")) {
-        triggeredBy = buildNotification.triggerSentence.split("triggered by ")[1];
-      }
-      await sendBuildNotification(build, triggeredBy, jobUrl);
+
+      await sendBuildNotification(build, getTriggeredByFromBambooRequest(buildNotification.triggerSentence), jobUrl);
       response.status(200).json({});
     }
   } catch (err: any) {
@@ -58,7 +60,16 @@ export const handleNotification = async (
   }
 };
 
-interface BuildNotification {
+interface BambooBuildNotification {
   buildResultKey: string,
   triggerSentence?: string,
+}
+
+const getTriggeredByFromBambooRequest = (triggerSentence: string | undefined): string => {
+  let triggeredBy = "Bamboo";
+  if(triggerSentence && triggerSentence.includes("triggered by ")) {
+    triggeredBy = triggerSentence.split("triggered by ")[1];
+  }
+
+  return triggeredBy;
 }

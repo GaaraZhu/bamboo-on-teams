@@ -44,7 +44,7 @@ copy the URL out as the `notificationURL` parameter value.
 /bamboo-on-teams/teamsHMACSharedToken
 
 # Teams incoming webhook URL
-/bamboo-on-terams/teamsNotificationURL
+/bamboo-on-terams/teamsIncomingWebhookUrl
 
 # VPC configuration to access the private bamboo REST API
 /bamboo-on-teams/securityGroupId

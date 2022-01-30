@@ -171,7 +171,7 @@ export const sendBuildNotification = async (
           "markdown": true
       }]
   }`;
-  const url = process.env.NOTIFICATION_URL!;
+  const url = process.env.TEAMS_INCOMING_WEBHOOK_URL!;
   await axiosPost(url, notification, {
     headers: {
       "Content-Type": "application/json",
@@ -218,7 +218,7 @@ const sendDeployBuildNotification = async (
           "markdown": true
       }]
   }`;
-  const url = process.env.NOTIFICATION_URL!;
+  const url = process.env.TEAMS_INCOMING_WEBHOOK_URL!;
   await axiosPost(url, notification, {
     headers: {
       "Content-Type": "application/json",
@@ -262,7 +262,7 @@ const sendDeployReleaseNotification = async (
           "markdown": true
       }]
   }`;
-  const url = process.env.NOTIFICATION_URL!;
+  const url = process.env.TEAMS_INCOMING_WEBHOOK_URL!;
   await axiosPost(url, notification, {
     headers: {
       "Content-Type": "application/json",
@@ -294,7 +294,7 @@ const sendHangingStatusNotification = async (
           "markdown": true
       }]
   }`;
-  await axiosPost(process.env.NOTIFICATION_URL!, notification, {
+  await axiosPost(process.env.TEAMS_INCOMING_WEBHOOK_URL!, notification, {
     headers: {
       "Content-Type": "application/json",
     },
