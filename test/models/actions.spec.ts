@@ -12,6 +12,7 @@ import { ListDeploysAction } from "../../src/functions/models/listDeploysAction"
 import { CreateReleaseAction } from "../../src/functions/models/createReleaseAction";
 import { DeployLatestBuildAction } from "../../src/functions/models/deployLatestBuildAction";
 import { DeployReleaseAction } from "../../src/functions/models/deployReleaseAction";
+import { DeployBuildAction } from "../../src/functions/models/deployBuildAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -757,6 +758,65 @@ Options:
       it(testCase.command, async () => {
         try {
           const actualAction = new DeployReleaseAction(testCase.command, "james");
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
+      });
+    });
+  });
+
+  describe("DeployBuildAction", () => {
+    const helpMessage = `Usage: deploy-build [options]
+
+Deploy a service build to an environment.
+
+Options:
+  -s, --service <service>     service name, e.g. customers-v1
+  -e, --env <env>             env name, e.g. dev
+  -b, --build-key <buildKey>  bamboo build key, e.g. API-CPV1-30
+  -h, --help                  display help for command
+`;
+    const testCases = [
+      {
+        command: "deploy-build -s customers-v1 -e test -b API-3",
+        expectedAction: {
+          actionName: ActionName.DEPLOY_BUILD,
+          service: "customers-v1",
+          env: "test",
+          buildKey: "API-3",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "deploy-build -scustomers-v1 -etest -bAPI-3",
+        expectedAction: {
+          actionName: ActionName.DEPLOY_BUILD,
+          service: "customers-v1",
+          env: "test",
+          buildKey: "API-3",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "deploy-build -s customers-v1 -b -e test",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "deploy-build",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new DeployBuildAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
