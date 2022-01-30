@@ -18,7 +18,7 @@ export const getBuild = async (key: string): Promise<Build> => {
   return {
     key: data.key,
     buildNumber: data.buildNumber,
-    service: data.master?.shortName,
+    service: data.master?.shortName || data.planName,
     branch: {
       key: data.plan?.key,
       name: data.master ? data.plan?.shortName : "master",
