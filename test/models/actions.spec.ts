@@ -6,6 +6,7 @@ import { ListBranchesAction } from "../../src/functions/models/listBranchesActio
 import { ListPlansAction } from "../../src/functions/models/listPlansAction";
 import { CreateBranchAction } from "../../src/functions/models/createBranchAction";
 import { ListEnvironmentsAction } from "../../src/functions/models/listEnvironmentsAction";
+import { ListDeploymentProjectsAction } from "../../src/functions/models/listDeploymentProjects";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -98,7 +99,7 @@ Options:
   });
 
   describe("ListPlansAction", () => {
-    it("build action correctly", async () => {
+    it("create list plans action correctly", async () => {
       process.env.BAMBOO_PROJECT_ID = "API";
       expect(new ListPlansAction("james")).toEqual({
         actionName: ActionName.LIST_PLANS,
@@ -435,6 +436,15 @@ Options:
         } catch (err) {
           expect(err).toEqual(testCase.error);
         }
+      });
+    });
+
+    describe("ListProjectsAction", () => {
+      it("create list projects action correctly", async () => {
+        expect(new ListDeploymentProjectsAction("james")).toEqual({
+          actionName: ActionName.LIST_DEPLOY_PROJECTS,
+          triggeredBy: "james",
+        });
       });
     });
   });
