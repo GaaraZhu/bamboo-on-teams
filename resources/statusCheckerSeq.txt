@@ -24,10 +24,10 @@ loop schedule with backoff
         Stepfunctions->Stepfunctions: waitForRetry()
     end
   else
-    Stepfunctions->Teams incoming webhook: POST unknown job result
+    Stepfunctions->Teams incoming webhook: POST hanging job alert
     activate Teams incoming webhook
-    Teams incoming webhook->Chatops channel: unknown job result
-    Chatops channel->User: unknown job result
+    Teams incoming webhook->Chatops channel: hanging job alert
+    Chatops channel->User: hanging job alert
     deactivate Teams incoming webhook
     Stepfunctions->Stepfunctions: end()
   end
