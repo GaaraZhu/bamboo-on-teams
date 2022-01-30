@@ -137,8 +137,8 @@ custom:
       - bamboo
       - local
     ssm:
-      "/bamboo-on-teams/deploymentBucket": placeholder
       "/bamboo-on-teams/accountId": placeholder
+      "/bamboo-on-teams/deploymentBucket": placeholder
       "/bamboo-on-teams/securityGroupId": placeholder
       "/bamboo-on-teams/subnetId": placeholder
       "/bamboo-on-teams/bambooHostUrl": placeholder
