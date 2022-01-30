@@ -11,6 +11,7 @@ import { ListReleasesAction } from "../../src/functions/models/listReleasesActio
 import { ListDeploysAction } from "../../src/functions/models/listDeploysAction";
 import { CreateReleaseAction } from "../../src/functions/models/createReleaseAction";
 import { DeployLatestBuildAction } from "../../src/functions/models/deployLatestBuildAction";
+import { DeployReleaseAction } from "../../src/functions/models/deployReleaseAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -696,6 +697,66 @@ Options:
       it(testCase.command, async () => {
         try {
           const actualAction = new DeployLatestBuildAction(testCase.command, "james");
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
+      });
+    });
+  });
+
+
+  describe("DeployReleaseAction", () => {
+    const helpMessage = `Usage: deploy-release [options]
+
+Deploy a release to a service environment.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -e, --env <env>          env name, e.g. dev
+  -r, --release <release>  release name, e.g. v1.0.0
+  -h, --help               display help for command
+`;
+    const testCases = [
+      {
+        command: "deploy-release -s customers-v1 -e test -r v1.0.0",
+        expectedAction: {
+          actionName: ActionName.DEPLOY_RELEASE,
+          service: "customers-v1",
+          env: "test",
+          releaseName: "v1.0.0",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "deploy-release -scustomers-v1 -e test -rv1.0.0",
+        expectedAction: {
+          actionName: ActionName.DEPLOY_RELEASE,
+          service: "customers-v1",
+          env: "test",
+          releaseName: "v1.0.0",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "deploy-release -s customers-v1 -r -e test",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "deploy-release",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new DeployReleaseAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
