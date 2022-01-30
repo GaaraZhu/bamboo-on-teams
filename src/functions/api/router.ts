@@ -57,6 +57,6 @@ app.post(
 //----------------------------------------------------------------------------//
 module.exports.router = (event: any, context: any, callback: any) => {
   // Run the request
-  console.log(`22222 ${JSON.stringify(event)}`);
+  console.log(`Received request: ${JSON.stringify(event)}`);
   app.run(event, context, callback);
 };

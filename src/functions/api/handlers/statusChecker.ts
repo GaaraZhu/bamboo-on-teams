@@ -112,7 +112,9 @@ export const notifyJobStatus = async (
   } else if (CheckerInputType.DEPLOY_RELEASE === event.type) {
     await sendDeployReleaseNotification(
       event.result as Deploy,
-      event as DeployReleaseJobCheckerInput,
+      event.service,
+      event.environment,
+      event.triggeredBy,
       jobUrl
     );
   }
@@ -226,35 +228,43 @@ const sendDeployBuildNotification = async (
   });
 };
 
-const sendDeployReleaseNotification = async (
+export const sendDeployReleaseNotification = async (
   deploy: Deploy,
-  event: DeployReleaseJobCheckerInput,
+  service: string,
+  environment: string,
+  triggeredBy: string,
   jobUrl: string
 ): Promise<void> => {
   const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
+  let jobTitle = "Bamboo deploy job finished";
+  let jobState = deploy.deploymentState;
+  if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
+    jobTitle = "Bamboo deploy job started";
+    jobState = deploy.lifeCycleState;
+  }
   const notification = `{
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
       "themeColor": "0076D7",
-      "summary": "Bamboo deploy job finished",
+      "summary": "${jobTitle}",
       "sections": [{
-          "activityTitle": "Bamboo deploy job finished",
-          "activitySubtitle": "triggered by ${event.triggeredBy}",
+          "activityTitle": "${jobTitle}",
+          "activitySubtitle": "triggered by ${triggeredBy}",
           "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg&usqp=CAU",
           "facts": [{
               "name": "Service",
-              "value": "${event.service}"
+              "value": "${service}"
           },{
               "name": "Release",
-              "value": "${event.release}"
+              "value": "${deploy.deploymentVersionName}"
           }, {
             "name": "Environment",
-            "value": "${event.environment}"
+            "value": "${environment}"
           }, {
               "name": "Deployment State",
               "value": "<span style=${
                 isSucceed ? "color:green;" : "color:red;"
-              }>${deploy.deploymentState}</span>"
+              }>${jobState}</span>"
           }, {
             "name": "Url",
             "value": "${jobUrl}"

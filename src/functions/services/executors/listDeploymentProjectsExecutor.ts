@@ -26,6 +26,19 @@ export const getDeploymentProject = async (
   return project;
 };
 
+export const getDeploymentProjectById = async (
+  id: string
+): Promise<any> => {
+  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${id}`;
+  const { data } = await axiosGet(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+    },
+  });
+
+  return data;
+};
+
 export const listDeploymentProjects = async (): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/all`;
   const { data } = await axiosGet(url, {
