@@ -4,6 +4,7 @@ import { DescBuildAction } from "../../src/functions/models/descBuildAction";
 import { ListBuildsAction } from "../../src/functions/models/listBuildsAction";
 import { ListBranchesAction } from "../../src/functions/models/listBranchesAction";
 import { ListPlansAction } from "../../src/functions/models/listPlansAction";
+import { CreateBranchAction } from "../../src/functions/models/createBranchAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -306,6 +307,69 @@ Options:
       it(testCase.command, async () => {
         try {
           const actualAction = new DescBuildAction(testCase.command, "james");
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
+      });
+    });
+  });
+
+  describe("CreateBranchAction", () => {
+    const helpMessage = `Usage: create-branch [options]
+
+Create branch for a plan.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -b, --branch <branch>    vcsBranch name, e.g. master
+  -h, --help               display help for command
+`;
+    const testCases = [
+      {
+        command: "create-branch -s customers-v1 -b dev",
+        expectedAction: {
+          actionName: ActionName.CREATE_BRANCH,
+          planName: "customers-v1",
+          vscBranch: "dev",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "create-branch -scustomers-v1 -bdev",
+        expectedAction: {
+          actionName: ActionName.CREATE_BRANCH,
+          planName: "customers-v1",
+          vscBranch: "dev",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "create-branch -s",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "create-branch -scustomers-v1 -b",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "create-branch",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new CreateBranchAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
