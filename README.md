@@ -150,7 +150,7 @@ Usage: list-releases [options]
 List the releases created from a service branch.
 Options:
   -s, --service <service>  service name, e.g. customers-v1
-  -b, --branch <branch>    bamboo branch name, e.g. release-1.0.0
+  -b, --branch <branch>    bamboo branch name, e.g. master
   -h, --help               display help for command
 ```
 ### list-deploys ###
@@ -205,7 +205,7 @@ Options:
 ### promote-release ###
 ```
 Usage: promote-release [options]
-promote the release from one environment to another.
+Promote the release from one environment to another.
 Options:
   -s, --service <service>        service name, e.g. customers-v1
   -se, --source-env <sourceEnv>  source environment name, e.g. dev
