@@ -17,7 +17,8 @@ export type Class<T> = {
 };
 
 export const trim = (value: string | undefined): any => {
-  if (!value || isEmpty(value)) { //undefined checking to make the compiler happy
+  if (!value || isEmpty(value)) {
+    //undefined checking to make the compiler happy
     throw new InvalidArgumentError("empty argument");
   }
 

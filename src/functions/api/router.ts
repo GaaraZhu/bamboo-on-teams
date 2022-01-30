@@ -45,12 +45,9 @@ app.post(
   }
 );
 
-app.post(
-  "/notification",
-  async (request: Request, response: Response) => {
-    await handleNotification(request, response);
-  }
-);
+app.post("/notification", async (request: Request, response: Response) => {
+  await handleNotification(request, response);
+});
 
 //----------------------------------------------------------------------------//
 // Main router handler

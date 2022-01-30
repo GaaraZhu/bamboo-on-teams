@@ -87,7 +87,10 @@ export const notifyJobStatus = async (
   context: any
 ): Promise<void> => {
   console.log(`notifying job status: ${JSON.stringify(event)}`);
-  const jobUrl = await getJobPageUrl(event.resultKey, CheckerInputType.BUILD === event.type);
+  const jobUrl = await getJobPageUrl(
+    event.resultKey,
+    CheckerInputType.BUILD === event.type
+  );
   if (event.error) {
     await sendHangingStatusNotification(
       event.service,
@@ -121,10 +124,11 @@ export const notifyJobStatus = async (
 };
 
 export const getJobPageUrl = (resultKey: string, isBuild: boolean): string => {
-  if(isEmpty(resultKey)) {
+  if (isEmpty(resultKey)) {
     throw new InvalidArgumentError("empty resultKey");
   }
-  return isBuild? `https://${process.env.BAMBOO_HOST_URL}/browse/${resultKey}`
+  return isBuild
+    ? `https://${process.env.BAMBOO_HOST_URL}/browse/${resultKey}`
     : `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${resultKey}`;
 };
 

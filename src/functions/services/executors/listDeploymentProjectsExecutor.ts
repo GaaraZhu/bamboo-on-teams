@@ -26,9 +26,7 @@ export const getDeploymentProject = async (
   return project;
 };
 
-export const getDeploymentProjectById = async (
-  id: string
-): Promise<any> => {
+export const getDeploymentProjectById = async (id: string): Promise<any> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${id}`;
   const { data } = await axiosGet(url, {
     headers: {
