@@ -13,6 +13,7 @@ import { CreateReleaseAction } from "../../src/functions/models/createReleaseAct
 import { DeployLatestBuildAction } from "../../src/functions/models/deployLatestBuildAction";
 import { DeployReleaseAction } from "../../src/functions/models/deployReleaseAction";
 import { DeployBuildAction } from "../../src/functions/models/deployBuildAction";
+import { PromoteReleaseAction } from "../../src/functions/models/promoteReleaseAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -817,6 +818,65 @@ Options:
       it(testCase.command, async () => {
         try {
           const actualAction = new DeployBuildAction(testCase.command, "james");
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
+      });
+    });
+  });
+
+  describe("PromoteReleaseAction", () => {
+    const helpMessage = `Usage: promote-release [options]
+
+Promote the release from one environment to another.
+
+Options:
+  -s, --service <service>        service name, e.g. customers-v1
+  -se, --source-env <sourceEnv>  source environment name, e.g. dev
+  -te, --target-env <targetEnv>  target environment name, e.g. test
+  -h, --help                     display help for command
+`;
+    const testCases = [
+      {
+        command: "promote-release -s customers-v1 -se test -te uat",
+        expectedAction: {
+          actionName: ActionName.PROMOTE_RELEASE,
+          service: "customers-v1",
+          sourceEnv: "test",
+          targetEnv: "uat",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "promote-release -scustomers-v1 -se test -te uat",
+        expectedAction: {
+          actionName: ActionName.PROMOTE_RELEASE,
+          service: "customers-v1",
+          sourceEnv: "test",
+          targetEnv: "uat",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "promote-release -s customers-v1",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "promote-release",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new PromoteReleaseAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);

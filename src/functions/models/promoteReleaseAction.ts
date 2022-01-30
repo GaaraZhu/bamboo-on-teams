@@ -14,7 +14,7 @@ export class PromoteReleaseAction implements Action {
     const promoteReleaseCommand = new Command()
       .name(this.actionName)
       .usage("[options]")
-      .description("promote the release from one environment to another.")
+      .description("Promote the release from one environment to another.")
       .requiredOption(
         "-s, --service <service>",
         "service name, e.g. customers-v1",
