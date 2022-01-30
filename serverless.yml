@@ -44,7 +44,6 @@ provider:
     TEAMS_INCOMING_WEBHOOK_URL: ${ssm:/bamboo-on-terams/teamsIncomingWebhookUrl}
     STATUS_CHECKER_ARN: ${self:custom.aws.stepFunction.arn}
     STEP_FUNCTIONS_ENDPOINT: https://states.ap-southeast-2.amazonaws.com
-    NOTIFICATION_API_WHITELIST_IPS: ${ssm:/bamboo-on-teams/notificationAPIWhitelistIPs}
     TZ: Pacific/Auckland
     ENABLE_FOR_PROD: false
 
@@ -97,11 +96,6 @@ functions:
           path: ${self:custom.api.urls.command}
           method: post
           cors: true
-      - http:
-          private: false
-          path: ${self:custom.api.urls.notification}
-          method: post
-          cors: true
     handler: dist/functions/api/router.router
   checkStatusFunc:
     name: ${self:service}-${self:provider.stage}-statusChecker
@@ -144,7 +138,6 @@ custom:
       "/bamboo-on-teams/bambooHostUrl": placeholder
       "/bamboo-on-teams/bambooAPIToken": placeholder
       "/bamboo-on-teams/bambooProjectId": placeholder
-      "/bamboo-on-teams/notificationAPIWhitelistIPs": placeholder
       "/bamboo-on-teams/teamsHMACSharedToken": placeholder
       "/bamboo-on-teams/teamsIncomingWebhookUrl": placeholder
 
@@ -152,4 +145,3 @@ custom:
     urls:
       prefix: /bamboo-on-teams/v1
       command: ${self:custom.api.urls.prefix}/command
-      notification: ${self:custom.api.urls.prefix}/notification

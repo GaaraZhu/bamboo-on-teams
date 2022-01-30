@@ -240,19 +240,13 @@ export const sendDeployReleaseNotification = async (
   jobUrl: string
 ): Promise<void> => {
   const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
-  let jobTitle = "Bamboo deploy job finished";
-  let jobState = deploy.deploymentState;
-  if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
-    jobTitle = "Bamboo deploy job started";
-    jobState = deploy.lifeCycleState;
-  }
   const notification = `{
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
       "themeColor": "0076D7",
-      "summary": "${jobTitle}",
+      "summary": "Bamboo deploy job finished",
       "sections": [{
-          "activityTitle": "${jobTitle}",
+          "activityTitle": "Bamboo deploy job finished",
           "activitySubtitle": "triggered by ${triggeredBy}",
           "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg&usqp=CAU",
           "facts": [{
@@ -268,7 +262,7 @@ export const sendDeployReleaseNotification = async (
               "name": "Deployment State",
               "value": "<span style=${
                 isSucceed ? "color:green;" : "color:red;"
-              }>${jobState}</span>"
+              }>${deploy.deploymentState}</span>"
           }, {
             "name": "Url",
             "value": "${jobUrl}"

@@ -1,5 +1,5 @@
 import { Request, Response } from "lambda-api";
-import { handleCommand, handleNotification } from "./handlers/bambooHandler";
+import { handleCommand } from "./handlers/bambooHandler";
 
 //----------------------------------------------------------------------------//
 // Define authentication middleware
@@ -45,15 +45,10 @@ app.post(
   }
 );
 
-app.post("/notification", async (request: Request, response: Response) => {
-  await handleNotification(request, response);
-});
-
 //----------------------------------------------------------------------------//
 // Main router handler
 //----------------------------------------------------------------------------//
 module.exports.router = (event: any, context: any, callback: any) => {
   // Run the request
-  console.log(`Received request: ${JSON.stringify(event)}`);
   app.run(event, context, callback);
 };
