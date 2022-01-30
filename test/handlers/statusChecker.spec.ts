@@ -96,7 +96,7 @@ describe("statusChecker", () => {
             lifeCycleState: "in_progress",
           },
         },
-        errorName: "jobHangingError",
+        errorName: "jobNotFinished",
       },
       {
         name: "cancelled build job",
@@ -167,7 +167,7 @@ describe("statusChecker", () => {
             lifeCycleState: "in_progress",
           },
         },
-        errorName: "jobHangingError",
+        errorName: "jobNotFinished",
       },
       {
         name: "finished deploy release job",
@@ -208,7 +208,7 @@ describe("statusChecker", () => {
             lifeCycleState: "in_progress",
           },
         },
-        errorName: "jobHangingError",
+        errorName: "jobNotFinished",
       },
     ];
 

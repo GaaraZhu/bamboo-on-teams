@@ -7,10 +7,10 @@ import {
 } from "../../services/executors/listDeploysExecutor";
 import { isEmpty } from "../../utils";
 
-export class JobHangingError extends Error {
+export class JobNotFinished extends Error {
   constructor() {
     super();
-    this.name = "jobHangingError";
+    this.name = "jobNotFinished";
   }
 }
 
@@ -64,7 +64,7 @@ export const checkJobStatus = async (
     if (
       !["FINISHED", "NOTBUILT"].includes(build.lifeCycleState.toUpperCase())
     ) {
-      throw new JobHangingError();
+      throw new JobNotFinished();
     }
     return build;
   } else if (
@@ -74,7 +74,7 @@ export const checkJobStatus = async (
   ) {
     const deploy = await getDeploy(event.resultKey);
     if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
-      throw new JobHangingError();
+      throw new JobNotFinished();
     }
     return deploy;
   }

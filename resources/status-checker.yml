@@ -15,13 +15,13 @@ StatusChecker:
         ResultPath: $.result
         Retry:
           - ErrorEquals:
-              - jobHangingError
+              - jobNotFinished
             IntervalSeconds: 30
             BackoffRate: 1
             MaxAttempts: 34
         Catch:
           - ErrorEquals:
-              - jobHangingError
+              - JobNotFinished
             ResultPath: $.error
             Next: NotifyResult
         Next: NotifyResult
