@@ -9,6 +9,7 @@ import { ListEnvironmentsAction } from "../../src/functions/models/listEnvironme
 import { ListDeploymentProjectsAction } from "../../src/functions/models/listDeploymentProjects";
 import { ListReleasesAction } from "../../src/functions/models/listReleasesAction";
 import { ListDeploysAction } from "../../src/functions/models/listDeploysAction";
+import { CreateReleaseAction } from "../../src/functions/models/createReleaseAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -569,6 +570,72 @@ Options:
       it(testCase.command, async () => {
         try {
           const actualAction = new ListDeploysAction(testCase.command, "james");
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
+      });
+    });
+  });
+
+  describe("CreateReleaseAction", () => {
+    const helpMessage = `Usage: create-release [options]
+
+Create a release for a service build.
+
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -b, --build <build>      build key, e.g. API-CCV28-1
+  -r, --release <release>  release name, e.g. v1.0.0
+  -h, --help               display help for command
+`;
+    const testCases = [
+      {
+        command: "create-release -s customers-v1 -b API-3 -r v1.0.0",
+        expectedAction: {
+          actionName: ActionName.CREATE_RELEASE,
+          deploymentProject: "customers-v1",
+          buildKey: "API-3",
+          releaseName: "v1.0.0",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "create-release -scustomers-v1 -bAPI-3 -rv1.0.0",
+        expectedAction: {
+          actionName: ActionName.CREATE_RELEASE,
+          deploymentProject: "customers-v1",
+          buildKey: "API-3",
+          releaseName: "v1.0.0",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "create-release -scustomers-v1 -bAPI-3",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "create-release -scustomers-v1 -bAPI-3 -r ",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+      {
+        command: "create-release",
+        error: {
+          status: 400,
+          message: helpMessage,
+        },
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new CreateReleaseAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
