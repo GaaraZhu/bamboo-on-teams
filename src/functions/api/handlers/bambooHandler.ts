@@ -3,7 +3,7 @@ import { CommandParser } from "../../services/commandParser";
 import { getBuild } from "../../services/executors/descBuildExecutor";
 import { getJobPageUrl, sendBuildNotification } from "./statusChecker";
 
-export const handle = async (
+export const handleCommand = async (
   request: Request,
   response: Response
 ): Promise<void> => {

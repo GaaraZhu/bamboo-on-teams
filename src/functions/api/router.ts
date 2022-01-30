@@ -1,5 +1,5 @@
 import { Request, Response } from "lambda-api";
-import { handle as handleCommand, handleNotification } from "./handlers/bambooHandler";
+import { handleCommand, handleNotification } from "./handlers/bambooHandler";
 
 //----------------------------------------------------------------------------//
 // Define authentication middleware
