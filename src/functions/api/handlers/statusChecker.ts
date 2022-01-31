@@ -87,7 +87,7 @@ export const notifyJobStatus = async (
   context: any
 ): Promise<void> => {
   console.log(`notifying job status: ${JSON.stringify(event)}`);
-  const jobUrl = await getJobPageUrl(
+  const jobUrl = getJobPageUrl(
     event.resultKey,
     CheckerInputType.BUILD === event.type
   );
