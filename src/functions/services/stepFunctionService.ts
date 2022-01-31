@@ -31,12 +31,7 @@ export const startCheckerExecution = async (
     | DeployBuildJobCheckerInput
     | DeployReleaseJobCheckerInput
 ): Promise<void> => {
-  const input: StartExecutionInput = {
-    stateMachineArn: process.env.STATUS_CHECKER_ARN!,
-    name: executionId.toString(),
-    input: JSON.stringify(checkerInput),
-    traceHeader: executionId.toString(),
-  };
+  const input = getCheckerInput(executionId, checkerInput);
   const stepFunctions: StepFunctions = await getStepFunctionsClient();
   const stepFunctionsResult: PromiseResult<StartExecutionOutput, AWSError> =
     await stepFunctions.startExecution(input).promise();
@@ -47,4 +42,19 @@ export const startCheckerExecution = async (
       )}`
     );
   }
+};
+
+export const getCheckerInput = (
+  executionId: string,
+  checkerInput:
+    | BuildJobCheckerInput
+    | DeployBuildJobCheckerInput
+    | DeployReleaseJobCheckerInput
+): StartExecutionInput => {
+  return {
+    stateMachineArn: process.env.STATUS_CHECKER_ARN!,
+    name: executionId.toString(),
+    input: JSON.stringify(checkerInput),
+    traceHeader: executionId.toString(),
+  };
 };
