@@ -378,7 +378,10 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new CreateBranchAction(testCase.command, "james");
+          const actualAction = new CreateBranchAction(
+            testCase.command,
+            "james"
+          );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -447,7 +450,10 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ListEnvironmentsAction(testCase.command, "james");
+          const actualAction = new ListEnvironmentsAction(
+            testCase.command,
+            "james"
+          );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -510,7 +516,10 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ListReleasesAction(testCase.command, "james");
+          const actualAction = new ListReleasesAction(
+            testCase.command,
+            "james"
+          );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -639,7 +648,10 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new CreateReleaseAction(testCase.command, "james");
+          const actualAction = new CreateReleaseAction(
+            testCase.command,
+            "james"
+          );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -698,7 +710,10 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new DeployLatestBuildAction(testCase.command, "james");
+          const actualAction = new DeployLatestBuildAction(
+            testCase.command,
+            "james"
+          );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -706,7 +721,6 @@ Options:
       });
     });
   });
-
 
   describe("DeployReleaseAction", () => {
     const helpMessage = `Usage: deploy-release [options]
@@ -758,7 +772,10 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new DeployReleaseAction(testCase.command, "james");
+          const actualAction = new DeployReleaseAction(
+            testCase.command,
+            "james"
+          );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -876,7 +893,10 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new PromoteReleaseAction(testCase.command, "james");
+          const actualAction = new PromoteReleaseAction(
+            testCase.command,
+            "james"
+          );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
