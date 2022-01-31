@@ -120,7 +120,7 @@ custom:
     gateway:
       name: ${self:service}
     stepFunction:
-      name: ${self:service}-status-puller-${self:provider.stage}
+      name: ${self:service}-status-checker-${self:provider.stage}
       arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.name}
 
   serverless-offline:
