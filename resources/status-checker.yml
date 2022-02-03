@@ -21,7 +21,7 @@ StatusChecker:
             MaxAttempts: 34
         Catch:
           - ErrorEquals:
-              - JobNotFinished
+              - States.ALL
             ResultPath: $.error
             Next: NotifyResult
         Next: NotifyResult
