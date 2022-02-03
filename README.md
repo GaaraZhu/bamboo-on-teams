@@ -3,7 +3,8 @@ A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
 ## Features
 ### 1. Bamboo interaction
-Interact with Bamboo in Microsoft Teams with [avaiable commands](#Available commands).
+Interact with Bamboo in Microsoft Teams with wide range of [commands](https://github.com/GaaraZhu/bamboo-on-teams#available-commands).
+
 ![Build command](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/command-build.png)
 ![Deploy command](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/command-deploy.png)
 
