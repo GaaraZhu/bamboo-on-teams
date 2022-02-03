@@ -115,7 +115,7 @@ export const getLatestSuccessBuild = async (
     },
   });
 
-  return data.results.result
+  return data.results.result && data.results.result[0]
     ? {
         key: data.results.result[0].key,
         buildNumber: data.results.result[0].buildNumber,
