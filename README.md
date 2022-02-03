@@ -2,11 +2,19 @@
 A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
 ## Features
-* Bamboo interaction
-* Result notification
-* Hanging detection
+### Bamboo interaction
+![Build command](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/command-build.JPG)
+![Deploy command](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/command-deploy.JPG)
 
-## Workflow
+### Result notification
+![Build notification](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/notification-build.JPG)
+![Deployment notification](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/notification-deploy.JPG)
+
+### Hanging detection
+![Hanging notification](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/notification-hanging-job.JPG)
+
+
+## How it works
 ### Bamboo interaction
 User interacts with Bamboo through Teams outgoing webhook and bamboo-on-teams service.
  ![Bamboo interaction](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/interactionSeq.png)
