@@ -131,6 +131,7 @@ export const notifyJobStatus = async (
     case CheckerInputType.NEW_BRANCH_BUILD: {
       await sendBuildNotification(
         event.result as Build,
+        event.service,
         event.triggeredBy,
         jobUrl
       );
@@ -168,6 +169,7 @@ export const getJobPageUrl = (resultKey: string, isBuild: boolean): string => {
 
 export const sendBuildNotification = async (
   build: Build,
+  service: string,
   triggeredBy: string,
   jobUrl: string
 ): Promise<void> => {
@@ -183,7 +185,7 @@ export const sendBuildNotification = async (
           "activityImage": "https://static.thenounproject.com/png/2714806-200.png",
           "facts": [{
               "name": "Service",
-              "value": "${build.service}"
+              "value": "${service}"
           },{
               "name": "Branch",
               "value": "${build.branch.name}"
