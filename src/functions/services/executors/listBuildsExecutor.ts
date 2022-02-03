@@ -10,7 +10,7 @@ export const executeListBuildsCommand = async (
 };
 
 export const listPlanBranchBuilds = async (branchKey: string): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?includeAllStates=true`;
+  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?includeAllStates=true&max-results=10&expand=results.result`;
   const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
@@ -21,5 +21,6 @@ export const listPlanBranchBuilds = async (branchKey: string): Promise<any> => {
     key: r.key,
     lifeCycleState: r.lifeCycleState,
     buildState: r.buildState,
+    buildRelativeTime: r.buildRelativeTime,
   }));
 };
