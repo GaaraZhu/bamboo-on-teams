@@ -1,6 +1,11 @@
 import { getPlan } from "./listPlansExecutor";
 import { CreateBranchAction } from "../../models/createBranchAction";
 import { axiosGet, axiosPut } from "../axiosService";
+import {
+  CheckerInputType,
+  NewBranchBuildJobCheckerInput,
+} from "../../api/handlers/statusChecker";
+import { startCheckerExecution } from "../stepFunctionService";
 
 export const executeCreateBranchCommand = async (
   action: CreateBranchAction
@@ -15,7 +20,19 @@ export const executeCreateBranchCommand = async (
       `Unknown vsc branch provided ${action.vscBranch}, available branches: ${vscBranches}`
     );
   }
-  return await createPlanBranch(plan.key, vscBranch);
+  const branchData = await createPlanBranch(plan.key, vscBranch);
+
+  // start async job status checker and push the result to MS Teams
+  const checkerInput: NewBranchBuildJobCheckerInput = {
+    type: CheckerInputType.NEW_BRANCH_BUILD,
+    branchKey: branchData.key,
+    branchName: branchData.shortName,
+    service: action.planName,
+    triggeredBy: action.triggeredBy,
+  };
+  await startCheckerExecution(checkerInput.branchKey, checkerInput);
+
+  return branchData;
 };
 
 const getAllBranches = async (planKey: string): Promise<any> => {

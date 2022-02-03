@@ -7,6 +7,19 @@ export const executeDescBuildCommand = async (
   return await getBuild(action.build);
 };
 
+export const getLatestBuild = async (branchKey: string): Promise<any> => {
+  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?max-results=1&expand=results.result`;
+  const { data } = await axiosGet(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+    },
+  });
+
+  return data.results.result && data.results.result[0]
+    ? await getBuild(data.results.result[0].key)
+    : undefined;
+};
+
 export const getBuild = async (key: string): Promise<Build> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${key}`;
   const { data } = await axiosGet(`${url}?expand=changes`, {

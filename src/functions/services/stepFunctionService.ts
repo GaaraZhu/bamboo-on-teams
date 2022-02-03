@@ -8,6 +8,7 @@ import {
   BuildJobCheckerInput,
   DeployBuildJobCheckerInput,
   DeployReleaseJobCheckerInput,
+  NewBranchBuildJobCheckerInput,
 } from "../api/handlers/statusChecker";
 
 const getStepFunctionsClient = async (): Promise<StepFunctions> => {
@@ -28,6 +29,7 @@ export const startCheckerExecution = async (
   executionId: string,
   checkerInput:
     | BuildJobCheckerInput
+    | NewBranchBuildJobCheckerInput
     | DeployBuildJobCheckerInput
     | DeployReleaseJobCheckerInput
 ): Promise<void> => {
@@ -48,6 +50,7 @@ export const getCheckerInput = (
   executionId: string,
   checkerInput:
     | BuildJobCheckerInput
+    | NewBranchBuildJobCheckerInput
     | DeployBuildJobCheckerInput
     | DeployReleaseJobCheckerInput
 ): StartExecutionInput => {

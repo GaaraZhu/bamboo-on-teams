@@ -1,6 +1,10 @@
 import { InvalidArgumentError } from "commander";
 import { axiosPost } from "../../services/axiosService";
-import { Build, getBuild } from "../../services/executors/descBuildExecutor";
+import {
+  Build,
+  getBuild,
+  getLatestBuild,
+} from "../../services/executors/descBuildExecutor";
 import {
   Deploy,
   getDeploy,
@@ -16,8 +20,17 @@ export class JobNotFinished extends Error {
 
 export enum CheckerInputType {
   BUILD,
+  NEW_BRANCH_BUILD,
   DEPLOY_BUILD,
   DEPLOY_RELEASE,
+}
+
+export interface NewBranchBuildJobCheckerInput {
+  type: CheckerInputType;
+  branchName: string;
+  branchKey: string;
+  service: string;
+  triggeredBy: string;
 }
 
 export interface BuildJobCheckerInput {
@@ -54,32 +67,43 @@ export interface DeployReleaseJobCheckerInput {
 export const checkJobStatus = async (
   event:
     | BuildJobCheckerInput
+    | NewBranchBuildJobCheckerInput
     | DeployBuildJobCheckerInput
     | DeployReleaseJobCheckerInput,
   context: any
 ): Promise<any> => {
   console.log(`checking job status: ${JSON.stringify(event)}`);
-  if (CheckerInputType.BUILD === event.type) {
-    const build = await getBuild(event.resultKey);
-    if (
-      !["FINISHED", "NOTBUILT"].includes(build.lifeCycleState.toUpperCase())
-    ) {
-      throw new JobNotFinished();
+  switch (event.type) {
+    case CheckerInputType.BUILD:
+    case CheckerInputType.NEW_BRANCH_BUILD: {
+      const build =
+        event.type === CheckerInputType.BUILD
+          ? await getBuild((event as BuildJobCheckerInput).resultKey)
+          : await getLatestBuild(
+              (event as NewBranchBuildJobCheckerInput).branchKey
+            );
+      if (
+        !["FINISHED", "NOTBUILT"].includes(build?.lifeCycleState?.toUpperCase())
+      ) {
+        throw new JobNotFinished();
+      }
+      return build;
     }
-    return build;
-  } else if (
-    [CheckerInputType.DEPLOY_BUILD, CheckerInputType.DEPLOY_RELEASE].includes(
-      event.type
-    )
-  ) {
-    const deploy = await getDeploy(event.resultKey);
-    if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
-      throw new JobNotFinished();
-    }
-    return deploy;
-  }
 
-  return undefined;
+    case CheckerInputType.DEPLOY_BUILD:
+    case CheckerInputType.DEPLOY_RELEASE: {
+      const deploy = await getDeploy(
+        (event as DeployBuildJobCheckerInput).resultKey
+      ); // both structs has the resultKey property
+      if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
+        throw new JobNotFinished();
+      }
+      return deploy;
+    }
+
+    default:
+      return undefined;
+  }
 };
 
 export const notifyJobStatus = async (
@@ -88,8 +112,10 @@ export const notifyJobStatus = async (
 ): Promise<void> => {
   console.log(`notifying job status: ${JSON.stringify(event)}`);
   const jobUrl = getJobPageUrl(
-    event.resultKey,
-    CheckerInputType.BUILD === event.type
+    event.resultKey || event.result.key,
+    [CheckerInputType.BUILD, CheckerInputType.NEW_BRANCH_BUILD].includes(
+      event.type
+    )
   );
   if (event.error) {
     await sendHangingStatusNotification(
@@ -100,26 +126,34 @@ export const notifyJobStatus = async (
     return;
   }
 
-  if (CheckerInputType.BUILD === event.type) {
-    await sendBuildNotification(
-      event.result as Build,
-      event.triggeredBy,
-      jobUrl
-    );
-  } else if (CheckerInputType.DEPLOY_BUILD === event.type) {
-    await sendDeployBuildNotification(
-      event.result as Deploy,
-      event as DeployBuildJobCheckerInput,
-      jobUrl
-    );
-  } else if (CheckerInputType.DEPLOY_RELEASE === event.type) {
-    await sendDeployReleaseNotification(
-      event.result as Deploy,
-      event.service,
-      event.environment,
-      event.triggeredBy,
-      jobUrl
-    );
+  switch (event.type) {
+    case CheckerInputType.BUILD:
+    case CheckerInputType.NEW_BRANCH_BUILD: {
+      await sendBuildNotification(
+        event.result as Build,
+        event.triggeredBy,
+        jobUrl
+      );
+      break;
+    }
+    case CheckerInputType.DEPLOY_BUILD: {
+      await sendDeployBuildNotification(
+        event.result as Deploy,
+        event as DeployBuildJobCheckerInput,
+        jobUrl
+      );
+      break;
+    }
+    case CheckerInputType.DEPLOY_RELEASE: {
+      await sendDeployReleaseNotification(
+        event.result as Deploy,
+        event.service,
+        event.environment,
+        event.triggeredBy,
+        jobUrl
+      );
+      break;
+    }
   }
 };
 
