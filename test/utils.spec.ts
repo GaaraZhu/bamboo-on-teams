@@ -1,5 +1,4 @@
-import { CheckerInputType } from "../src/functions/api/handlers/statusChecker";
-import { trim, prodEnvCheck } from "../src/functions/utils";
+import { trim } from "../src/functions/utils";
 
 describe("utils", () => {
   describe("emptyCheck", () => {
