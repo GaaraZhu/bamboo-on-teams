@@ -20,7 +20,7 @@ export class CreateBranchAction implements Action {
         trim
       )
       .requiredOption(
-        "-b, --branch <branch>",
+        "-vb, --vcs-branch <vcsBranch>",
         "vcsBranch name, e.g. master",
         trim
       );
@@ -34,7 +34,7 @@ export class CreateBranchAction implements Action {
     const commandInput = [".", ...command.split(" ")];
     createBranchCommand.parse(commandInput);
     this.planName = createBranchCommand.opts().service!;
-    this.vscBranch = createBranchCommand.opts().branch!;
+    this.vscBranch = createBranchCommand.opts().vcsBranch!;
     this.triggeredBy = triggeredBy;
   }
 
