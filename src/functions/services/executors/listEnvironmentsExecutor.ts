@@ -1,6 +1,7 @@
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { ListEnvironmentsAction } from "../../models/listEnvironmentsAction";
 import { axiosGet } from "../axiosService";
+import { isInvalidProdEnv } from "../../utils";
 
 export const executeListEnvironmentsCommand = async (
   action: ListEnvironmentsAction
@@ -39,7 +40,10 @@ const listEnvironments = async (projectId: string): Promise<any> => {
 
   return data.environments
     .filter(
-      (e: any) => e.operations.canView && e.configurationState === "TASKED"
+      (e: any) =>
+        e.operations.canView &&
+        !isInvalidProdEnv(e.name) &&
+        e.configurationState === "TASKED"
     )
     .map((e: any) => ({
       id: e.id,
