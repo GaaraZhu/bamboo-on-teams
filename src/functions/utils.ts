@@ -47,7 +47,7 @@ export const isInvalidProdEnv = (env: string): boolean => {
 };
 
 export const envExecuteOperationCheck = (env: Env): void => {
-  if (!env.opeartions.allowedToExecute) {
+  if (!env.operations.allowedToExecute) {
     throw {
       status: 400,
       message: `Not allowed to execute job in environment ${env.name}`,
@@ -56,7 +56,7 @@ export const envExecuteOperationCheck = (env: Env): void => {
 };
 
 export const envViewOperationCheck = (env: Env): void => {
-  if (!env.opeartions.canView) {
+  if (!env.operations.canView) {
     throw {
       status: 400,
       message: `Not allowed to view environment details in environment ${env.name}`,
