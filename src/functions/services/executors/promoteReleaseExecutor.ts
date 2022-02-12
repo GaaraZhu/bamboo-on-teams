@@ -10,6 +10,7 @@ import {
   DeployReleaseJobCheckerInput,
 } from "../../api/handlers/statusChecker";
 import { startCheckerExecution } from "../stepFunctionService";
+import { envExecuteOperationCheck } from "../../utils";
 
 export const executePromoteReleaseCommand = async (
   action: PromoteReleaseAction
@@ -26,6 +27,7 @@ export const executePromoteReleaseCommand = async (
     };
   }
   const targetEnv = await getEnvironment(project.id, action.targetEnv);
+  envExecuteOperationCheck(targetEnv);
   const deployment = await deployRelease(
     targetEnv.id,
     lastSuccessDeploy.release.id

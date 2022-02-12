@@ -2,7 +2,7 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { prodEnvCheck } from "../../utils";
+import { envExecuteOperationCheck, prodEnvCheck } from "../../utils";
 import { axiosGet } from "../axiosService";
 import { DeployBuildAction } from "../../models/deployBuildAction";
 import { getBuild } from "./descBuildExecutor";
@@ -48,6 +48,7 @@ export const executeDeployBuildCommand = async (
 
   // deploy the release to the environment
   const env = await getEnvironment(project.id, action.env);
+  envExecuteOperationCheck(env);
   const deployment = await deployRelease(env.id, targetRelease.id);
 
   const deployResult: DeployResult = {

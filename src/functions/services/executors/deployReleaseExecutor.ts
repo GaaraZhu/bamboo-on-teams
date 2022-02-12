@@ -2,7 +2,7 @@ import { DeployReleaseAction } from "../../models/deployReleaseAction";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getRelease } from "./listReleasesExecutor";
-import { prodEnvCheck } from "../../utils";
+import { envExecuteOperationCheck, prodEnvCheck } from "../../utils";
 import { axiosPost } from "../axiosService";
 import {
   CheckerInputType,
@@ -17,6 +17,7 @@ export const executeDeployReleaseCommand = async (
 
   const project = await getDeploymentProject(action.service);
   const env = await getEnvironment(project.id, action.env);
+  envExecuteOperationCheck(env);
   const release = await getRelease(project.id, action.releaseName);
   const deployment = await deployRelease(env.id, release.id);
 

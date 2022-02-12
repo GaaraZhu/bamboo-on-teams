@@ -11,6 +11,7 @@ import {
   DeployBuildJobCheckerInput,
   DeployReleaseJobCheckerInput,
 } from "./api/handlers/statusChecker";
+import { Env } from "./services/executors/listEnvironmentsExecutor";
 
 export type Class<T> = {
   new (command: string, triggeredBy: string): T;
@@ -43,4 +44,13 @@ export const isInvalidProdEnv = (env: string): boolean => {
     process.env.ENABLE_FOR_PROD?.toUpperCase() !== "TRUE" &&
     env.toUpperCase().startsWith("PROD")
   );
+};
+
+export const envExecuteOperationCheck = (env: Env): void => {
+  if (!env.opeartions.allowedToExecute) {
+    throw {
+      status: 400,
+      message: `Not allowed to execute job in environment ${env.name}`,
+    };
+  }
 };
