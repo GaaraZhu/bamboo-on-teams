@@ -30,13 +30,17 @@ export const isEmpty = (value: string | undefined): boolean => {
 };
 
 export const prodEnvCheck = (env: string): void => {
-  if (
-    process.env.ENABLE_FOR_PROD?.toUpperCase() === "TRUE" &&
-    env?.toUpperCase().startsWith("PROD")
-  ) {
+  if (isInvalidProdEnv(env)) {
     throw {
       status: 400,
       message: "Bamboo-on-teams is disabled for production environment",
     };
   }
+};
+
+export const isInvalidProdEnv = (env: string): boolean => {
+  return (
+    process.env.ENABLE_FOR_PROD?.toUpperCase() !== "TRUE" &&
+    env.toUpperCase().startsWith("PROD")
+  );
 };

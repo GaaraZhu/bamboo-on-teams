@@ -39,9 +39,7 @@ const listEnvironments = async (projectId: string): Promise<any> => {
 
   return data.environments
     .filter(
-      (e: any) =>
-        e.operations.canView &&
-        e.configurationState === "TASKED"
+      (e: any) => e.operations.canView && e.configurationState === "TASKED"
     )
     .map((e: any) => ({
       id: e.id,
