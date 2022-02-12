@@ -1,4 +1,5 @@
 import { ListDeploysAction } from "../../models/listDeploysAction";
+import { envViewOperationCheck } from "../../utils";
 import { axiosGet } from "../axiosService";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
@@ -8,6 +9,7 @@ export const executeListDeploysCommand = async (
 ): Promise<any> => {
   const project = await getDeploymentProject(action.deploymentProject);
   const environment = await getEnvironment(project.id, action.env);
+  envViewOperationCheck(environment);
   return await listDeploys(environment.id);
 };
 

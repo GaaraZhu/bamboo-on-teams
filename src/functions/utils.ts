@@ -54,3 +54,12 @@ export const envExecuteOperationCheck = (env: Env): void => {
     };
   }
 };
+
+export const envViewOperationCheck = (env: Env): void => {
+  if (!env.opeartions.canView) {
+    throw {
+      status: 400,
+      message: `Not allowed to view environment details in environment ${env.name}`,
+    };
+  }
+};
