@@ -5,7 +5,7 @@ import { isInvalidProdEnv } from "../../utils";
 
 export const executeListEnvironmentsCommand = async (
   action: ListEnvironmentsAction
-): Promise<any> => {
+): Promise<Env[]> => {
   const project = await getDeploymentProject(action.deploymentProject);
   return await listEnvironments(project.id);
 };
@@ -13,16 +13,16 @@ export const executeListEnvironmentsCommand = async (
 export const getEnvironment = async (
   projectId: string,
   envName: string
-): Promise<any> => {
+): Promise<Env> => {
   const envs = await listEnvironments(projectId);
   const env = envs.find(
-    (e: any) => e.name.toUpperCase() === envName.toUpperCase()
+    (e: Env) => e.name.toUpperCase() === envName.toUpperCase()
   );
   if (!env) {
     throw {
       status: 400,
       message: `Unknown environment provided ${envName}, availables: ${envs.map(
-        (e: any) => e.name
+        (e: Env) => e.name
       )}`,
     };
   }
@@ -30,7 +30,14 @@ export const getEnvironment = async (
   return env;
 };
 
-const listEnvironments = async (projectId: string): Promise<any> => {
+/**
+ *
+ * @param projectId deployment project id
+ * @returns a list of available environments
+ *
+ * Note: no filtering by operation permissions
+ */
+const listEnvironments = async (projectId: string): Promise<Env[]> => {
   const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}`;
   const { data } = await axiosGet(url, {
     headers: {
@@ -40,14 +47,28 @@ const listEnvironments = async (projectId: string): Promise<any> => {
 
   return data.environments
     .filter(
-      (e: any) =>
-        e.operations.canView &&
-        !isInvalidProdEnv(e.name) &&
-        e.configurationState === "TASKED"
+      (e: any) => e.configurationState === "TASKED" && !isInvalidProdEnv(e.name)
     )
     .map((e: any) => ({
       id: e.id,
       name: e.name,
-      allowedToExecute: e.operations.allowedToExecute,
+      operations: {
+        canView: e.operations.canView,
+        canExecute: e.operations.canExecute,
+        allowedToExecute: e.operations.allowedToExecute,
+      },
     }));
 };
+
+/**
+ * expose only useful operations here
+ */
+export interface Env {
+  id: string;
+  name: string;
+  opeartions: {
+    canView: boolean;
+    canExecute: boolean;
+    allowedToExecute: boolean;
+  };
+}
