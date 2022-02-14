@@ -4,7 +4,7 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { envExecuteOperationCheck, prodEnvCheck } from "../../utils";
+import { executeOperationCheck, prodEnvCheck } from "../../utils";
 import { axiosGet } from "../axiosService";
 import {
   CheckerInputType,
@@ -58,7 +58,7 @@ export const executeDeployLatestCommand = async (
 
   // deploy the release to the environment
   const env = await getEnvironment(project.id, action.env);
-  envExecuteOperationCheck(env.operations);
+  executeOperationCheck(env.operations);
   const deployment = await deployRelease(env.id, targetRelease.id);
   const deployResult: DeployResult = {
     service: action.service,

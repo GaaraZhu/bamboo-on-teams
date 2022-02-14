@@ -46,7 +46,7 @@ export const isInvalidProdEnv = (env: string): boolean => {
   );
 };
 
-export const envExecuteOperationCheck = (operations: Operations): void => {
+export const executeOperationCheck = (operations: Operations): void => {
   if (!operations.allowedToExecute) {
     throw {
       status: 400,
@@ -55,7 +55,7 @@ export const envExecuteOperationCheck = (operations: Operations): void => {
   }
 };
 
-export const envViewOperationCheck = (operations: Operations): void => {
+export const viewOperationCheck = (operations: Operations): void => {
   if (!operations.canView) {
     throw {
       status: 400,

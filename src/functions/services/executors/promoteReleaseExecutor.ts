@@ -10,14 +10,14 @@ import {
   DeployReleaseJobCheckerInput,
 } from "../../api/handlers/statusChecker";
 import { startCheckerExecution } from "../stepFunctionService";
-import { envExecuteOperationCheck, envViewOperationCheck } from "../../utils";
+import { executeOperationCheck, viewOperationCheck } from "../../utils";
 
 export const executePromoteReleaseCommand = async (
   action: PromoteReleaseAction
 ): Promise<any> => {
   const project = await getDeploymentProject(action.service);
   const sourceEnv = await getEnvironment(project.id, action.sourceEnv);
-  envViewOperationCheck(sourceEnv.operations);
+  viewOperationCheck(sourceEnv.operations);
   const lastSuccessDeploy = (await listDeploys(sourceEnv.id))?.find(
     (d: any) => d.deploymentState === "SUCCESS"
   );
@@ -28,7 +28,7 @@ export const executePromoteReleaseCommand = async (
     };
   }
   const targetEnv = await getEnvironment(project.id, action.targetEnv);
-  envExecuteOperationCheck(targetEnv.operations);
+  executeOperationCheck(targetEnv.operations);
   const deployment = await deployRelease(
     targetEnv.id,
     lastSuccessDeploy.release.id
