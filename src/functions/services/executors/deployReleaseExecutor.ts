@@ -17,7 +17,7 @@ export const executeDeployReleaseCommand = async (
 
   const project = await getDeploymentProject(action.service);
   const env = await getEnvironment(project.id, action.env);
-  envExecuteOperationCheck(env);
+  envExecuteOperationCheck(env.operations);
   const release = await getRelease(project.id, action.releaseName);
   const deployment = await deployRelease(env.id, release.id);
 

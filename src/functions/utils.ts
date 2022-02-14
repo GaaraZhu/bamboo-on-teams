@@ -11,7 +11,7 @@ import {
   DeployBuildJobCheckerInput,
   DeployReleaseJobCheckerInput,
 } from "./api/handlers/statusChecker";
-import { Env } from "./services/executors/listEnvironmentsExecutor";
+import { Env, Operations } from "./services/executors/listEnvironmentsExecutor";
 
 export type Class<T> = {
   new (command: string, triggeredBy: string): T;
@@ -46,20 +46,20 @@ export const isInvalidProdEnv = (env: string): boolean => {
   );
 };
 
-export const envExecuteOperationCheck = (env: Env): void => {
-  if (!env.operations.allowedToExecute) {
+export const envExecuteOperationCheck = (operations: Operations): void => {
+  if (!operations.allowedToExecute) {
     throw {
       status: 400,
-      message: `Not allowed to execute job in environment ${env.name}`,
+      message: "Not allowed to execute bamboo job",
     };
   }
 };
 
-export const envViewOperationCheck = (env: Env): void => {
-  if (!env.operations.canView) {
+export const envViewOperationCheck = (operations: Operations): void => {
+  if (!operations.canView) {
     throw {
       status: 400,
-      message: `Not allowed to view environment details in environment ${env.name}`,
+      message: "Not allowed to view resource details",
     };
   }
 };

@@ -66,9 +66,11 @@ const listEnvironments = async (projectId: string): Promise<Env[]> => {
 export interface Env {
   id: string;
   name: string;
-  operations: {
-    canView: boolean;
-    canExecute: boolean;
-    allowedToExecute: boolean;
-  };
+  operations: Operations;
+}
+
+export interface Operations {
+  canView: boolean;
+  canExecute: boolean;
+  allowedToExecute: boolean;
 }

@@ -17,7 +17,7 @@ export const executePromoteReleaseCommand = async (
 ): Promise<any> => {
   const project = await getDeploymentProject(action.service);
   const sourceEnv = await getEnvironment(project.id, action.sourceEnv);
-  envViewOperationCheck(sourceEnv);
+  envViewOperationCheck(sourceEnv.operations);
   const lastSuccessDeploy = (await listDeploys(sourceEnv.id))?.find(
     (d: any) => d.deploymentState === "SUCCESS"
   );
@@ -28,7 +28,7 @@ export const executePromoteReleaseCommand = async (
     };
   }
   const targetEnv = await getEnvironment(project.id, action.targetEnv);
-  envExecuteOperationCheck(targetEnv);
+  envExecuteOperationCheck(targetEnv.operations);
   const deployment = await deployRelease(
     targetEnv.id,
     lastSuccessDeploy.release.id
