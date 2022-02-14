@@ -130,9 +130,9 @@ Options:
 Usage: create-branch [options
 Create branch for a plan.
 Options:
-  -s, --service <service>        service name, e.g. customers-v1
-  -vb, --vcs-branch <vcsBranch>  vcsBranch name, e.g. master
-  -h, --help                     display help for command
+  -s, --service <service>       service name, e.g. customers-v1
+  -b, --vcs-branch <vcsBranch>  vcsBranch name, e.g. master
+  -h, --help                    display help for command
 ```
 ### build ###
 ```

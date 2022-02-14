@@ -330,13 +330,13 @@ Options:
 Create branch for a plan.
 
 Options:
-  -s, --service <service>        service name, e.g. customers-v1
-  -vb, --vcs-branch <vcsBranch>  vcsBranch name, e.g. master
-  -h, --help                     display help for command
+  -s, --service <service>       service name, e.g. customers-v1
+  -b, --vcs-branch <vcsBranch>  vcsBranch name, e.g. master
+  -h, --help                    display help for command
 `;
     const testCases = [
       {
-        command: "create-branch -s customers-v1 -vb dev",
+        command: "create-branch -s customers-v1 -b dev",
         expectedAction: {
           actionName: ActionName.CREATE_BRANCH,
           planName: "customers-v1",
@@ -345,7 +345,7 @@ Options:
         },
       },
       {
-        command: "create-branch -scustomers-v1 -vb dev",
+        command: "create-branch -scustomers-v1 -b dev",
         expectedAction: {
           actionName: ActionName.CREATE_BRANCH,
           planName: "customers-v1",
@@ -361,7 +361,7 @@ Options:
         },
       },
       {
-        command: "create-branch -scustomers-v1 -vb",
+        command: "create-branch -scustomers-v1 -b",
         error: {
           status: 400,
           message: helpMessage,

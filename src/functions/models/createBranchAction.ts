@@ -20,7 +20,7 @@ export class CreateBranchAction implements Action {
         trim
       )
       .requiredOption(
-        "-vb, --vcs-branch <vcsBranch>",
+        "-b, --vcs-branch <vcsBranch>",
         "vcsBranch name, e.g. master",
         trim
       );
