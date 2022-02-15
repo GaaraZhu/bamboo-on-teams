@@ -43,7 +43,7 @@ export const listDeploys = async (environmentId: string): Promise<any> => {
   return data.results?.map((r: any) => ({
     release: {
       id: r.deploymentVersion?.id,
-      name: r.deploymentVersion.name,
+      name: r.deploymentVersion?.name,
     },
     deploymentState: r.deploymentState,
     lifeCycleState: r.lifeCycleState,
