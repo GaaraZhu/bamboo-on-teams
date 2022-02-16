@@ -1,5 +1,6 @@
 import { Request, Response } from "lambda-api";
 import { CommandParser } from "../../services/commandParser";
+import { extractCommandFromTeamsMessage } from "../../utils";
 
 export const handleCommand = async (
   request: Request,
@@ -10,7 +11,10 @@ export const handleCommand = async (
     `Action: ${body.text} triggered by user ${body.from.name} from channel ${body.channelId}`
   );
   try {
-    const action = await CommandParser.build().parse(body.text, body.from.name);
+    const action = await CommandParser.build().parse(
+      extractCommandFromTeamsMessage(body.text),
+      body.from.name
+    );
     const result = await action.process();
     response.status(200).json(result);
   } catch (err: any) {

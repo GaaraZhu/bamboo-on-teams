@@ -1,4 +1,8 @@
-import { isInvalidProdEnv, trim } from "../src/functions/utils";
+import {
+  extractCommandFromTeamsMessage,
+  isInvalidProdEnv,
+  trim,
+} from "../src/functions/utils";
 
 describe("utils", () => {
   describe("emptyCheck", () => {
@@ -82,6 +86,46 @@ describe("utils", () => {
       it(JSON.stringify(testCase), async () => {
         process.env.ENABLE_FOR_PROD = testCase.enabledForProd;
         expect(isInvalidProdEnv(testCase.env)).toEqual(testCase.expected);
+      });
+    });
+  });
+
+  describe("extractCommandFromTeamsMessage", () => {
+    const testCases = [
+      {
+        command: "<at>Bamboo</at>&nbsp;build -s core-customers-v1 -b master ",
+        expected: "build -s core-customers-v1 -b master",
+      },
+      {
+        command:
+          "<at>Bamboo-on-teams</at>&nbsp; build -s core-customers-v1 -b master ",
+        expected: "build -s core-customers-v1 -b master",
+      },
+      {
+        command:
+          "<at>Bamboo-bot</at>&nbsp;&nbsp;build -s core-customers-v1 -b master ",
+        expected: "build -s core-customers-v1 -b master",
+      },
+      {
+        command: "<at>Bamboo</at>build -s core-customers-v1 -b master ",
+        expected: "build -s core-customers-v1 -b master",
+      },
+      {
+        command: "<at>Bamboo</at> build -s core-customers-v1 -b master ",
+        expected: "build -s core-customers-v1 -b master",
+      },
+      {
+        command:
+          "<at>Bamboo</at>&nbsp; &nbsp;build -s core-customers-v1 -b master ",
+        expected: "build -s core-customers-v1 -b master",
+      },
+    ];
+
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        expect(extractCommandFromTeamsMessage(testCase.command)).toEqual(
+          testCase.expected
+        );
       });
     });
   });

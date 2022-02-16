@@ -30,6 +30,10 @@ export const isEmpty = (value: string | undefined): boolean => {
   return !value || /^ *$/.test(value);
 };
 
+export const extractCommandFromTeamsMessage = (message: string): string => {
+  return message.split("</at>")[1].split("&nbsp;").join("").trim();
+};
+
 export const prodEnvCheck = (env: string): void => {
   if (isInvalidProdEnv(env)) {
     throw {
