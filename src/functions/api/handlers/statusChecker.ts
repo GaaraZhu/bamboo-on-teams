@@ -178,7 +178,9 @@ export const sendBuildNotification = async (
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
       "themeColor": "0076D7",
-      "summary": "Bamboo build job finished",
+      "summary": "Bamboo build job finished with status: <span style=${
+        isSucceed ? "color:green;" : "color:red;"
+      }>${build.buildState}</span>",
       "sections": [{
           "activityTitle": "Bamboo build job finished",
           "activitySubtitle": "triggered by ${triggeredBy}",
@@ -189,23 +191,6 @@ export const sendBuildNotification = async (
           },{
               "name": "Branch",
               "value": "${build.branch.name}"
-          }, {
-              "name": "Build Number",
-              "value": "${build.buildNumber}"
-          }, {
-              "name": "Build Key",
-              "value": "${build.key}"
-          }, {
-              "name": "Build State",
-              "value": "<span style=${
-                isSucceed ? "color:green;" : "color:red;"
-              }>${build.buildState}</span>"
-          }, {
-              "name": "Build Finished Time",
-              "value": "${build.buildRelativeTime}"
-          }, {
-            "name": "Build Duration",
-            "value": "${build.buildDuration}"
           }, {
             "name": "Url",
             "value": "${jobUrl}"
@@ -231,7 +216,9 @@ const sendDeployBuildNotification = async (
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
       "themeColor": "0076D7",
-      "summary": "Bamboo deploy job finished",
+      "summary": "Bamboo deploy job finished with status: <span style=${
+        isSucceed ? "color:green;" : "color:red;"
+      }>${deploy.deploymentState}</span>",
       "sections": [{
           "activityTitle": "Bamboo deploy job finished",
           "activitySubtitle": "triggered by ${event.triggeredBy}",
@@ -242,17 +229,6 @@ const sendDeployBuildNotification = async (
           },{
               "name": "Environment",
               "value": "${event.environment}"
-          }, {
-              "name": "Branch",
-              "value": "${event.branch}"
-          }, {
-              "name": "Deployed Build Number",
-              "value": "${event.buildNumber}"
-          }, {
-              "name": "Deployment State",
-              "value": "<span style=${
-                isSucceed ? "color:green;" : "color:red;"
-              }>${deploy.deploymentState}</span>"
           }, {
             "name": "Url",
             "value": "${jobUrl}"
@@ -280,7 +256,9 @@ export const sendDeployReleaseNotification = async (
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
       "themeColor": "0076D7",
-      "summary": "Bamboo deploy job finished",
+      "summary": "Bamboo deploy job finished with status: <span style=${
+        isSucceed ? "color:green;" : "color:red;"
+      }>${deploy.deploymentState}</span>",
       "sections": [{
           "activityTitle": "Bamboo deploy job finished",
           "activitySubtitle": "triggered by ${triggeredBy}",
@@ -288,17 +266,9 @@ export const sendDeployReleaseNotification = async (
           "facts": [{
               "name": "Service",
               "value": "${service}"
-          },{
-              "name": "Release",
-              "value": "${deploy.deploymentVersionName}"
           }, {
             "name": "Environment",
             "value": "${environment}"
-          }, {
-              "name": "Deployment State",
-              "value": "<span style=${
-                isSucceed ? "color:green;" : "color:red;"
-              }>${deploy.deploymentState}</span>"
           }, {
             "name": "Url",
             "value": "${jobUrl}"

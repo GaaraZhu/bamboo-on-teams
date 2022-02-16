@@ -17,7 +17,8 @@ export const handleCommand = async (
     const action = await CommandParser.build().parse(command, body.from.name);
     const result = await action.process();
 
-    let resultMessage = "Job has been triggerred, please wait for the result notification.";
+    let resultMessage =
+      "Job has been triggerred, please wait for the result notification.";
     if (
       ![
         ActionName.BUILD,
