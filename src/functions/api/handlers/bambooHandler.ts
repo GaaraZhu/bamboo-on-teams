@@ -19,7 +19,9 @@ export const handleCommand = async (
 
     let resultMessage =
       "Job has been triggerred, please wait for the result notification.";
-    if (
+    if (ActionName.HELP === action.actionName) {
+      resultMessage = result;
+    } else if (
       ![
         ActionName.BUILD,
         ActionName.CREATE_BRANCH,
