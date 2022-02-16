@@ -1,17 +1,5 @@
 import { InvalidArgumentError } from "commander";
-import { StepFunctions } from "aws-sdk";
-import { AWSError } from "aws-sdk/lib/error";
-import { PromiseResult } from "aws-sdk/lib/request";
-import {
-  StartExecutionInput,
-  StartExecutionOutput,
-} from "aws-sdk/clients/stepfunctions";
-import {
-  BuildJobCheckerInput,
-  DeployBuildJobCheckerInput,
-  DeployReleaseJobCheckerInput,
-} from "./api/handlers/statusChecker";
-import { Env, Operations } from "./services/executors/listEnvironmentsExecutor";
+import { Operations } from "./services/executors/listEnvironmentsExecutor";
 
 export type Class<T> = {
   new (command: string, triggeredBy: string): T;
