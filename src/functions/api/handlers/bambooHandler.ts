@@ -1,4 +1,6 @@
+import { ACM } from "aws-sdk";
 import { Request, Response } from "lambda-api";
+import { ActionName } from "../../models/actions";
 import { CommandParser } from "../../services/commandParser";
 import { extractCommandFromTeamsMessage } from "../../utils";
 
@@ -10,20 +12,43 @@ export const handleCommand = async (
   console.log(
     `Action: ${body.text} triggered by user ${body.from.name} from channel ${body.channelId}`
   );
+  const command = extractCommandFromTeamsMessage(body.text);
   try {
-    const action = await CommandParser.build().parse(
-      extractCommandFromTeamsMessage(body.text),
-      body.from.name
-    );
+    const action = await CommandParser.build().parse(command, body.from.name);
     const result = await action.process();
-    response.status(200).json(result);
+
+    let resultMessage = "Job has been triggerred, please wait for the result notification.";
+    if (
+      ![
+        ActionName.BUILD,
+        ActionName.CREATE_BRANCH,
+        ActionName.DEPLOY_BUILD,
+        ActionName.DEPLOY_LATEST_BUILD,
+        ActionName.DEPLOY_RELEASE,
+        ActionName.PROMOTE_RELEASE,
+      ].includes(action.actionName)
+    ) {
+      resultMessage = JSON.stringify(result);
+    }
+
+    const responseMsg = JSON.stringify({
+      type: "message",
+      text: resultMessage,
+    });
+
+    console.log(responseMsg);
+    response.status(200).send(responseMsg);
   } catch (err: any) {
     console.log(
-      `Failed to execute ACTION ${body.text} due to ${JSON.stringify(err)}`
+      `Failed to execute ACTION ${command} due to ${JSON.stringify(err)}`
     );
-    response.status(err.status || 500).json(err.message);
+    const responseMsg = JSON.stringify({
+      type: "message",
+      text: err.message,
+    });
+    response.status(200).send(responseMsg);
   }
-  console.log(`Action: ${body.text} finished`);
+  console.log(`Action: ${command} finished`);
 };
 
 interface IncomingMessage {
