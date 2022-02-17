@@ -18,7 +18,7 @@ export const handleCommand = async (
     const result = await action.process();
 
     let resultMessage =
-      "Job has been triggerred, please wait for the result notification.";
+      "Job has been triggered, please wait for the result notification.";
     if (ActionName.HELP === action.actionName) {
       resultMessage = result;
     } else if (
