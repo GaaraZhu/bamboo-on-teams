@@ -174,15 +174,16 @@ export const sendBuildNotification = async (
   jobUrl: string
 ): Promise<void> => {
   const isSucceed = build.buildState.toUpperCase() === "SUCCESSFUL";
+  const title = `Bamboo build job finished with status: <span style=${
+    isSucceed ? "color:green;" : "color:red;"
+  }>${build.buildState}</span>`;
   const notification = `{
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
       "themeColor": "0076D7",
-      "summary": "Bamboo build job finished with status: <span style=${
-        isSucceed ? "color:green;" : "color:red;"
-      }>${build.buildState}</span>",
+      "summary": "${title}",
       "sections": [{
-          "activityTitle": "Bamboo build job finished",
+          "activityTitle": "${title}",
           "activitySubtitle": "triggered by ${triggeredBy}",
           "activityImage": "https://static.thenounproject.com/png/2714806-200.png",
           "facts": [{
@@ -212,15 +213,16 @@ const sendDeployBuildNotification = async (
   jobUrl: string
 ): Promise<void> => {
   const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
+  const title = `Bamboo deploy job finished with status: <span style=${
+    isSucceed ? "color:green;" : "color:red;"
+  }>${deploy.deploymentState}</span>`;
   const notification = `{
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
       "themeColor": "0076D7",
-      "summary": "Bamboo deploy job finished with status: <span style=${
-        isSucceed ? "color:green;" : "color:red;"
-      }>${deploy.deploymentState}</span>",
+      "summary": "${title}",
       "sections": [{
-          "activityTitle": "Bamboo deploy job finished",
+          "activityTitle": "${title}",
           "activitySubtitle": "triggered by ${event.triggeredBy}",
           "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg",
           "facts": [{
@@ -252,15 +254,16 @@ export const sendDeployReleaseNotification = async (
   jobUrl: string
 ): Promise<void> => {
   const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
+  const title = `Bamboo deploy job finished with status: <span style=${
+    isSucceed ? "color:green;" : "color:red;"
+  }>${deploy.deploymentState}</span>`;
   const notification = `{
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
       "themeColor": "0076D7",
-      "summary": "Bamboo deploy job finished with status: <span style=${
-        isSucceed ? "color:green;" : "color:red;"
-      }>${deploy.deploymentState}</span>",
+      "summary": "${title}",
       "sections": [{
-          "activityTitle": "Bamboo deploy job finished",
+          "activityTitle": "${title}",
           "activitySubtitle": "triggered by ${triggeredBy}",
           "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg&usqp=CAU",
           "facts": [{
