@@ -22,6 +22,19 @@ export const extractCommandFromTeamsMessage = (message: string): string => {
   return message.split("</at>")[1].split("&nbsp;").join(" ").trim();
 };
 
+export const fallbackToHTML = (message: string): string => {
+  let result = message;
+  if (result.includes("\n")) {
+    result = result.split("\n").join("<br>");
+  }
+
+  if (result.includes("\t")) {
+    result = result.split("\t").join("&nbsp;&nbsp;&nbsp;&nbsp;");
+  }
+
+  return result;
+};
+
 export const prodEnvCheck = (env: string): void => {
   if (isInvalidProdEnv(env)) {
     throw {

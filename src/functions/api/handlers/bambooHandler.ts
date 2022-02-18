@@ -1,8 +1,7 @@
-import { ACM } from "aws-sdk";
 import { Request, Response } from "lambda-api";
 import { ActionName } from "../../models/actions";
 import { CommandParser } from "../../services/commandParser";
-import { extractCommandFromTeamsMessage } from "../../utils";
+import { extractCommandFromTeamsMessage, fallbackToHTML } from "../../utils";
 
 export const handleCommand = async (
   request: Request,
@@ -31,7 +30,7 @@ export const handleCommand = async (
         ActionName.PROMOTE_RELEASE,
       ].includes(action.actionName)
     ) {
-      resultMessage = JSON.stringify(result);
+      /* eslint-disable */resultMessage = fallbackToHTML(JSON.stringify(result, null, "\t")); // fall back json to HTML for better display
     }
 
     const responseMsg = JSON.stringify({
@@ -47,7 +46,7 @@ export const handleCommand = async (
     );
     const responseMsg = JSON.stringify({
       type: "message",
-      text: err.message,
+      text: fallbackToHTML(err.message), // fall back error messge to HTML for better display
     });
     response.status(200).send(responseMsg);
   }
