@@ -9,7 +9,7 @@ export const handleCommand = async (
 ): Promise<void> => {
   const body: IncomingMessage = request.body;
   console.log(
-    `Action: ${body.text} triggered by user ${body.from.name} from channel ${body.channelId}`
+    `Action: [${body.text}] triggered by user ${body.from.name} from channel ${body.channelId}`
   );
   const command = extractCommandFromTeamsMessage(body.text);
   try {
@@ -31,11 +31,13 @@ export const handleCommand = async (
       ].includes(action.actionName)
     ) {
       /* eslint-disable */resultMessage = fallbackToHTML(JSON.stringify(result, null, "\t")); // fall back json to HTML for better display
+    } else {
+      console.log(`Command result: ${JSON.stringify(result)}`);
     }
 
     const responseMsg = JSON.stringify({
       type: "message",
-      text: resultMessage,
+      text: `${resultMessage}`
     });
 
     console.log(responseMsg);
@@ -50,7 +52,7 @@ export const handleCommand = async (
     });
     response.status(200).send(responseMsg);
   }
-  console.log(`Action: ${command} finished`);
+  console.log(`Action finished: ${command}`);
 };
 
 interface IncomingMessage {
