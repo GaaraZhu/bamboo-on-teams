@@ -1,6 +1,9 @@
-import { getBranch } from "./listPlanBranchesExecutor";
+import { getBranchByNameAndPlanKey } from "./listPlanBranchesExecutor";
 import { DeployLatestBuildAction } from "../../models/deployLatestBuildAction";
-import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
+import {
+  getDeploymentProject,
+  getDeploymentProjectById,
+} from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
@@ -18,8 +21,20 @@ export const executeDeployLatestCommand = async (
   // 1. check environment availability
   prodEnvCheck(action.env);
 
-  // get the latest build from the service branch
-  const branch = await getBranch(action.service, action.branch);
+  // 2. get the deployment project by name
+  const project = await getDeploymentProject(action.service);
+
+  // 3. get the latest build from the service branch
+  const projectDetails = await getDeploymentProjectById(project.id);
+  const buildPlanKey = projectDetails.planKey?.key;
+  if (!buildPlanKey) {
+    throw {
+      status: 400,
+      message: `No build plan configured for project ${action.service}`,
+    };
+  }
+
+  const branch = await getBranchByNameAndPlanKey(buildPlanKey, action.branch);
   const latestBuild = await getLatestSuccessBuild(branch.key);
   if (!latestBuild) {
     throw {
@@ -28,11 +43,9 @@ export const executeDeployLatestCommand = async (
     };
   }
 
-  // get all releases for the service branch
-  const project = await getDeploymentProject(action.service);
+  // 4. get all releases for the service branch
   const buildReleases = await getBuildReleases(project.id, action.branch);
-
-  // create a release if not exist for the build
+  // 5. create a release if not exist for the build
   let targetRelease = buildReleases?.find((r: any) =>
     r.items.find((i: any) => i.planResultKey.key === latestBuild.key)
   );
@@ -56,7 +69,7 @@ export const executeDeployLatestCommand = async (
     );
   }
 
-  // deploy the release to the environment
+  // 6. deploy the release to the environment
   const env = await getEnvironment(project.id, action.env);
   executeOperationCheck(env.operations);
   const deployment = await deployRelease(env.id, targetRelease.id);
@@ -76,7 +89,7 @@ export const executeDeployLatestCommand = async (
     },
   };
 
-  // start async job status checker and push the result to MS Teams
+  // 7. start async job status checker and push the result to MS Teams
   const checkerInput: DeployBuildJobCheckerInput = {
     type: CheckerInputType.DEPLOY_BUILD,
     resultKey: deployment.deploymentResultId,

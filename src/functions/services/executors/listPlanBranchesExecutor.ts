@@ -15,14 +15,21 @@ export const getBranch = async (
   branchName: string
 ): Promise<any> => {
   const plan = await getPlan(planName);
-  const branches = await listPlanBranches(plan.key);
+  return await getBranchByNameAndPlanKey(plan.key, branchName);
+};
+
+export const getBranchByNameAndPlanKey = async (
+  planKey: string,
+  branchName: string
+): Promise<any> => {
+  const branches = await listPlanBranches(planKey);
   const branch = branches.find(
     (b: any) => b.name.toUpperCase() === branchName.toUpperCase()
   );
   if (!branch) {
     throw {
       status: 400,
-      message: `Unknown branch provided ${branchName} for plan ${planName}, available branches: ${branches.map(
+      message: `Unknown branch provided ${branchName} for plan key ${planKey}, available branches: ${branches.map(
         (b: any) => b.name
       )}`,
     };
