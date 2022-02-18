@@ -119,6 +119,11 @@ describe("utils", () => {
           "<at>Bamboo</at>&nbsp; &nbsp;build -s core-customers-v1 -b master ",
         expected: "build -s core-customers-v1 -b master",
       },
+      {
+        command:
+          "<at>Bamboo</at>&nbsp; &nbsp;build -s core-customers-v1&nbsp; -b master ",
+        expected: "build -s core-customers-v1  -b master",
+      },
     ];
 
     testCases.forEach((testCase) => {
