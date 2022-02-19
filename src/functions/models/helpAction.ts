@@ -5,7 +5,6 @@ import { executeHelpCommand } from "../services/executors/helpExecutor";
 export class HelpAction implements Action {
   readonly actionName = ActionName.HELP;
   readonly triggeredBy: string;
-  readonly project;
 
   constructor(triggeredBy: string) {
     const helpCommand = new Command()
@@ -20,7 +19,6 @@ export class HelpAction implements Action {
 
     const commandInput = [".", "."];
     helpCommand.parse(commandInput);
-    this.project = process.env.BAMBOO_PROJECT_ID!;
     this.triggeredBy = triggeredBy;
   }
 
