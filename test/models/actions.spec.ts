@@ -107,11 +107,9 @@ Options:
 
   describe("ListPlansAction", () => {
     it("create list plans action correctly", async () => {
-      process.env.BAMBOO_PROJECT_ID = "API";
       expect(new ListPlansAction("james")).toEqual({
         actionName: ActionName.LIST_PLANS,
         triggeredBy: "james",
-        project: "API",
       });
     });
   });

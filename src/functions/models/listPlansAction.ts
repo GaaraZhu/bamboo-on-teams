@@ -5,7 +5,6 @@ import { executeListPlansCommand } from "../services/executors/listPlansExecutor
 export class ListPlansAction implements Action {
   readonly actionName = ActionName.LIST_PLANS;
   readonly triggeredBy: string;
-  readonly project;
 
   constructor(triggeredBy: string) {
     const listPlansCommand = new Command()
@@ -20,7 +19,6 @@ export class ListPlansAction implements Action {
 
     const commandInput = [".", "."];
     listPlansCommand.parse(commandInput);
-    this.project = process.env.BAMBOO_PROJECT_ID!;
     this.triggeredBy = triggeredBy;
   }
 

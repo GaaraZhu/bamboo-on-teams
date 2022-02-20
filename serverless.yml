@@ -39,7 +39,6 @@ provider:
     BATH_PATH: bamboo/v1${self:custom.api.urls.prefix}
     BAMBOO_HOST_URL: ${ssm:/bamboo-on-teams/bambooHostUrl}
     BAMBOO_API_TOKEN: ${ssm:/bamboo-on-teams/bambooAPIToken}
-    BAMBOO_PROJECT_ID:  ${ssm:/bamboo-on-teams/bambooProjectId}
     TEAMS_HMAC_SHARED_TOKEN: ${ssm:/bamboo-on-teams/teamsHMACSharedToken}
     TEAMS_INCOMING_WEBHOOK_URL: ${ssm:/bamboo-on-terams/teamsIncomingWebhookUrl}
     STATUS_CHECKER_ARN: ${self:custom.aws.stepFunction.arn}
