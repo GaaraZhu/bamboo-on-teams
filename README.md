@@ -43,25 +43,24 @@ copy the URL out as the `notificationURL` parameter value.
 # Custom deployment bucket
 /bamboo-on-teams/deploymentBucket
 
-# Personal access token to access the Bamboo REST API
-/bamboo-on-teams/bambooAPIToken
-
-# Bamboo host URL
-/bamboo-on-teams/bambooHostUrl
-
-# Bamboo project ID
-/bamboo-on-teams/bambooProjectId
-
-# The shared HMAC token from Teams outgoing webhook
-/bamboo-on-teams/teamsHMACSharedToken
-
-# Teams incoming webhook URL
-/bamboo-on-terams/teamsIncomingWebhookUrl
-
 # VPC configuration to access the private bamboo REST API
 /bamboo-on-teams/securityGroupId
 /bamboo-on-teams/subnetId
+
+# Application configuration
+/bamboo-on-teams/applicationConfig
 ```
+Sample application configuration:
+```
+{
+    "bambooHostUrl": "test.co.nz",
+    "bambooAPIToken": "NjsDAFDHkoVOASXIM4QDSDFSgRQ",
+    "hmacToken": "neasdffz+LPsYZGsdddxyOvWSiK8=",
+    "notificationURL": "https://test.webhook.office.com/webhookb2/85dcasdfaf@864e4889-04a2-416e-9f88-ca5ce1c6c1b7/IncomingWebhook/9db3asdfaa369/be873347-c615-4984-ad7a-f7952283551e",
+    "enabledForProd": false,
+}
+```
+
 5. Build and deploy Bamboo-on-Teams through npm scripts in [package.json](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/package.json).
 
 6. In Teams channel, tag the outgoing webhook and run commands.
