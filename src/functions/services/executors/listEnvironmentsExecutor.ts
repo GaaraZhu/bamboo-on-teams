@@ -2,6 +2,7 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { ListEnvironmentsAction } from "../../models/listEnvironmentsAction";
 import { axiosGet } from "../axiosService";
 import { isInvalidProdEnv } from "../../utils";
+import { getConfig } from "../config";
 
 export const executeListEnvironmentsCommand = async (
   action: ListEnvironmentsAction
@@ -38,10 +39,12 @@ export const getEnvironment = async (
  * Note: no filtering by operation permissions
  */
 const listEnvironments = async (projectId: string): Promise<Env[]> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/deploy/project/${projectId}`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 

@@ -1,6 +1,7 @@
 import { ListDeploysAction } from "../../models/listDeploysAction";
 import { viewOperationCheck } from "../../utils";
 import { axiosGet } from "../axiosService";
+import { getConfig } from "../config";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getEnvironment } from "./listEnvironmentsExecutor";
 
@@ -14,10 +15,12 @@ export const executeListDeploysCommand = async (
 };
 
 export const getDeploy = async (id: string): Promise<Deploy> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/result/${id}`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/deploy/result/${id}`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 
@@ -33,10 +36,12 @@ export interface Deploy {
 }
 
 export const listDeploys = async (environmentId: string): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/environment/${environmentId}/results`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/deploy/environment/${environmentId}/results`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 

@@ -1,4 +1,5 @@
 import { Request, Response } from "lambda-api";
+import { getConfig } from "../services/config";
 import { handleCommand } from "./handlers/bambooHandler";
 
 //----------------------------------------------------------------------------//
@@ -13,7 +14,7 @@ export const verifyHMAC = (
   const auth = request.headers["authorization"];
   // Calculate HMAC on the message we've received using the shared secret
   const msgBuf = Buffer.from(request.body, "utf8");
-  const teamsSharedToken = process.env.TEAMS_HMAC_SHARED_TOKEN;
+  const teamsSharedToken = getConfig().hmacToken;
   const msgHash =
     "HMAC " +
     crypto

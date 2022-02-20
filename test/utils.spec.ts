@@ -44,48 +44,15 @@ describe("utils", () => {
   describe("isInvalidProdEnv check", () => {
     const testCases = [
       {
-        enabledForProd: "true",
+        enabledForProd: false,
         env: "Prod",
-        expected: false,
-      },
-      {
-        enabledForProd: "true",
-        env: "Production",
-        expected: false,
-      },
-      {
-        enabledForProd: "true",
-        env: "Product",
-        expected: false,
-      },
-      {
-        enabledForProd: "false",
-        env: "Product",
-        expected: true,
-      },
-      {
-        enabledForProd: "false",
-        env: "Prod",
-        expected: true,
-      },
-      {
-        enabledForProd: "false",
-        env: "Production",
-        expected: true,
-      },
-      {
-        env: "Prod",
-        expected: true,
-      },
-      {
-        env: "Production",
         expected: true,
       },
     ];
 
     testCases.forEach((testCase) => {
       it(JSON.stringify(testCase), async () => {
-        process.env.ENABLE_FOR_PROD = testCase.enabledForProd;
+        process.env.APPLICATION_CONFIG = `{"enabledForProd": ${testCase.enabledForProd}}`;
         expect(isInvalidProdEnv(testCase.env)).toEqual(testCase.expected);
       });
     });
@@ -141,9 +108,9 @@ describe("utils", () => {
       {
         name: "json message",
         message:
-          '[\n\t{\n\t\t"key": "API-PCV25-3",\n\t\t"lifeCycleState": "Finished",\n\t\t"buildState": "Successful",\n\t\t"buildRelativeTime": "1 day ago"\n\t},\n\t{\n\t\t"key": "API-PCV25-2",\n\t\t"lifeCycleState": "Finished",\n\t\t"buildState": "Successful",\n\t\t"buildRelativeTime": "3 days ago"\n\t},\n\t{\n\t\t"key": "API-PCV25-1",\n\t\t"lifeCycleState": "Finished",\n\t\t"buildState": "Failed",\n\t\t"buildRelativeTime": "3 days ago"\n\t}\n]',
+          /* eslint-disable */'[\n\t{\n\t\t"key": "API-PCV25-3",\n\t\t"lifeCycleState": "Finished",\n\t\t"buildState": "Successful",\n\t\t"buildRelativeTime": "1 day ago"\n\t},\n\t{\n\t\t"key": "API-PCV25-2",\n\t\t"lifeCycleState": "Finished",\n\t\t"buildState": "Successful",\n\t\t"buildRelativeTime": "3 days ago"\n\t},\n\t{\n\t\t"key": "API-PCV25-1",\n\t\t"lifeCycleState": "Finished",\n\t\t"buildState": "Failed",\n\t\t"buildRelativeTime": "3 days ago"\n\t}\n]',
         expected:
-          '[<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"key": "API-PCV25-3",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"lifeCycleState": "Finished",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildState": "Successful",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildRelativeTime": "1 day ago"<br>&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"key": "API-PCV25-2",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"lifeCycleState": "Finished",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildState": "Successful",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildRelativeTime": "3 days ago"<br>&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"key": "API-PCV25-1",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"lifeCycleState": "Finished",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildState": "Failed",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildRelativeTime": "3 days ago"<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>]',
+          /* eslint-disable */'[<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"key": "API-PCV25-3",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"lifeCycleState": "Finished",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildState": "Successful",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildRelativeTime": "1 day ago"<br>&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"key": "API-PCV25-2",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"lifeCycleState": "Finished",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildState": "Successful",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildRelativeTime": "3 days ago"<br>&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"key": "API-PCV25-1",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"lifeCycleState": "Finished",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildState": "Failed",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"buildRelativeTime": "3 days ago"<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>]',
       },
       {
         name: "text message",

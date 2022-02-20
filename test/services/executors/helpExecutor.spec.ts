@@ -3,7 +3,6 @@ import { executeHelpCommand } from "../../../src/functions/services/executors/he
 
 describe("helpExecutor", () => {
   it("help text", async () => {
-    console.log("1111");
     console.log(await executeHelpCommand(new HelpAction("james")));
   });
 });

@@ -1,5 +1,6 @@
 import { ListPlansAction } from "../../models/listPlansAction";
 import { axiosGet } from "../axiosService";
+import { getConfig } from "../config";
 
 export const executeListPlansCommand = async (
   action: ListPlansAction
@@ -25,10 +26,12 @@ export const getPlan = async (planName: string): Promise<any> => {
 };
 
 const listPlans = async (): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/plan.json?max-result=10000`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/plan.json?max-result=10000`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 

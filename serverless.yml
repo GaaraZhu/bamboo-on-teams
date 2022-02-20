@@ -37,14 +37,10 @@ provider:
   environment:
     REGION: ap-southeast-2
     BATH_PATH: bamboo/v1${self:custom.api.urls.prefix}
-    BAMBOO_HOST_URL: ${ssm:/bamboo-on-teams/bambooHostUrl}
-    BAMBOO_API_TOKEN: ${ssm:/bamboo-on-teams/bambooAPIToken}
-    TEAMS_HMAC_SHARED_TOKEN: ${ssm:/bamboo-on-teams/teamsHMACSharedToken}
-    TEAMS_INCOMING_WEBHOOK_URL: ${ssm:/bamboo-on-terams/teamsIncomingWebhookUrl}
     STATUS_CHECKER_ARN: ${self:custom.aws.stepFunction.arn}
     STEP_FUNCTIONS_ENDPOINT: https://states.ap-southeast-2.amazonaws.com
     TZ: Pacific/Auckland
-    ENABLE_FOR_PROD: false
+    APPLICATION_CONFIG: ${ssm:/bamboo-on-teams/applicationConfig}
 
 package:
   excludeDevDependencies: false
@@ -134,11 +130,7 @@ custom:
       "/bamboo-on-teams/deploymentBucket": placeholder
       "/bamboo-on-teams/securityGroupId": placeholder
       "/bamboo-on-teams/subnetId": placeholder
-      "/bamboo-on-teams/bambooHostUrl": placeholder
-      "/bamboo-on-teams/bambooAPIToken": placeholder
-      "/bamboo-on-teams/bambooProjectId": placeholder
-      "/bamboo-on-teams/teamsHMACSharedToken": placeholder
-      "/bamboo-on-teams/teamsIncomingWebhookUrl": placeholder
+      "/bamboo-on-teams/applicationConfig": placeholder
 
   api:
     urls:

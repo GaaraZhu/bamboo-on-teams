@@ -4,9 +4,12 @@ import {
   axiosPost,
   axiosPut,
 } from "../../src/functions/services/axiosService";
+import { getConfig } from "../../src/functions/services/config";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+/* eslint-disable */process.env.APPLICATION_CONFIG =
+  '{"bambooHostUrl": "test.co.nz", "bambooAPIToken": "token"}';
 
 describe("http operations", () => {
   describe("GET operation", () => {
@@ -14,7 +17,7 @@ describe("http operations", () => {
       const url = "https://test.co.nz/browse/API1-4";
       const config = {
         headers: {
-          Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+          Authorization: `Bearer ${getConfig().bambooAPIToken}`,
           "Content-Type": "application/json",
         },
       };
@@ -38,7 +41,7 @@ describe("http operations", () => {
       const url = "https://test.co.nz/browse/API1-4";
       const config = {
         headers: {
-          Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+          Authorization: `Bearer ${getConfig().bambooAPIToken}`,
           "Content-Type": "application/json",
         },
       };
@@ -71,7 +74,7 @@ describe("http operations", () => {
       };
       const config = {
         headers: {
-          Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+          Authorization: `Bearer ${getConfig().bambooAPIToken}`,
           "Content-Type": "application/json",
         },
       };
@@ -95,7 +98,7 @@ describe("http operations", () => {
       const url = "https://test.co.nz/browse/API1-4";
       const config = {
         headers: {
-          Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+          Authorization: `Bearer ${getConfig().bambooAPIToken}`,
           "Content-Type": "application/json",
         },
       };
@@ -131,7 +134,7 @@ describe("http operations", () => {
       };
       const config = {
         headers: {
-          Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+          Authorization: `Bearer ${getConfig().bambooAPIToken}`,
           "Content-Type": "application/json",
         },
       };
@@ -155,7 +158,7 @@ describe("http operations", () => {
       const url = "https://test.co.nz/browse/API1-4";
       const config = {
         headers: {
-          Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+          Authorization: `Bearer ${getConfig().bambooAPIToken}`,
           "Content-Type": "application/json",
         },
       };

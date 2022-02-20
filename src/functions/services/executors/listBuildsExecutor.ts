@@ -1,5 +1,6 @@
 import { ListBuildsAction } from "../../models/listBuildsAction";
 import { axiosGet } from "../axiosService";
+import { getConfig } from "../config";
 import { getBranch } from "./listPlanBranchesExecutor";
 
 export const executeListBuildsCommand = async (
@@ -10,10 +11,12 @@ export const executeListBuildsCommand = async (
 };
 
 export const listPlanBranchBuilds = async (branchKey: string): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?includeAllStates=true&max-results=10&expand=results.result`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/result/${branchKey}?includeAllStates=true&max-results=10&expand=results.result`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 

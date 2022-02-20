@@ -1,5 +1,6 @@
 import { ListDeploymentProjectsAction } from "../../models/listDeploymentProjects";
 import { axiosGet } from "../axiosService";
+import { getConfig } from "../config";
 
 export const executeListDeploymentProjectsCommand = async (
   action: ListDeploymentProjectsAction
@@ -27,10 +28,12 @@ export const getDeploymentProject = async (
 };
 
 export const getDeploymentProjectById = async (id: string): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${id}`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/deploy/project/${id}`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 
@@ -38,10 +41,12 @@ export const getDeploymentProjectById = async (id: string): Promise<any> => {
 };
 
 export const listDeploymentProjects = async (): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/all`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/deploy/project/all`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 

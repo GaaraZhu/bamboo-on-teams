@@ -6,6 +6,7 @@ import {
   CheckerInputType,
 } from "../../api/handlers/statusChecker";
 import { startCheckerExecution } from "../stepFunctionService";
+import { getConfig } from "../config";
 
 export const executeBuildCommand = async (
   action: BuildAction
@@ -31,10 +32,12 @@ const build = async (
   branchName: string
 ): Promise<BuildResult> => {
   const branch = await getBranch(planName, branchName);
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/queue/${branch.key}`;
+  const url = `https://${getConfig().bambooHostUrl}/rest/api/latest/queue/${
+    branch.key
+  }`;
   const { data } = await axiosPost(url, undefined, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 

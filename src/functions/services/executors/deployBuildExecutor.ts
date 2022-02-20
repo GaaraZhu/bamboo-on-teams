@@ -12,6 +12,7 @@ import {
 } from "../../api/handlers/statusChecker";
 import { DeployResult } from "./deployLatestBuildExecutor";
 import { startCheckerExecution } from "../stepFunctionService";
+import { getConfig } from "../config";
 
 export const executeDeployBuildCommand = async (
   action: DeployBuildAction
@@ -86,10 +87,12 @@ export const getBuildReleases = async (
   projectId: string,
   branchName: string
 ): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/versions?planBranchName=${branchName}`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/deploy/project/${projectId}/versions?planBranchName=${branchName}`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 
@@ -99,10 +102,12 @@ export const getBuildReleases = async (
 export const getLatestSuccessBuild = async (
   branchKey: string
 ): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?buildstate=Successful&max-results=1&expand=results.result`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/result/${branchKey}?buildstate=Successful&max-results=1&expand=results.result`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 

@@ -1,5 +1,6 @@
 import { ListReleasesAction } from "../../models/listReleasesAction";
 import { axiosGet } from "../axiosService";
+import { getConfig } from "../config";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 
 export const executeListReleasesCommand = async (
@@ -34,10 +35,12 @@ export const getRelease = async (
 };
 
 const listReleases = async (projectId: string): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/versions`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/deploy/project/${projectId}/versions`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 

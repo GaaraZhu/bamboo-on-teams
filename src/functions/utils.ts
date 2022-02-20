@@ -1,4 +1,5 @@
 import { InvalidArgumentError } from "commander";
+import { getConfig } from "./services/config";
 import { Operations } from "./services/executors/listEnvironmentsExecutor";
 
 export type Class<T> = {
@@ -45,10 +46,7 @@ export const prodEnvCheck = (env: string): void => {
 };
 
 export const isInvalidProdEnv = (env: string): boolean => {
-  return (
-    process.env.ENABLE_FOR_PROD?.toUpperCase() !== "TRUE" &&
-    env.toUpperCase().startsWith("PROD")
-  );
+  return !getConfig().enabledForProd && env.toUpperCase().startsWith("PROD");
 };
 
 export const executeOperationCheck = (operations: Operations): void => {

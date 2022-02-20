@@ -1,5 +1,6 @@
 import { InvalidArgumentError } from "commander";
 import { axiosPost } from "../../services/axiosService";
+import { getConfig } from "../../services/config";
 import {
   Build,
   getBuild,
@@ -163,8 +164,10 @@ export const getJobPageUrl = (resultKey: string, isBuild: boolean): string => {
     throw new InvalidArgumentError("empty resultKey");
   }
   return isBuild
-    ? `https://${process.env.BAMBOO_HOST_URL}/browse/${resultKey}`
-    : `https://${process.env.BAMBOO_HOST_URL}/deploy/viewDeploymentResult.action?deploymentResultId=${resultKey}`;
+    ? `https://${getConfig().bambooHostUrl}/browse/${resultKey}`
+    : `https://${
+        getConfig().bambooHostUrl
+      }/deploy/viewDeploymentResult.action?deploymentResultId=${resultKey}`;
 };
 
 export const sendBuildNotification = async (
@@ -199,7 +202,7 @@ export const sendBuildNotification = async (
           "markdown": true
       }]
   }`;
-  const url = process.env.TEAMS_INCOMING_WEBHOOK_URL!;
+  const url = getConfig().notificationURL;
   await axiosPost(url, notification, {
     headers: {
       "Content-Type": "application/json",
@@ -238,7 +241,7 @@ const sendDeployBuildNotification = async (
           "markdown": true
       }]
   }`;
-  const url = process.env.TEAMS_INCOMING_WEBHOOK_URL!;
+  const url = getConfig().notificationURL;
   await axiosPost(url, notification, {
     headers: {
       "Content-Type": "application/json",
@@ -279,7 +282,7 @@ export const sendDeployReleaseNotification = async (
           "markdown": true
       }]
   }`;
-  const url = process.env.TEAMS_INCOMING_WEBHOOK_URL!;
+  const url = getConfig().notificationURL;
   await axiosPost(url, notification, {
     headers: {
       "Content-Type": "application/json",
@@ -311,7 +314,7 @@ const sendHangingStatusNotification = async (
           "markdown": true
       }]
   }`;
-  await axiosPost(process.env.TEAMS_INCOMING_WEBHOOK_URL!, notification, {
+  await axiosPost(getConfig().notificationURL, notification, {
     headers: {
       "Content-Type": "application/json",
     },

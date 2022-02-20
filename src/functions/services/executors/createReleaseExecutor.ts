@@ -1,6 +1,7 @@
 import { CreateReleaseAction } from "../../models/createReleaseAction";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { axiosPost } from "../axiosService";
+import { getConfig } from "../config";
 
 export const executeCreateReleaseCommand = async (
   action: CreateReleaseAction
@@ -14,14 +15,16 @@ export const createRelease = async (
   buildKey: string,
   release: string
 ): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/deploy/project/${projectId}/version`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/deploy/project/${projectId}/version`;
   const payload = JSON.stringify({
     planResultKey: buildKey,
     name: release,
   });
   const { data } = await axiosPost(url, payload, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
       "Content-Type": "application/json",
     },
   });

@@ -1,5 +1,6 @@
 import { DescBuildAction } from "../../models/descBuildAction";
 import { axiosGet } from "../axiosService";
+import { getConfig } from "../config";
 
 export const executeDescBuildCommand = async (
   action: DescBuildAction
@@ -8,10 +9,12 @@ export const executeDescBuildCommand = async (
 };
 
 export const getLatestBuild = async (branchKey: string): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${branchKey}?max-results=1&expand=results.result`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/result/${branchKey}?max-results=1&expand=results.result`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 
@@ -21,10 +24,12 @@ export const getLatestBuild = async (branchKey: string): Promise<any> => {
 };
 
 export const getBuild = async (key: string): Promise<Build> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/result/${key}`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/result/${key}`;
   const { data } = await axiosGet(`${url}?expand=changes`, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 

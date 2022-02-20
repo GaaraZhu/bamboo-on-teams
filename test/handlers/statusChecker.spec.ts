@@ -7,7 +7,7 @@ import axios from "axios";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-process.env.BAMBOO_HOST_URL = "test.co.nz";
+/* eslint-disable */process.env.APPLICATION_CONFIG = '{"bambooHostUrl": "test.co.nz"}';
 
 describe("statusChecker", () => {
   describe("getJobPageUrl", () => {

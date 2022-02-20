@@ -6,6 +6,7 @@ import {
   NewBranchBuildJobCheckerInput,
 } from "../../api/handlers/statusChecker";
 import { startCheckerExecution } from "../stepFunctionService";
+import { getConfig } from "../config";
 
 export const executeCreateBranchCommand = async (
   action: CreateBranchAction
@@ -36,10 +37,12 @@ export const executeCreateBranchCommand = async (
 };
 
 const getAllBranches = async (planKey: string): Promise<any> => {
-  const url = `https://${process.env.BAMBOO_HOST_URL}/rest/api/latest/plan/${planKey}/vcsBranches?max-result=10000`;
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/plan/${planKey}/vcsBranches?max-result=10000`;
   const { data } = await axiosGet(url, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
   });
 
@@ -51,14 +54,14 @@ const createPlanBranch = async (
   vscBranch: string
 ): Promise<any> => {
   const url = `https://${
-    process.env.BAMBOO_HOST_URL
+    getConfig().bambooHostUrl
   }/rest/api/latest/plan/${planKey}/branch/${vscBranch.replace(
     /\//g,
     "-"
   )}?vcsBranch=${vscBranch}`;
   const { data } = await axiosPut(url, undefined, {
     headers: {
-      Authorization: `Bearer ${process.env.BAMBOO_API_TOKEN}`,
+      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
       "Content-Type": "application/json",
     },
   });
