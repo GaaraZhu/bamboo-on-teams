@@ -11,23 +11,25 @@ export const verifyHMAC = (
   response: Response,
   next: () => void
 ): void => {
-  const auth = request.headers["authorization"];
-  // Calculate HMAC on the message we've received using the shared secret
-  const msgBuf = Buffer.from(request.body, "utf8");
-  const teamsSharedToken = getConfig().hmacToken;
-  const msgHash =
-    "HMAC " +
-    crypto
-      .createHmac("sha256", teamsSharedToken)
-      .update(msgBuf)
-      .digest("base64");
-  if (msgHash === auth) {
-    return next();
-  } else {
-    return response.error(
-      403,
-      "Error: message sender cannot be authenticated."
-    );
+  try {
+    const expectedReqHash = request.headers["authorization"];
+    // Calculate HMAC on the message we've received using the shared secret
+    const teamsSharedToken = getConfig().hmacToken;
+    const bufSecret = Buffer.from(teamsSharedToken, "base64");
+    const msgBuf = Buffer.from(request.rawBody, "utf8");
+    const actualReqHash =
+      "HMAC " +
+      crypto.createHmac("sha256", bufSecret).update(msgBuf).digest("base64");
+    if (actualReqHash === expectedReqHash) {
+      return next();
+    } else {
+      return response.error(
+        403,
+        "Error: message sender cannot be authenticated."
+      );
+    }
+  } catch (e) {
+    console.log(JSON.stringify(e));
   }
 };
 
@@ -40,7 +42,7 @@ const app = require("lambda-api")({
 });
 app.post(
   "/command",
-  //   verifyHMAC,
+  verifyHMAC,
   async (request: Request, response: Response) => {
     await handleCommand(request, response);
   }
