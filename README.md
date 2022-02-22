@@ -7,7 +7,6 @@ Interact with Bamboo in Microsoft Teams with wide range of [commands](https://gi
 
 ![Build command](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/command-build.png)
 ![Deploy command](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/command-deploy.png)
-![Create branch command](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/command-create-branch.png)
 
 ### 2. Result notification
 Receive notification in Microsoft Teams for Bamboo jobs.
