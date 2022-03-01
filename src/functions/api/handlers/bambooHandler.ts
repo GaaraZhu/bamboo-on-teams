@@ -18,12 +18,13 @@ export const handleCommand = async (
 
     let resultMessage =
       "Job has been triggered, please wait for the result notification.";
-    if (ActionName.HELP === action.actionName) {
+    if (ActionName.CREATE_BRANCH === action.actionName) {
+      resultMessage = "Branch plan has been created and a build job has been triggered, please wait for the result notification.";
+    } else if (ActionName.HELP === action.actionName) {
       resultMessage = result;
     } else if (
       ![
         ActionName.BUILD,
-        ActionName.CREATE_BRANCH,
         ActionName.DEPLOY_BUILD,
         ActionName.DEPLOY_LATEST_BUILD,
         ActionName.DEPLOY_RELEASE,
