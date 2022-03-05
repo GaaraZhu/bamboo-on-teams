@@ -1,10 +1,10 @@
 import { Command, CommanderError } from "commander";
 import { Action, ActionName } from "./actions";
-import { executeSearchProjectCommand } from "../services/executors/searchProjectExecutor";
+import { executeSearchProjectsCommand } from "../services/executors/searchProjectsExecutor";
 import { trim } from "../utils";
 
-export class SearchProjectAction implements Action {
-  readonly actionName = ActionName.SEARCH_PROJECT;
+export class SearchProjectsAction implements Action {
+  readonly actionName = ActionName.SEARCH_PROJECTS;
   readonly deploymentProject: string;
   readonly triggeredBy: string;
 
@@ -33,6 +33,6 @@ export class SearchProjectAction implements Action {
   }
 
   async process(): Promise<any> {
-    return await executeSearchProjectCommand(this);
+    return await executeSearchProjectsCommand(this);
   }
 }

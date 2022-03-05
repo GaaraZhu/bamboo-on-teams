@@ -15,8 +15,8 @@ import { PromoteReleaseAction } from "./promoteReleaseAction";
 import { DeployBuildAction } from "./deployBuildAction";
 import { CreateBranchAction } from "./createBranchAction";
 import { HelpAction } from "./helpAction";
-import { SearchPlanAction } from "./searchPlanAction";
-import { SearchProjectAction } from "./searchProjectAction";
+import { SearchPlansAction } from "./searchPlansAction";
+import { SearchProjectsAction } from "./searchProjectsAction";
 
 export enum ActionName {
   HELP = "help",
@@ -35,8 +35,8 @@ export enum ActionName {
   LIST_DEPLOYS = "list-deploys",
   PROMOTE_RELEASE = "promote-release",
   CREATE_BRANCH = "create-branch",
-  SEARCH_PLAN = "search-plan",
-  SEARCH_PROJECT = "search-project",
+  SEARCH_PLANS = "search-plans",
+  SEARCH_PROJECTS = "search-projects",
 }
 
 export const sanitizeActionName = (
@@ -76,8 +76,8 @@ export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.LIST_RELEASES]: ListReleasesAction,
   [ActionName.PROMOTE_RELEASE]: PromoteReleaseAction,
   [ActionName.CREATE_BRANCH]: CreateBranchAction,
-  [ActionName.SEARCH_PLAN]: SearchPlanAction,
-  [ActionName.SEARCH_PROJECT]: SearchProjectAction,
+  [ActionName.SEARCH_PLANS]: SearchPlansAction,
+  [ActionName.SEARCH_PROJECTS]: SearchProjectsAction,
 };
 
 export const actionGroupLookup: Record<JobType, ActionName[]> = {
