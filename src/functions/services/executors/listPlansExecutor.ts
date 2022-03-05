@@ -25,7 +25,7 @@ export const getPlan = async (planName: string): Promise<any> => {
   return plan;
 };
 
-const listPlans = async (): Promise<any> => {
+export const listPlans = async (): Promise<any> => {
   const url = `https://${
     getConfig().bambooHostUrl
   }/rest/api/latest/plan.json?max-result=10000`;
