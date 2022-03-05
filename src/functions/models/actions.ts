@@ -1,5 +1,4 @@
 import { Class } from "../utils";
-import { Response } from "lambda-api";
 import { BuildAction } from "./buildAction";
 import { CreateReleaseAction } from "./createReleaseAction";
 import { DeployLatestBuildAction } from "./deployLatestBuildAction";
@@ -17,6 +16,7 @@ import { DeployBuildAction } from "./deployBuildAction";
 import { CreateBranchAction } from "./createBranchAction";
 import { HelpAction } from "./helpAction";
 import { SearchPlanAction } from "./searchPlanAction";
+import { SearchProjectAction } from "./searchProjectAction";
 
 export enum ActionName {
   HELP = "help",
@@ -36,6 +36,7 @@ export enum ActionName {
   PROMOTE_RELEASE = "promote-release",
   CREATE_BRANCH = "create-branch",
   SEARCH_PLAN = "search-plan",
+  SEARCH_PROJECT = "search-project",
 }
 
 export const sanitizeActionName = (
@@ -76,6 +77,7 @@ export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.PROMOTE_RELEASE]: PromoteReleaseAction,
   [ActionName.CREATE_BRANCH]: CreateBranchAction,
   [ActionName.SEARCH_PLAN]: SearchPlanAction,
+  [ActionName.SEARCH_PROJECT]: SearchProjectAction,
 };
 
 export const actionGroupLookup: Record<JobType, ActionName[]> = {
