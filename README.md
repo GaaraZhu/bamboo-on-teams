@@ -73,7 +73,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 ## Available commands ##
 ### Build commands ###
 * list-plans
-* search-plan
+* search-plans
 * list-branches
 * list-builds
 * desc-build
@@ -82,6 +82,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 
 ### Deploy commands ###
 * list-projects
+* search-projects
 * list-envs
 * list-releases
 * list-deploys
@@ -100,10 +101,10 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 Usage: list-plans
 List bamboo plans.
 ```
-### search-plan ###
+### search-plans ###
 ```
-Usage: serach-plan [options]
-Search a plan.
+Usage: search-plans [options]
+Search build plans.
 Options:
   -s, --service <service>  wildcard service name, e.g. customers
   -h, --help               display help for command
@@ -155,6 +156,14 @@ Options:
 ```
 Usage: list-projects
 List deployment projects.
+```
+### search-projects ###
+```
+Usage: search-projects [options]
+Search deployment projects.
+Options:
+  -s, --service <service>  wildcard service name, e.g. customers
+  -h, --help               display help for command
 ```
 ### list-envs ###
 ```

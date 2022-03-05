@@ -11,7 +11,7 @@ export class SearchProjectAction implements Action {
   constructor(command: string, triggeredBy: string) {
     const searchProjectCommand = new Command()
       .name(this.actionName)
-      .description("Search deployment project.")
+      .description("Search deployment projects.")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",

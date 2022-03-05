@@ -11,7 +11,7 @@ export class SearchPlanAction implements Action {
   constructor(command: string, triggeredBy: string) {
     const searchPlanCommand = new Command()
       .name(this.actionName)
-      .description("Search a plan.")
+      .description("Search build plans.")
       .usage("[options]")
       .requiredOption(
         "-s, --service <service>",
