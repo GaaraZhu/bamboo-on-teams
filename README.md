@@ -37,17 +37,18 @@ copy the URL out as the `notificationURL` parameter value.
 
 4. Configure required parameters in SSM
 ```
+## Infrastructure configuration ##
 # ID of the AWS account in which the stack is going to be created
 /bamboo-on-teams/accountId
 
 # Custom deployment bucket
 /bamboo-on-teams/deploymentBucket
 
-# VPC configuration to access the private bamboo REST API
+# VPC configuration to access the private bamboo REST API(Optional if Bamboo Rest API is public available)
 /bamboo-on-teams/securityGroupId
 /bamboo-on-teams/subnetId
 
-# Application configuration
+## Application configuration ##
 /bamboo-on-teams/applicationConfig
 ```
 Sample application configuration:
