@@ -12,12 +12,12 @@ export const handleCommand = async (
     `Action: [${body.text}] triggered by user ${body.from.name} from channel ${body.channelId}`
   );
   const command = extractCommandFromTeamsMessage(body.text);
+  let resultMessage =
+    "Job has been triggered, please wait for the result notification.";
   try {
     const action = await CommandParser.build().parse(command, body.from.name);
     const result = await action.process();
 
-    let resultMessage =
-      "Job has been triggered, please wait for the result notification.";
     if (ActionName.CREATE_BRANCH === action.actionName) {
       resultMessage =
         "Branch plan has been created and a build job has been triggered, please wait for the result notification.";
@@ -36,25 +36,21 @@ export const handleCommand = async (
     } else {
       console.log(`Command result: ${JSON.stringify(result)}`);
     }
-
-    const responseMsg = JSON.stringify({
-      type: "message",
-      text: `${resultMessage}`
-    });
-
-    console.log(responseMsg);
-    response.status(200).send(responseMsg);
   } catch (err: any) {
     console.log(
       `Failed to execute ACTION ${command} due to ${JSON.stringify(err)}`
     );
-    const responseMsg = JSON.stringify({
-      type: "message",
-      text: fallbackToHTML(err.message), // fall back error messge to HTML for better display
-    });
-    response.status(200).send(responseMsg);
+    resultMessage = fallbackToHTML(err.message); // fall back error messge to HTML for better display
   }
-  console.log(`Action finished: ${command}`);
+
+  const responseMsg = {
+    type: "message",
+    text: `${resultMessage}`
+  };
+  console.log(
+    `Responding to Teams channel: ${responseMsg}`
+  );
+  response.status(200).json(responseMsg);
 };
 
 interface IncomingMessage {

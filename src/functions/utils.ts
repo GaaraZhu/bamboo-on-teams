@@ -1,4 +1,8 @@
 import { InvalidArgumentError } from "commander";
+import { Action } from "./models/actions";
+import { BuildAction } from "./models/buildAction";
+import { DeployLatestBuildAction } from "./models/deployLatestBuildAction";
+import { PromoteReleaseAction } from "./models/promoteReleaseAction";
 import { getConfig } from "./services/config";
 import { Operations } from "./services/executors/listEnvironmentsExecutor";
 
@@ -63,6 +67,40 @@ export const viewOperationCheck = (operations: Operations): void => {
     throw {
       status: 400,
       message: "Not allowed to view resource details",
+    };
+  }
+};
+
+/**
+ *  Trigger jobs for multiple services.
+ *  Note: only build job is supported to avoid the 5 seconds timeout in Teams:
+ *  https://github.com/MicrosoftDocs/msteams-docs/issues/693
+ *
+ * @param action build action
+ * @param triggerSingle function to trigger a job for a single service
+ */
+export const triggerJobForServices = async (
+  action: BuildAction,
+  triggerSingle: (service: string, action: BuildAction) => Promise<any>
+): Promise<any> => {
+  const failedServices: string[] = [];
+  for (let i = 0; i < action.services.length; i++) {
+    const service = action.services[i];
+    try {
+      await triggerSingle(service, action);
+    } catch (err) {
+      console.log(
+        `Failed to trigger job for service ${service} due to ${JSON.stringify(
+          err
+        )}`
+      );
+      failedServices.push(service);
+    }
+  }
+  if (failedServices.length !== 0) {
+    throw {
+      status: 500,
+      message: `Failed to trigger jobs for services: ${failedServices} while other jobs have been triggered.`,
     };
   }
 };

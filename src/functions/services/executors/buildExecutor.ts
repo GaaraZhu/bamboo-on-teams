@@ -7,32 +7,19 @@ import {
 } from "../../api/handlers/statusChecker";
 import { startCheckerExecution } from "../stepFunctionService";
 import { getConfig } from "../config";
+import { triggerJobForServices } from "../../utils";
 
 export const executeBuildCommand = async (
   action: BuildAction
 ): Promise<any> => {
-  const failedServices: string[] = [];
-  action.services.forEach((service) => {
-    try {
-      buildSingle(service, action.branch, action.triggeredBy);
-    } catch (err) {
-      failedServices.push(service);
-    }
-  });
-  if (failedServices.length !== 0) {
-    throw {
-      status: 500,
-      message: `Failed to build service(s): ${failedServices}`,
-    };
-  }
+  await triggerJobForServices(action, buildSingle);
 };
 
 const buildSingle = async (
   service: string,
-  branchName: string,
-  triggeredBy: string
+  action: BuildAction
 ): Promise<any> => {
-  const buildResult = await build(service, branchName);
+  const buildResult = await build(service, action.branch);
 
   // start async job status checker and push the result to MS Teams
   const checkerInput: BuildJobCheckerInput = {
@@ -40,9 +27,9 @@ const buildSingle = async (
     resultKey: buildResult.buildResultKey,
     resultUrl: buildResult.link.href,
     service: service,
-    branch: branchName,
+    branch: action.branch,
     buildNumber: buildResult.buildNumber,
-    triggeredBy: triggeredBy,
+    triggeredBy: action.triggeredBy,
   };
   await startCheckerExecution(buildResult.buildResultKey, checkerInput);
   return buildResult;
