@@ -10,7 +10,19 @@ describe("parseCommand", () => {
       },
       action: {
         actionName: ActionName.BUILD,
-        service: "customers-v1",
+        services: ["customers-v1"],
+        branch: "master",
+        triggeredBy: "james",
+      },
+    },
+    {
+      input: {
+        command: "build -s customers-v1,accounts-v1 -b master",
+        triggeredBy: "james",
+      },
+      action: {
+        actionName: ActionName.BUILD,
+        services: ["customers-v1", "accounts-v1"],
         branch: "master",
         triggeredBy: "james",
       },

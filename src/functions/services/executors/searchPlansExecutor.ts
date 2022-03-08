@@ -10,7 +10,7 @@ export const executeSearchPlansCommand = async (
 export const searchPlans = async (planName: string): Promise<any> => {
   const plans = await listPlans();
 
-  return plans.filter(
-    (p: any) => p.name.toUpperCase().includes(planName.toUpperCase())
+  return plans.filter((p: any) =>
+    p.name.toUpperCase().includes(planName.toUpperCase())
   );
 };

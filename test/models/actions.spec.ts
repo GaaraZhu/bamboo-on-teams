@@ -19,12 +19,13 @@ describe("actions", () => {
   describe("BuildAction", () => {
     const buildCommandHelp = `Usage: build [options]
 
-Trigger a branch build for a service.
+Trigger branch build for service(s).
 
 Options:
-  -s, --service <service>  service name, e.g. customers-v1
-  -b, --branch <branch>    bamboo branch name, e.g. master
-  -h, --help               display help for command
+  -s, --services <services>  service names separated by comma without spaces,
+                             e.g. customers-v1,accounts-v1
+  -b, --branch <branch>      bamboo branch name, e.g. master
+  -h, --help                 display help for command
 `;
 
     const testCases = [
@@ -32,7 +33,16 @@ Options:
         command: "build -s customer-service -b master",
         expectedAction: {
           actionName: ActionName.BUILD,
-          service: "customer-service",
+          services: ["customer-service"],
+          branch: "master",
+          triggeredBy: "james",
+        },
+      },
+      {
+        command: "build -s customer-service,account-service -b master",
+        expectedAction: {
+          actionName: ActionName.BUILD,
+          services: ["customer-service", "account-service"],
           branch: "master",
           triggeredBy: "james",
         },
@@ -41,16 +51,16 @@ Options:
         command: "build -s customer-service --branch master",
         expectedAction: {
           actionName: ActionName.BUILD,
-          service: "customer-service",
+          services: ["customer-service"],
           branch: "master",
           triggeredBy: "james",
         },
       },
       {
-        command: "build --service=customer-service --branch=master",
+        command: "build --services=customer-service --branch=master",
         expectedAction: {
           actionName: ActionName.BUILD,
-          service: "customer-service",
+          services: ["customer-service"],
           branch: "master",
           triggeredBy: "james",
         },
@@ -59,7 +69,7 @@ Options:
         command: "build -b master -s customer-service",
         expectedAction: {
           actionName: ActionName.BUILD,
-          service: "customer-service",
+          services: ["customer-service"],
           branch: "master",
           triggeredBy: "james",
         },
