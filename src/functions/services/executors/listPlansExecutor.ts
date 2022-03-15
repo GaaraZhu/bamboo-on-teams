@@ -28,7 +28,7 @@ export const getPlan = async (planName: string): Promise<any> => {
 export const listPlans = async (): Promise<any> => {
   const url = `https://${
     getConfig().bambooHostUrl
-  }/rest/api/latest/plan.json?max-result=10000`;
+  }/rest/api/latest/plan.json?includeAllStates=true&max-result=10000`;
   const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${getConfig().bambooAPIToken}`,
