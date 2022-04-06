@@ -31,3 +31,63 @@ StatusChecker:
         Resource:
           Fn::GetAtt: [notifyStatusFunc, Arn]
         End: true
+
+BatchDeployer:
+  name: ${self:custom.aws.stepFunction.batchDeployer.name}
+  definition:
+    StartAt: DeployAll
+    States:
+      DeployAll:
+        Type: Map
+        ItemsPath: $.commands
+        MaxConcurrency: 3
+        Next: NotifyAll
+        Iterator:
+          StartAt: DeploySingle
+          States:
+            DeploySingle:
+              Type: Task
+              Resource:
+                Fn::GetAtt: [deploySingleFunc, Arn]
+              ResultPath: $.triggerResult
+              Catch:
+                - ErrorEquals:
+                    - States.ALL
+                  ResultPath: $.error
+                  Next: NotifySingle
+              Next: DelayTheChecking
+
+            DelayTheChecking:
+              Type: Wait
+              Seconds: 20
+              Next: CheckSingle
+
+            CheckSingle:
+              Type: Task
+              Resource:
+                Fn::GetAtt: [checkSingleFunc, Arn]
+              ResultPath: $.deploy
+              Retry:
+                - ErrorEquals:
+                    - jobNotFinished
+                  IntervalSeconds: 30
+                  BackoffRate: 1
+                  MaxAttempts: 34
+              Catch:
+                - ErrorEquals:
+                    - States.ALL
+                  ResultPath: $.error
+                  Next: NotifySingle
+              Next: NotifySingle
+            NotifySingle:
+              Type: Task
+              ResultPath: null
+              Resource:
+                Fn::GetAtt: [notifySingleFunc, Arn]
+              End: true
+
+      NotifyAll:
+        Type: Task
+        Resource:
+          Fn::GetAtt: [notifyAllFunc, Arn]
+        End: true

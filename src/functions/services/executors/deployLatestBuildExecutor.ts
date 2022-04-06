@@ -17,7 +17,8 @@ import { startCheckerExecution } from "../stepFunctionService";
 import { getConfig } from "../config";
 
 export const executeDeployLatestCommand = async (
-  action: DeployLatestBuildAction
+  action: DeployLatestBuildAction,
+  isFromBatchJob = false
 ): Promise<any> => {
   // 1. check environment availability
   prodEnvCheck(action.env);
@@ -91,17 +92,20 @@ export const executeDeployLatestCommand = async (
   };
 
   // 7. start async job status checker and push the result to MS Teams
-  const checkerInput: DeployBuildJobCheckerInput = {
-    type: CheckerInputType.DEPLOY_BUILD,
-    resultKey: deployment.deploymentResultId,
-    resultUrl: deployment.link.href,
-    service: action.service,
-    branch: action.branch,
-    buildNumber: latestBuild.buildNumber,
-    environment: action.env,
-    triggeredBy: action.triggeredBy,
-  };
-  await startCheckerExecution(deployment.deploymentResultId, checkerInput);
+  // NOTE: batch job has its own status checking logic for final notification push
+  if (!isFromBatchJob) {
+    const checkerInput: DeployBuildJobCheckerInput = {
+      type: CheckerInputType.DEPLOY_BUILD,
+      resultKey: deployment.deploymentResultId,
+      resultUrl: deployment.link.href,
+      service: action.service,
+      branch: action.branch,
+      buildNumber: latestBuild.buildNumber,
+      environment: action.env,
+      triggeredBy: action.triggeredBy,
+    };
+    await startCheckerExecution(deployment.deploymentResultId, checkerInput);
+  }
 
   return deployResult;
 };

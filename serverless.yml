@@ -28,7 +28,9 @@ provider:
     - Effect: Allow
       Action:
         - states:StartExecution
-      Resource: ${self:custom.aws.stepFunction.arn}
+      Resource:
+        - ${self:custom.aws.stepFunction.arn}
+        - ${self:custom.aws.stepFunction.batchDeployer.arn}
 
   apiGateway:
     restApiId: !Ref ApiGatewayRestApi
@@ -38,6 +40,7 @@ provider:
     REGION: ap-southeast-2
     BATH_PATH: bamboo/v1${self:custom.api.urls.prefix}
     STATUS_CHECKER_ARN: ${self:custom.aws.stepFunction.arn}
+    BATCH_DEPLOYER_ARN: ${self:custom.aws.stepFunction.batchDeployer.arn}
     STEP_FUNCTIONS_ENDPOINT: https://states.ap-southeast-2.amazonaws.com
     TZ: Pacific/Auckland
     APPLICATION_CONFIG: ${ssm:/bamboo-on-teams/applicationConfig}
@@ -92,6 +95,18 @@ functions:
           method: post
           cors: true
     handler: dist/functions/api/router.router
+  deploySingleFunc:
+    name: ${self:service}-${self:provider.stage}-deploySingle
+    handler: dist/functions/api/handlers/batchDeployer.deploySingle
+  checkSingleFunc:
+    name: ${self:service}-${self:provider.stage}-checkSingle
+    handler: dist/functions/api/handlers/batchDeployer.checkSingle
+  notifySingleFunc:
+    name: ${self:service}-${self:provider.stage}-notifySingle
+    handler: dist/functions/api/handlers/batchDeployer.notifySingle
+  notifyAllFunc:
+    name: ${self:service}-${self:provider.stage}-notifyAll
+    handler: dist/functions/api/handlers/batchDeployer.notifyAll
   checkStatusFunc:
     name: ${self:service}-${self:provider.stage}-statusChecker
     handler: dist/functions/api/handlers/statusChecker.checkJobStatus
@@ -117,6 +132,9 @@ custom:
     stepFunction:
       name: ${self:service}-status-checker-${self:provider.stage}
       arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.name}
+      batchDeployer:
+        name: ${self:service}-batch-deployer-${self:provider.stage}
+        arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.batchDeployer.name}
 
   serverless-offline:
     noPrependStageInUrl: true

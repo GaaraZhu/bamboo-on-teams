@@ -17,6 +17,7 @@ import { CreateBranchAction } from "./createBranchAction";
 import { HelpAction } from "./helpAction";
 import { SearchPlansAction } from "./searchPlansAction";
 import { SearchProjectsAction } from "./searchProjectsAction";
+import { BatchDeployAction } from "./batchDeployAction";
 
 export enum ActionName {
   HELP = "help",
@@ -28,6 +29,7 @@ export enum ActionName {
   DEPLOY_BUILD = "deploy-build",
   DEPLOY_RELEASE = "deploy-release",
   DEPLOY_LATEST_BUILD = "deploy-latest",
+  BATCH_DEPLOY = "batch-deploy",
   LIST_DEPLOY_PROJECTS = "list-projects",
   CREATE_RELEASE = "create-release",
   LIST_RELEASES = "list-releases",
@@ -67,6 +69,7 @@ export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.DEPLOY_RELEASE]: DeployReleaseAction,
   [ActionName.DESC_BUILD]: DescBuildAction,
   [ActionName.DEPLOY_BUILD]: DeployBuildAction,
+  [ActionName.BATCH_DEPLOY]: BatchDeployAction,
   [ActionName.LIST_BRANCHES]: ListBranchesAction,
   [ActionName.LIST_BUILDS]: ListBuildsAction,
   [ActionName.LIST_DEPLOY_PROJECTS]: ListDeploymentProjectsAction,

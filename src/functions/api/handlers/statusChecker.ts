@@ -139,9 +139,13 @@ export const notifyJobStatus = async (
       break;
     }
     case CheckerInputType.DEPLOY_BUILD: {
+      const deployEvent = event as DeployBuildJobCheckerInput;
+      const deploy = event.result as Deploy;
       await sendDeployBuildNotification(
-        event.result as Deploy,
-        event as DeployBuildJobCheckerInput,
+        deployEvent.service,
+        deployEvent.environment,
+        deploy.deploymentState,
+        deployEvent.triggeredBy,
         jobUrl
       );
       break;
@@ -210,15 +214,42 @@ export const sendBuildNotification = async (
   });
 };
 
-const sendDeployBuildNotification = async (
-  deploy: Deploy,
-  event: DeployBuildJobCheckerInput,
-  jobUrl: string
+export const sendDeployBuildNotification = async (
+  service: string,
+  environment: string,
+  deploymentState: string,
+  triggeredBy: string,
+  jobUrl?: string,
+  errorMessage?: string
 ): Promise<void> => {
-  const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
+  const isSucceed =
+    deploymentState.toUpperCase() === "SUCCESS" && !errorMessage;
   const title = `Bamboo deploy job finished with status: <span style=${
     isSucceed ? "color:green;" : "color:red;"
-  }>${deploy.deploymentState}</span>`;
+  }>${deploymentState}</span>`;
+  let sectionFacts = `{
+        "name": "Service",
+        "value": "${service}"
+    }, {
+        "name": "Environment",
+        "value": "${environment}"
+    }`;
+  if (jobUrl) {
+    sectionFacts =
+      sectionFacts +
+      `, {
+        "name": "Url",
+        "value": "${jobUrl}"
+      }`;
+  }
+  if (errorMessage) {
+    sectionFacts =
+      sectionFacts +
+      `, {
+      "name": "Error",
+      "value": "${errorMessage}"
+    }`;
+  }
   const notification = `{
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
@@ -226,18 +257,60 @@ const sendDeployBuildNotification = async (
       "summary": "${title}",
       "sections": [{
           "activityTitle": "${title}",
-          "activitySubtitle": "triggered by ${event.triggeredBy}",
+          "activitySubtitle": "triggered by ${triggeredBy}",
           "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg",
-          "facts": [{
-              "name": "Service",
-              "value": "${event.service}"
-          },{
-              "name": "Environment",
-              "value": "${event.environment}"
-          }, {
-            "name": "Url",
-            "value": "${jobUrl}"
-          }],
+          "facts": [${sectionFacts}],
+          "markdown": true
+      }]
+  }`;
+  const url = getConfig().notificationURL;
+  await axiosPost(url, notification, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export interface BatchDeployNotificationInput {
+  deploys: {
+    service: string;
+    status: string;
+  }[];
+  environment: string;
+  triggeredBy: string;
+}
+
+export const sendDeployAllNotification = async (
+  input: BatchDeployNotificationInput
+): Promise<void> => {
+  if (input.deploys.length == 0) {
+    return;
+  }
+
+  let sectionFacts = "";
+  input.deploys.forEach((deploy) => {
+    const isSucceed = deploy.status.toUpperCase() === "SUCCESS";
+    const status = `<span style=${isSucceed ? "color:green;" : "color:red;"}>${
+      deploy.status
+    }</span>`;
+    sectionFacts =
+      sectionFacts +
+      `{
+        "name": "${deploy.service}",
+        "value": "${status}"
+    },`;
+  });
+  sectionFacts = sectionFacts.substring(0, sectionFacts.length - 1);
+  const notification = `{
+      "@type": "MessageCard",
+      "@context": "http://schema.org/extensions",
+      "themeColor": "0076D7",
+      "summary": "Bamboo batch deploy job finished",
+      "sections": [{
+          "activityTitle": "Bamboo batch deploy job finished",
+          "activitySubtitle": "triggered by ${input.triggeredBy}",
+          "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg",
+          "facts": [${sectionFacts}],
           "markdown": true
       }]
   }`;

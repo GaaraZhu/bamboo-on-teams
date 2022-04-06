@@ -10,6 +10,7 @@ import {
   DeployReleaseJobCheckerInput,
   NewBranchBuildJobCheckerInput,
 } from "../api/handlers/statusChecker";
+import { v4 as uuidv4 } from "uuid";
 
 const getStepFunctionsClient = async (): Promise<StepFunctions> => {
   if (!process.env.STEP_FUNCTIONS_ENDPOINT) {
@@ -60,4 +61,38 @@ export const getCheckerInput = (
     input: JSON.stringify(checkerInput),
     traceHeader: executionId.toString(),
   };
+};
+
+export interface BatchDeployerExecutionInput {
+  commands: SingleDeployCommand[]; // wrap the command in a JSON object so that the stepfunction Map state can pass the result through `ResultPath`
+}
+
+export interface SingleDeployCommand {
+  command: string;
+  service: string;
+  branch: string;
+  environment: string;
+  triggeredBy: string;
+}
+
+export const startBatchDeployerExecution = async (
+  input: BatchDeployerExecutionInput
+): Promise<void> => {
+  const name = uuidv4();
+  const executionInput = {
+    stateMachineArn: process.env.BATCH_DEPLOYER_ARN!,
+    name: name,
+    input: JSON.stringify(input),
+    traceHeader: name,
+  };
+  const stepFunctions: StepFunctions = await getStepFunctionsClient();
+  const stepFunctionsResult: PromiseResult<StartExecutionOutput, AWSError> =
+    await stepFunctions.startExecution(executionInput).promise();
+  if (stepFunctionsResult?.$response?.error) {
+    console.log(
+      `Failed to start stepFunction to deploy services: ${JSON.stringify(
+        input
+      )}`
+    );
+  }
 };
