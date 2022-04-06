@@ -83,6 +83,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * deploy-release
 * deploy-build
 * promote-release
+* batch-deploy
 
 ### Other commands ###
 * help
@@ -232,6 +233,17 @@ Options:
   -se, --source-env <sourceEnv>  source environment name, e.g. dev
   -te, --target-env <targetEnv>  target environment name, e.g. test
   -h, --help                     display help for command
+```
+### batch-deploy ###
+```
+Usage: batch-deploy [options]
+Deploy services in batch with the latest build in a branch to an environment.
+Options:
+  -s, --services <services>  service names separated by comma without spaces,
+                             e.g. customers-v1,accounts-v1
+  -b, --branch <branch>      bamboo branch name, e.g. master
+  -e, --env <env>            env name, e.g. dev
+  -h, --help                 display help for command
 ```
 
 ## Contribution ##

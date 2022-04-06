@@ -13,7 +13,7 @@ export class BatchDeployAction implements Action {
   constructor(command: string, triggeredBy: string) {
     const batchDeployCommand = new Command()
       .name(this.actionName)
-      .description("Trigger batch deploy build for services.")
+      .description("Deploy services in batches with the latest build in a branch to an environment.")
       .usage("[options]")
       .requiredOption(
         "-s, --services <services>",
