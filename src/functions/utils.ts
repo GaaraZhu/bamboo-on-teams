@@ -83,24 +83,26 @@ export const triggerJobForServices = async (
   action: BuildAction,
   triggerSingle: (service: string, action: BuildAction) => Promise<any>
 ): Promise<any> => {
-  const failedServices: string[] = [];
+  const failedServicesMessages: string[] = [];
   for (let i = 0; i < action.services.length; i++) {
     const service = action.services[i];
     try {
       await triggerSingle(service, action);
-    } catch (err) {
+    } catch (err: any) {
       console.log(
         `Failed to trigger job for service ${service} due to ${JSON.stringify(
           err
         )}`
       );
-      failedServices.push(service);
+      failedServicesMessages.push(
+        `Service: ${service}\nError: ${err.message};\n`
+      );
     }
   }
-  if (failedServices.length !== 0) {
+  if (failedServicesMessages.length !== 0) {
     throw {
       status: 500,
-      message: `Failed to trigger jobs for services: ${failedServices} while other jobs have been triggered.`,
+      message: `Failed to trigger jobs:\n${failedServicesMessages}`,
     };
   }
 };
