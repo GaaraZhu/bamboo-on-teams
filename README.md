@@ -71,6 +71,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * desc-build
 * create-branch
 * build
+* batch-build
 
 ### Deploy commands ###
 * list-projects
