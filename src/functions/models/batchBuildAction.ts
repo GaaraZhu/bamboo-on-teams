@@ -1,22 +1,22 @@
 import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
-import { executeBuildCommand } from "../services/executors/buildExecutor";
+import { executeBatchBuildCommand } from "../services/executors/batchBuildExecutor";
 
-export class BuildAction implements Action {
-  readonly actionName = ActionName.BUILD;
+export class BatchBuildAction implements Action {
+  readonly actionName = ActionName.BATCH_BUILD;
   readonly triggeredBy: string;
-  service: string;
+  services: string[];
   branch: string;
 
   constructor(command: string, triggeredBy: string) {
-    const buildCommand = new Command()
+    const batchBuildCommand = new Command()
       .name(this.actionName)
-      .description("Trigger branch build for service.")
+      .description("Trigger branch build in batches for services.")
       .usage("[options]")
       .requiredOption(
-        "-s, --service <service>",
-        "service name, e.g. customers-v1",
+        "-s, --services <services>",
+        "service names separated by comma without spaces, e.g. customers-v1,accounts-v1",
         trim
       )
       .requiredOption(
@@ -24,23 +24,23 @@ export class BuildAction implements Action {
         "bamboo branch name, e.g. master",
         trim
       );
-    buildCommand.exitOverride((_: CommanderError) => {
+    batchBuildCommand.exitOverride((_: CommanderError) => {
       throw {
         status: 400,
-        message: buildCommand.helpInformation(),
+        message: batchBuildCommand.helpInformation(),
       };
     }); //to avoid process.exit
 
     // The default expectation is that the arguments are from node and have the application as argv[0]
     // and the script being run in argv[1], with user parameters after that.
     const commandInput = [".", ...command.split(" ")];
-    buildCommand.parse(commandInput);
-    this.service = buildCommand.opts().service;
-    this.branch = buildCommand.opts().branch;
+    batchBuildCommand.parse(commandInput);
+    this.services = batchBuildCommand.opts().services.split(",");
+    this.branch = batchBuildCommand.opts().branch;
     this.triggeredBy = triggeredBy;
   }
 
   async process(): Promise<any> {
-    return await executeBuildCommand(this);
+    return await executeBatchBuildCommand(this);
   }
 }

@@ -7,31 +7,27 @@ import {
 } from "../../api/handlers/statusChecker";
 import { startCheckerExecution } from "../stepFunctionService";
 import { getConfig } from "../config";
-import { triggerJobForServices } from "../../utils";
 
 export const executeBuildCommand = async (
-  action: BuildAction
+  action: BuildAction,
+  isBatch = false
 ): Promise<any> => {
-  await triggerJobForServices(action, buildSingle);
-};
-
-const buildSingle = async (
-  service: string,
-  action: BuildAction
-): Promise<any> => {
-  const buildResult = await build(service, action.branch);
+  const buildResult = await build(action.service, action.branch);
 
   // start async job status checker and push the result to MS Teams
-  const checkerInput: BuildJobCheckerInput = {
-    type: CheckerInputType.BUILD,
-    resultKey: buildResult.buildResultKey,
-    resultUrl: buildResult.link.href,
-    service: service,
-    branch: action.branch,
-    buildNumber: buildResult.buildNumber,
-    triggeredBy: action.triggeredBy,
-  };
-  await startCheckerExecution(buildResult.buildResultKey, checkerInput);
+  // NOTE: batch job has its own status checking logic for final notification push
+  if (!isBatch) {
+    const checkerInput: BuildJobCheckerInput = {
+      type: CheckerInputType.BUILD,
+      resultKey: buildResult.buildResultKey,
+      resultUrl: buildResult.link.href,
+      service: action.service,
+      branch: action.branch,
+      buildNumber: buildResult.buildNumber,
+      triggeredBy: action.triggeredBy,
+    };
+    await startCheckerExecution(buildResult.buildResultKey, checkerInput);
+  }
   return buildResult;
 };
 

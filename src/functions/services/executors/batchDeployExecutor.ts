@@ -1,7 +1,7 @@
 import { BatchDeployAction } from "../../models/batchDeployAction";
 import {
-  BatchDeployerExecutionInput,
-  startBatchDeployerExecution,
+  BatcherExecutionInput,
+  startBatcherExecution,
 } from "../stepFunctionService";
 import { listDeploymentProjects } from "./listDeploymentProjectsExecutor";
 import { ActionName } from "../../models/actions";
@@ -24,10 +24,8 @@ export const executeBatchDeployCommand = async (
     }
   });
 
-  // validate incoming branch
-
-  // start batch deployer step function
-  const input: BatchDeployerExecutionInput = {
+  // start batcher step function for batch deploy
+  const input: BatcherExecutionInput = {
     commands: action.services.map((service) => ({
       command: `${ActionName.DEPLOY_LATEST_BUILD} -s ${service} -b ${action.branch} -e ${action.env}`,
       service: service,
@@ -36,5 +34,5 @@ export const executeBatchDeployCommand = async (
       triggeredBy: action.triggeredBy,
     })),
   };
-  await startBatchDeployerExecution(input);
+  await startBatcherExecution(input);
 };

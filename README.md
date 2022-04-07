@@ -145,6 +145,16 @@ Options:
   -b, --branch <branch>    bamboo branch name, e.g. master
   -h, --help               display help for command
 ```
+### batch-build ###
+```
+Usage: batch-build [options]
+Trigger branch build in batches for services.
+Options:
+  -s, --services <services>  service names separated by comma without spaces,
+                             e.g. customers-v1,accounts-v1
+  -b, --branch <branch>      bamboo branch name, e.g. master
+  -h, --help                 display help for command
+```
 ### list-projects ###
 ```
 Usage: list-projects

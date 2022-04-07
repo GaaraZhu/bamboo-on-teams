@@ -29,8 +29,8 @@ provider:
       Action:
         - states:StartExecution
       Resource:
-        - ${self:custom.aws.stepFunction.arn}
-        - ${self:custom.aws.stepFunction.batchDeployer.arn}
+        - ${self:custom.aws.stepFunction.statusChecker.arn}
+        - ${self:custom.aws.stepFunction.batcher.arn}
 
   apiGateway:
     restApiId: !Ref ApiGatewayRestApi
@@ -39,8 +39,8 @@ provider:
   environment:
     REGION: ap-southeast-2
     BATH_PATH: bamboo/v1${self:custom.api.urls.prefix}
-    STATUS_CHECKER_ARN: ${self:custom.aws.stepFunction.arn}
-    BATCH_DEPLOYER_ARN: ${self:custom.aws.stepFunction.batchDeployer.arn}
+    STATUS_CHECKER_ARN: ${self:custom.aws.stepFunction.statusChecker.arn}
+    BATCHER_ARN: ${self:custom.aws.stepFunction.batcher.arn}
     STEP_FUNCTIONS_ENDPOINT: https://states.ap-southeast-2.amazonaws.com
     TZ: Pacific/Auckland
     APPLICATION_CONFIG: ${ssm:/bamboo-on-teams/applicationConfig}
@@ -95,18 +95,20 @@ functions:
           method: post
           cors: true
     handler: dist/functions/api/router.router
-  deploySingleFunc:
-    name: ${self:service}-${self:provider.stage}-deploySingle
-    handler: dist/functions/api/handlers/batchDeployer.deploySingle
+  # batch operation lambdas
+  executeSingleFunc:
+    name: ${self:service}-${self:provider.stage}-executeSingle
+    handler: dist/functions/api/handlers/batcher.executeSingle
   checkSingleFunc:
     name: ${self:service}-${self:provider.stage}-checkSingle
-    handler: dist/functions/api/handlers/batchDeployer.checkSingle
+    handler: dist/functions/api/handlers/batcher.checkSingle
   notifySingleFunc:
     name: ${self:service}-${self:provider.stage}-notifySingle
-    handler: dist/functions/api/handlers/batchDeployer.notifySingle
+    handler: dist/functions/api/handlers/batcher.notifySingle
   notifyAllFunc:
     name: ${self:service}-${self:provider.stage}-notifyAll
-    handler: dist/functions/api/handlers/batchDeployer.notifyAll
+    handler: dist/functions/api/handlers/batcher.notifyAll
+  # non batch operations lambdas
   checkStatusFunc:
     name: ${self:service}-${self:provider.stage}-statusChecker
     handler: dist/functions/api/handlers/statusChecker.checkJobStatus
@@ -122,7 +124,7 @@ plugins:
   - serverless-plugin-include-dependencies
 
 stepFunctions:
-  stateMachines: ${file(resources/status-checker.yml)}
+  stateMachines: ${file(resources/stateMachines.yml)}
 
 custom:
   version: v1
@@ -130,11 +132,12 @@ custom:
     gateway:
       name: ${self:service}
     stepFunction:
-      name: ${self:service}-status-checker-${self:provider.stage}
-      arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.name}
-      batchDeployer:
-        name: ${self:service}-batch-deployer-${self:provider.stage}
-        arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.batchDeployer.name}
+      batcher:
+        name: ${self:service}-batcher-${self:provider.stage}
+        arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.batcher.name}
+      statusChecker:
+        name: ${self:service}-status-checker-${self:provider.stage}
+        arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.statusChecker.name}
 
   serverless-offline:
     noPrependStageInUrl: true

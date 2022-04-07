@@ -63,24 +63,24 @@ export const getCheckerInput = (
   };
 };
 
-export interface BatchDeployerExecutionInput {
-  commands: SingleDeployCommand[]; // wrap the command in a JSON object so that the stepfunction Map state can pass the result through `ResultPath`
+export interface BatcherExecutionInput {
+  commands: SingleCommand[]; // wrap the command in a JSON object so that the stepfunction Map state can pass the result through `ResultPath`
 }
 
-export interface SingleDeployCommand {
+export interface SingleCommand {
   command: string;
   service: string;
   branch: string;
-  environment: string;
+  environment?: string;
   triggeredBy: string;
 }
 
-export const startBatchDeployerExecution = async (
-  input: BatchDeployerExecutionInput
+export const startBatcherExecution = async (
+  input: BatcherExecutionInput
 ): Promise<void> => {
   const name = uuidv4();
   const executionInput = {
-    stateMachineArn: process.env.BATCH_DEPLOYER_ARN!,
+    stateMachineArn: process.env.BATCHER_ARN!,
     name: name,
     input: JSON.stringify(input),
     traceHeader: name,
@@ -90,9 +90,9 @@ export const startBatchDeployerExecution = async (
     await stepFunctions.startExecution(executionInput).promise();
   if (stepFunctionsResult?.$response?.error) {
     console.log(
-      `Failed to start stepFunction to deploy services: ${JSON.stringify(
+      `Failed to start batcher stepFunction for: ${JSON.stringify(
         input
-      )}`
+      )} due to ${JSON.stringify(stepFunctionsResult?.$response?.error)}`
     );
   }
 };

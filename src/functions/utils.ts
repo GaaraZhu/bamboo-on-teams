@@ -1,8 +1,4 @@
 import { InvalidArgumentError } from "commander";
-import { Action } from "./models/actions";
-import { BuildAction } from "./models/buildAction";
-import { DeployLatestBuildAction } from "./models/deployLatestBuildAction";
-import { PromoteReleaseAction } from "./models/promoteReleaseAction";
 import { getConfig } from "./services/config";
 import { Operations } from "./services/executors/listEnvironmentsExecutor";
 
@@ -29,11 +25,11 @@ export const extractCommandFromTeamsMessage = (message: string): string => {
 
 export const fallbackToHTML = (message: string): string => {
   let result = message;
-  if (result.includes("\n")) {
+  if (result?.includes("\n")) {
     result = result.split("\n").join("<br>");
   }
 
-  if (result.includes("\t")) {
+  if (result?.includes("\t")) {
     result = result.split("\t").join("&nbsp;&nbsp;&nbsp;&nbsp;");
   }
 
@@ -67,42 +63,6 @@ export const viewOperationCheck = (operations: Operations): void => {
     throw {
       status: 400,
       message: "Not allowed to view resource details",
-    };
-  }
-};
-
-/**
- *  Trigger jobs for multiple services.
- *  Note: only build job is supported to avoid the 5 seconds timeout in Teams:
- *  https://github.com/MicrosoftDocs/msteams-docs/issues/693
- *
- * @param action build action
- * @param triggerSingle function to trigger a job for a single service
- */
-export const triggerJobForServices = async (
-  action: BuildAction,
-  triggerSingle: (service: string, action: BuildAction) => Promise<any>
-): Promise<any> => {
-  const failedServicesMessages: string[] = [];
-  for (let i = 0; i < action.services.length; i++) {
-    const service = action.services[i];
-    try {
-      await triggerSingle(service, action);
-    } catch (err: any) {
-      console.log(
-        `Failed to trigger job for service ${service} due to ${JSON.stringify(
-          err
-        )}`
-      );
-      failedServicesMessages.push(
-        `Service: ${service}\nError: ${err.message};\n`
-      );
-    }
-  }
-  if (failedServicesMessages.length !== 0) {
-    throw {
-      status: 500,
-      message: `Failed to trigger jobs:\n${failedServicesMessages}`,
     };
   }
 };

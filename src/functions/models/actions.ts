@@ -18,10 +18,12 @@ import { HelpAction } from "./helpAction";
 import { SearchPlansAction } from "./searchPlansAction";
 import { SearchProjectsAction } from "./searchProjectsAction";
 import { BatchDeployAction } from "./batchDeployAction";
+import { BatchBuildAction } from "./batchBuildAction";
 
 export enum ActionName {
   HELP = "help",
   BUILD = "build",
+  BATCH_BUILD = "batch-build",
   LIST_PLANS = "list-plans",
   LIST_BRANCHES = "list-branches",
   LIST_BUILDS = "list-builds",
@@ -64,6 +66,7 @@ export interface Action {
 export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.HELP]: HelpAction,
   [ActionName.BUILD]: BuildAction,
+  [ActionName.BATCH_BUILD]: BatchBuildAction,
   [ActionName.CREATE_RELEASE]: CreateReleaseAction,
   [ActionName.DEPLOY_LATEST_BUILD]: DeployLatestBuildAction,
   [ActionName.DEPLOY_RELEASE]: DeployReleaseAction,
@@ -90,6 +93,7 @@ export const actionGroupLookup: Record<JobType, ActionName[]> = {
     ActionName.LIST_BUILDS,
     ActionName.DESC_BUILD,
     ActionName.BUILD,
+    ActionName.BATCH_BUILD,
     ActionName.CREATE_BRANCH,
   ],
   [JobType.Deploy]: [
@@ -101,6 +105,7 @@ export const actionGroupLookup: Record<JobType, ActionName[]> = {
     ActionName.DEPLOY_LATEST_BUILD,
     ActionName.DEPLOY_RELEASE,
     ActionName.DEPLOY_BUILD,
+    ActionName.BATCH_DEPLOY,
     ActionName.PROMOTE_RELEASE,
   ],
   [JobType.OTHERS]: [ActionName.HELP],

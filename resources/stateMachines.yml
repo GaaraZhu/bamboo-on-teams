@@ -1,5 +1,5 @@
 StatusChecker:
-  name: ${self:custom.aws.stepFunction.name}
+  name: ${self:custom.aws.stepFunction.statusChecker.name}
   definition:
     StartAt: DelayTheChecking
     States:
@@ -32,23 +32,23 @@ StatusChecker:
           Fn::GetAtt: [notifyStatusFunc, Arn]
         End: true
 
-BatchDeployer:
-  name: ${self:custom.aws.stepFunction.batchDeployer.name}
+Batcher:
+  name: ${self:custom.aws.stepFunction.batcher.name}
   definition:
-    StartAt: DeployAll
+    StartAt: ExecuteAll
     States:
-      DeployAll:
+      ExecuteAll:
         Type: Map
         ItemsPath: $.commands
         MaxConcurrency: 3
         Next: NotifyAll
         Iterator:
-          StartAt: DeploySingle
+          StartAt: ExecuteSingle
           States:
-            DeploySingle:
+            ExecuteSingle:
               Type: Task
               Resource:
-                Fn::GetAtt: [deploySingleFunc, Arn]
+                Fn::GetAtt: [executeSingleFunc, Arn]
               ResultPath: $.triggerResult
               Catch:
                 - ErrorEquals:
@@ -59,20 +59,20 @@ BatchDeployer:
 
             DelayTheChecking:
               Type: Wait
-              Seconds: 20
+              Seconds: 180
               Next: CheckSingle
 
             CheckSingle:
               Type: Task
               Resource:
                 Fn::GetAtt: [checkSingleFunc, Arn]
-              ResultPath: $.deploy
+              ResultPath: $.target
               Retry:
                 - ErrorEquals:
                     - jobNotFinished
-                  IntervalSeconds: 30
+                  IntervalSeconds: 20
                   BackoffRate: 1
-                  MaxAttempts: 34
+                  MaxAttempts: 81
               Catch:
                 - ErrorEquals:
                     - States.ALL

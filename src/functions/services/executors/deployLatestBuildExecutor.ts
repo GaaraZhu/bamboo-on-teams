@@ -18,7 +18,7 @@ import { getConfig } from "../config";
 
 export const executeDeployLatestCommand = async (
   action: DeployLatestBuildAction,
-  isFromBatchJob = false
+  isBatch = false
 ): Promise<any> => {
   // 1. check environment availability
   prodEnvCheck(action.env);
@@ -93,7 +93,7 @@ export const executeDeployLatestCommand = async (
 
   // 7. start async job status checker and push the result to MS Teams
   // NOTE: batch job has its own status checking logic for final notification push
-  if (!isFromBatchJob) {
+  if (!isBatch) {
     const checkerInput: DeployBuildJobCheckerInput = {
       type: CheckerInputType.DEPLOY_BUILD,
       resultKey: deployment.deploymentResultId,
