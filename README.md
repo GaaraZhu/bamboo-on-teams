@@ -7,7 +7,7 @@ A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 * Hanging detection - detect hanging Bamboo jobs and alert in Microsoft Teams.
 
 ## Demo
-[![Demo](https://img.youtube.com/vi/94IqLup3o5g/0.jpg)](https://youtu.be/94IqLup3o5g)
+[![Demo](https://img.youtube.com/vi/ojHTkzBGWgw/0.jpg)](https://youtu.be/ojHTkzBGWgw)
 
 ## How it works
 ### Bamboo interaction
