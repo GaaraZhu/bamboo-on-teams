@@ -1,6 +1,9 @@
 # Bamboo-on-Teams ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) #
 A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
+## Blogpost
+[Chat the Ops up](https://gaarazhu.github.io/chat-the-ops-up/)
+
 ## Features
 * Bamboo interaction - interact with Bamboo in Microsoft Teams with wide range of [commands](https://github.com/GaaraZhu/bamboo-on-teams#available-commands).
 * Result notification - receive notification in Microsoft Teams for Bamboo jobs.
