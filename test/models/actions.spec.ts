@@ -14,6 +14,7 @@ import { DeployLatestBuildAction } from "../../src/functions/models/deployLatest
 import { DeployReleaseAction } from "../../src/functions/models/deployReleaseAction";
 import { DeployBuildAction } from "../../src/functions/models/deployBuildAction";
 import { PromoteReleaseAction } from "../../src/functions/models/promoteReleaseAction";
+import { ReleaseAction } from "../../src/functions/models/releaseAction";
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -709,6 +710,68 @@ Options:
       it(testCase.command, async () => {
         try {
           const actualAction = new DeployLatestBuildAction(
+            testCase.command,
+            "james"
+          );
+          expect(actualAction).toEqual(testCase.expectedAction);
+        } catch (err) {
+          expect(err).toEqual(testCase.error);
+        }
+      });
+    });
+  });
+
+  describe("ReleaseAction", () => {
+    const helpMessage = `Usage: release [options]
+
+Deploy services in sequential batches for releases with dependencies.
+
+Options:
+  -s, --services <services>  service names separated by comma without spaces and use semi-collon for different batches,
+                             e.g. customers-v1,accounts-v1;transactions-v1
+  -b, --branch <branch>      bamboo branch name, e.g. master
+  -e, --env <env>            env name, e.g. dev
+  -h, --help                 display help for command
+`;
+    const testCases = [
+      {
+        command: "release -s customers-v1,accounts-v1;transactions-v1 -b master -e test",
+        expectedAction: {
+          actionName: ActionName.RELEASE,
+          services: [["customers-v1","accounts-v1"], ["transactions-v1"]],
+          branch: "master",
+          env: "test",
+          triggeredBy: "james",
+        },
+        error: undefined,
+      },
+      {
+        command: "release -s customers-v1;transactions-v1,accounts-v1;cards-v1 -b master -e test",
+        expectedAction: {
+          actionName: ActionName.RELEASE,
+          services: [["customers-v1"], ["transactions-v1","accounts-v1"], ["cards-v1"]],
+          branch: "master",
+          env: "test",
+          triggeredBy: "james",
+        },
+        error: undefined,
+      },
+      {
+        command: "release -s customers-v1,accounts-v1 -b master -e test",
+        expectedAction: {
+          actionName: ActionName.RELEASE,
+          services: [["customers-v1","accounts-v1"]],
+          branch: "master",
+          env: "test",
+          triggeredBy: "james",
+        },
+        error: undefined,
+      },
+    ];
+    testCases.forEach((testCase) => {
+      it(testCase.command, async () => {
+        try {
+          const actualAction = new ReleaseAction(
             testCase.command,
             "james"
           );
