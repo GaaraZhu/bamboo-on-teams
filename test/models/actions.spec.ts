@@ -735,10 +735,11 @@ Options:
 `;
     const testCases = [
       {
-        command: "release -s customers-v1,accounts-v1;transactions-v1 -b master -e test",
+        command:
+          "release -s customers-v1,accounts-v1;transactions-v1 -b master -e test",
         expectedAction: {
           actionName: ActionName.RELEASE,
-          services: [["customers-v1","accounts-v1"], ["transactions-v1"]],
+          services: [["customers-v1", "accounts-v1"], ["transactions-v1"]],
           branch: "master",
           env: "test",
           triggeredBy: "james",
@@ -746,10 +747,15 @@ Options:
         error: undefined,
       },
       {
-        command: "release -s customers-v1;transactions-v1,accounts-v1;cards-v1 -b master -e test",
+        command:
+          "release -s customers-v1;transactions-v1,accounts-v1;cards-v1 -b master -e test",
         expectedAction: {
           actionName: ActionName.RELEASE,
-          services: [["customers-v1"], ["transactions-v1","accounts-v1"], ["cards-v1"]],
+          services: [
+            ["customers-v1"],
+            ["transactions-v1", "accounts-v1"],
+            ["cards-v1"],
+          ],
           branch: "master",
           env: "test",
           triggeredBy: "james",
@@ -760,7 +766,7 @@ Options:
         command: "release -s customers-v1,accounts-v1 -b master -e test",
         expectedAction: {
           actionName: ActionName.RELEASE,
-          services: [["customers-v1","accounts-v1"]],
+          services: [["customers-v1", "accounts-v1"]],
           branch: "master",
           env: "test",
           triggeredBy: "james",
@@ -771,10 +777,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ReleaseAction(
-            testCase.command,
-            "james"
-          );
+          const actualAction = new ReleaseAction(testCase.command, "james");
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);

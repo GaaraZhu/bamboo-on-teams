@@ -31,6 +31,7 @@ provider:
       Resource:
         - ${self:custom.aws.stepFunction.statusChecker.arn}
         - ${self:custom.aws.stepFunction.batcher.arn}
+        - ${self:custom.aws.stepFunction.releaser.arn}
 
   apiGateway:
     restApiId: !Ref ApiGatewayRestApi
@@ -41,6 +42,7 @@ provider:
     BATH_PATH: bamboo/v1${self:custom.api.urls.prefix}
     STATUS_CHECKER_ARN: ${self:custom.aws.stepFunction.statusChecker.arn}
     BATCHER_ARN: ${self:custom.aws.stepFunction.batcher.arn}
+    RELEASER_ARN: ${self:custom.aws.stepFunction.releaser.arn}
     STEP_FUNCTIONS_ENDPOINT: https://states.ap-southeast-2.amazonaws.com
     TZ: Pacific/Auckland
     APPLICATION_CONFIG: ${ssm:/bamboo-on-teams/applicationConfig}
@@ -95,6 +97,10 @@ functions:
           method: post
           cors: true
     handler: dist/functions/api/router.router
+  # release operation lambda
+  notifyReleaseFunc:
+    name: ${self:service}-${self:provider.stage}-notifyRelease
+    handler: dist/functions/api/handlers/batcher.notifyRelease
   # batch operation lambdas
   executeSingleFunc:
     name: ${self:service}-${self:provider.stage}-executeSingle
@@ -132,6 +138,9 @@ custom:
     gateway:
       name: ${self:service}
     stepFunction:
+      releaser:
+        name: ${self:service}-releaser-${self:provider.stage}
+        arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.releaser.name}
       batcher:
         name: ${self:service}-batcher-${self:provider.stage}
         arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.batcher.name}

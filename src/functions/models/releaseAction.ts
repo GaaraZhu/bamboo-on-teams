@@ -14,7 +14,9 @@ export class ReleaseAction implements Action {
   constructor(command: string, triggeredBy: string) {
     const releaseAction = new Command()
       .name(this.actionName)
-      .description("Deploy services in sequential batches for releases with dependencies.")
+      .description(
+        "Deploy services in sequential batches for releases with dependencies."
+      )
       .usage("[options]")
       .requiredOption(
         "-s, --services <services>",
@@ -38,7 +40,10 @@ export class ReleaseAction implements Action {
     // and the script being run in argv[1], with user parameters after that.
     const commandInput = [".", ...command.split(" ")];
     releaseAction.parse(commandInput);
-    this.services = releaseAction.opts().services.split(";")?.map((s: string) => s.split(","));
+    this.services = releaseAction
+      .opts()
+      .services.split(";")
+      ?.map((s: string) => s.split(","));
     this.branch = releaseAction.opts().branch;
     this.env = releaseAction.opts().env;
     this.triggeredBy = triggeredBy;

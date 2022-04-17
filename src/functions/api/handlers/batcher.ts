@@ -154,3 +154,21 @@ export const notifyAll = async (event: any, context: any): Promise<any> => {
     await sendAllBuildsNotification(input);
   }
 };
+
+export const notifyRelease = async (event: any, context: any): Promise<any> => {
+  console.log(`notifyRelease: ${JSON.stringify(event)}`);
+  const firstCommand: SingleCommand = event[0][0];
+  const input: BatchNotificationInput = {
+    services: event.flat().map((c: any) => ({
+      service: c.service,
+      status: c.error
+        ? "FAILED"
+        : c.target?.buildState || c.target?.deploymentState || "NOT-STARTED",
+    })),
+    branch: firstCommand.branch,
+    environment: firstCommand.environment,
+    triggeredBy: firstCommand.triggeredBy,
+  };
+  // batch deploy operation
+  await sendAllDeploysNotification(input, "Bamboo release job finished");
+};

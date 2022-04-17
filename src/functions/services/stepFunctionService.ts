@@ -63,6 +63,10 @@ export const getCheckerInput = (
   };
 };
 
+export interface ReleaserExecutionInput {
+  batches: BatcherExecutionInput[];
+}
+
 export interface BatcherExecutionInput {
   commands: SingleCommand[]; // wrap the command in a JSON object so that the stepfunction Map state can pass the result through `ResultPath`
 }
@@ -91,6 +95,28 @@ export const startBatcherExecution = async (
   if (stepFunctionsResult?.$response?.error) {
     console.log(
       `Failed to start batcher stepFunction for: ${JSON.stringify(
+        input
+      )} due to ${JSON.stringify(stepFunctionsResult?.$response?.error)}`
+    );
+  }
+};
+
+export const startReleaserExecution = async (
+  input: ReleaserExecutionInput
+): Promise<void> => {
+  const name = uuidv4();
+  const executionInput = {
+    stateMachineArn: process.env.RELEASER_ARN!,
+    name: name,
+    input: JSON.stringify(input),
+    traceHeader: name,
+  };
+  const stepFunctions: StepFunctions = await getStepFunctionsClient();
+  const stepFunctionsResult: PromiseResult<StartExecutionOutput, AWSError> =
+    await stepFunctions.startExecution(executionInput).promise();
+  if (stepFunctionsResult?.$response?.error) {
+    console.log(
+      `Failed to start releaser stepFunction for: ${JSON.stringify(
         input
       )} due to ${JSON.stringify(stepFunctionsResult?.$response?.error)}`
     );

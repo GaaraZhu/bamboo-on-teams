@@ -91,3 +91,60 @@ Batcher:
         Resource:
           Fn::GetAtt: [notifyAllFunc, Arn]
         End: true
+
+Releaser:
+  name: ${self:custom.aws.stepFunction.releaser.name}
+  definition:
+    StartAt: Release
+    States:
+      Release:
+        Type: Map
+        ItemsPath: $.batches
+        MaxConcurrency: 1
+        Next: NotifyRelease
+        Iterator:
+          StartAt: ExecuteSingleBatch
+          States:
+            ExecuteSingleBatch:
+              Type: Map
+              ItemsPath: $.commands
+              MaxConcurrency: 3
+              End: true
+              Iterator:
+                StartAt: ExecuteSingle
+                States:
+                  ExecuteSingle:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [executeSingleFunc, Arn]
+                    ResultPath: $.triggerResult
+                    Next: DelayTheChecking
+
+                  DelayTheChecking:
+                    Type: Wait
+                    Seconds: 120
+                    Next: CheckSingle
+
+                  CheckSingle:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [checkSingleFunc, Arn]
+                    ResultPath: $.target
+                    Retry:
+                      - ErrorEquals:
+                          - jobNotFinished
+                        IntervalSeconds: 20
+                        BackoffRate: 1
+                        MaxAttempts: 81
+                    Next: NotifySingle
+                  NotifySingle:
+                    Type: Task
+                    ResultPath: null
+                    Resource:
+                      Fn::GetAtt: [notifySingleFunc, Arn]
+                    End: true
+      NotifyRelease:
+        Type: Task
+        Resource:
+          Fn::GetAtt: [notifyReleaseFunc, Arn]
+        End: true

@@ -32,6 +32,7 @@ export const handleCommand = async (
         ActionName.BATCH_DEPLOY,
         ActionName.BATCH_BUILD,
         ActionName.PROMOTE_RELEASE,
+        ActionName.RELEASE,
       ].includes(action.actionName)
     ) {
       /* eslint-disable */resultMessage = fallbackToHTML(JSON.stringify(result, null, "\t")); // fall back json to HTML for better display

@@ -157,20 +157,22 @@ export const sendAllBuildsNotification = async (
 };
 
 export const sendAllDeploysNotification = async (
-  input: BatchNotificationInput
+  input: BatchNotificationInput,
+  messageTitle?: string
 ): Promise<void> => {
   if (input.services.length == 0) {
     return;
   }
 
+  const title = messageTitle || "Bamboo batch deploy job finished";
   const sectionFacts = generateSectionFacts(input);
   const notification = `{
         "@type": "MessageCard",
         "@context": "http://schema.org/extensions",
         "themeColor": "0076D7",
-        "summary": "Bamboo batch deploy job finished",
+        "summary": "${title}",
         "sections": [{
-            "activityTitle": "Bamboo batch deploy job finished",
+            "activityTitle": "${title}",
             "activitySubtitle": "triggered by ${input.triggeredBy}",
             "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg",
             "facts": [${sectionFacts}],
@@ -188,7 +190,9 @@ export const sendAllDeploysNotification = async (
 const generateSectionFacts = (input: BatchNotificationInput): string => {
   let sectionFacts = "";
   input.services.forEach((service) => {
-    const isSucceed = ["SUCCESS", "SUCCESSFUL"].includes(service.status.toUpperCase());
+    const isSucceed = ["SUCCESS", "SUCCESSFUL"].includes(
+      service.status.toUpperCase()
+    );
     const status = `<span style=${isSucceed ? "color:green;" : "color:red;"}>${
       service.status
     }</span>`;
