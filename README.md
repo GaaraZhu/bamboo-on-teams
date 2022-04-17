@@ -91,6 +91,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * deploy-build
 * promote-release
 * batch-deploy
+* release
 
 ### Other commands ###
 * help
@@ -258,6 +259,18 @@ Deploy services in batch with the latest build in a branch to an environment.
 Options:
   -s, --services <services>  service names separated by comma without spaces,
                              e.g. customers-v1,accounts-v1
+  -b, --branch <branch>      bamboo branch name, e.g. master
+  -e, --env <env>            env name, e.g. dev
+  -h, --help                 display help for command
+```
+
+### release ###
+```
+Usage: release [options]
+Deploy services in sequential batches for releases with dependencies.
+Options:
+  -s, --services <services>  service names separated by comma without spaces and use semi-collon to separate different batches,
+                             e.g. customers-v1,accounts-v1;transactions-v1
   -b, --branch <branch>      bamboo branch name, e.g. master
   -e, --env <env>            env name, e.g. dev
   -h, --help                 display help for command
