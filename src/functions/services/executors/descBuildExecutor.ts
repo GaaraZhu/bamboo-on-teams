@@ -52,7 +52,7 @@ export const getBuild = async (key: string): Promise<Build> => {
       author: c.author,
       commit: c.changesetId,
     })),
-    variables: data.variables.variable,
+    variables: data.variables?.variable,
   };
 };
 

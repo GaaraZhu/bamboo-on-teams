@@ -1,7 +1,6 @@
 import {
   extractCommandFromTeamsMessage,
   fallbackToHTML,
-  isInvalidProdEnv,
   trim,
 } from "../src/functions/utils";
 
@@ -37,23 +36,6 @@ describe("utils", () => {
         } catch (err: any) {
           expect(err.message).toEqual(testCase.errorMessage);
         }
-      });
-    });
-  });
-
-  describe("isInvalidProdEnv check", () => {
-    const testCases = [
-      {
-        enabledForProd: false,
-        env: "Prod",
-        expected: true,
-      },
-    ];
-
-    testCases.forEach((testCase) => {
-      it(JSON.stringify(testCase), async () => {
-        process.env.APPLICATION_CONFIG = `{"enabledForProd": ${testCase.enabledForProd}}`;
-        expect(isInvalidProdEnv(testCase.env)).toEqual(testCase.expected);
       });
     });
   });

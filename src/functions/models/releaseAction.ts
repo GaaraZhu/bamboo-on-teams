@@ -15,12 +15,12 @@ export class ReleaseAction implements Action {
     const releaseAction = new Command()
       .name(this.actionName)
       .description(
-        "Deploy services in sequential batches for releases with dependencies."
+        "Release services in sequential batches."
       )
       .usage("[options]")
       .requiredOption(
         "-s, --services <services>",
-        "service names separated by comma without spaces and use semi-collon for sequential batches, e.g. customers-v1,accounts-v1;transactions-v1",
+        "sequential service name batches separated by semi-collon and with comma to separate service names in each batch, e.g. customers-v1,accounts-v1;transactions-v1",
         trim
       )
       .requiredOption(

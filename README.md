@@ -270,9 +270,9 @@ Options:
 ### release ###
 ```
 Usage: release [options]
-Deploy services in sequential batches for releases with dependencies.
+Release services in sequential batches.
 Options:
-  -s, --services <services>  service names separated by comma without spaces and use semi-collon to separate sequential batches,
+  -s, --services <services>  sequential service name batches separated by semi-collon and with comma to separate service names in each batch,
                              e.g. customers-v1,accounts-v1;transactions-v1
   -b, --branch <branch>      bamboo branch name, e.g. master
   -e, --env <env>            env name, e.g. dev

@@ -223,6 +223,7 @@ describe("statusChecker", () => {
           const result = await checkJobStatus(testCase.input.event, {});
           expect(result).toEqual(testCase.output);
         } catch (err: any) {
+          console.log(err);
           expect(err.name).toEqual(testCase.errorName);
         }
       });
