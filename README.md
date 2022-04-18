@@ -45,7 +45,7 @@ copy the URL out as the `notificationURL` parameter value.
 /bamboo-on-teams/securityGroupId
 /bamboo-on-teams/subnetId
 
-## Application configuration ##
+## Application configuration - SecureString using the default AWS account key ##
 /bamboo-on-teams/applicationConfig
 ```
 Sample application configuration:
@@ -55,7 +55,10 @@ Sample application configuration:
     "bambooAPIToken": "NjsDAFDHkoVOASXIM4QDSDFSgRQ",
     "hmacToken": "neasdffz+LPsYZGsdddxyOvWSiK8=",
     "notificationURL": "https://test.webhook.office.com/webhookb2/85dcasdfaf@864e4889-04a2-416e-9f88-ca5ce1c6c1b7/IncomingWebhook/9db3asdfaa369/be873347-c615-4984-ad7a-f7952283551e",
-    "enabledForProd": false,
+    "releaseApproval": {
+         "bambooPlanId": "API-RCV",
+         "requiredForEnvs": ["uat", "prod"]
+    }
 }
 ```
 
