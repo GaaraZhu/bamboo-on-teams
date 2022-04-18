@@ -22,7 +22,7 @@ User interacts with Bamboo through Teams outgoing webhook and bamboo-on-teams se
 
 ### Result notification & Hanging detection
 Bamboo-on-teams stepfunction pulls job status from Bamboo and pushes to Teams channel through incoming webhook, and a warning message will be sent the same way out if the job is hanging.
- ![Result notification & hanging detection](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/statusCheckerSeq.png)
+ ![Result notification & hanging detection](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/statusCheckerSeq.svg)
 
 ## Setup ##
 1. Create an [incoming webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) in Teams to received job notification and

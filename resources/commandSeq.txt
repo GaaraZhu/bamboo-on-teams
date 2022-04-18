@@ -1,4 +1,3 @@
-title Bamboo-On-Teams
 actor User
 participant Chatops channel
 participant Teams outgoing webhook

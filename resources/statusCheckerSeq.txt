@@ -1,5 +1,3 @@
-title StatusChecker
-
 participant Stepfunctions
 participant Bamboo Rest API
 participant Teams incoming webhook
