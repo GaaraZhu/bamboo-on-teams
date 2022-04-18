@@ -5,10 +5,13 @@ import {
 } from "../stepFunctionService";
 import { listDeploymentProjects } from "./listDeploymentProjectsExecutor";
 import { ActionName } from "../../models/actions";
+import { prodEnvCheck } from "../../utils";
 
 export const executeBatchDeployCommand = async (
   action: BatchDeployAction
 ): Promise<any> => {
+  prodEnvCheck(action.env);
+
   const projects = await listDeploymentProjects();
 
   // validate incoming deployment project names

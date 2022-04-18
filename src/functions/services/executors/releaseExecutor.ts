@@ -1,6 +1,6 @@
 import { ActionName } from "../../models/actions";
 import { ReleaseAction } from "../../models/releaseAction";
-import { prodEnvCheck, releaseApprovalCheck } from "../../utils";
+import { releaseApprovalCheck } from "../../utils";
 import {
   ReleaserExecutionInput,
   startReleaserExecution,
@@ -10,13 +10,10 @@ import { listDeploymentProjects } from "./listDeploymentProjectsExecutor";
 export const executeReleaseCommand = async (
   action: ReleaseAction
 ): Promise<any> => {
-  // 1. check environment availability
-  prodEnvCheck(action.env);
-
-  // 2. check release approved or not
+  // 1. check release approved or not
   await releaseApprovalCheck(action.env);
 
-  // 3. validate incoming deployment project names
+  // 2. validate incoming deployment project names
   const projects = await listDeploymentProjects();
   action.services.flat().forEach((service) => {
     const project = projects.find(
@@ -30,7 +27,7 @@ export const executeReleaseCommand = async (
     }
   });
 
-  // 4. start releaser step function
+  // 3. start releaser step function
   const input: ReleaserExecutionInput = {
     batches: action.services.map((services: string[]) => ({
       commands: services.map((service) => ({

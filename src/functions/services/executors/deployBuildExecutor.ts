@@ -17,17 +17,17 @@ import { getConfig } from "../config";
 export const executeDeployBuildCommand = async (
   action: DeployBuildAction
 ): Promise<any> => {
-  // 1. check environment availability
+  // 1. check prod environment availability
   prodEnvCheck(action.env);
 
-  // get the build
+  // 2. get the build
   const build = await getBuild(action.buildKey);
 
-  // get all releases for the service branch
+  // 3. get all releases for the service branch
   const project = await getDeploymentProject(action.service);
   const buildReleases = await getBuildReleases(project.id, build.branch.key);
 
-  // create a release if not exist for the build
+  // 4. create a release if not exist for the build
   let targetRelease = buildReleases?.find((r: any) =>
     r.items.find((i: any) => i.planResultKey.key === build.key)
   );
@@ -47,7 +47,7 @@ export const executeDeployBuildCommand = async (
     targetRelease = await createRelease(project.id, build.key, releaseName);
   }
 
-  // deploy the release to the environment
+  // 5. deploy the release to the environment
   const env = await getEnvironment(project.id, action.env);
   executeOperationCheck(env.operations);
   const deployment = await deployRelease(env.id, targetRelease.id);
@@ -67,7 +67,7 @@ export const executeDeployBuildCommand = async (
     },
   };
 
-  // start async job status checker and push the result to MS Teams
+  // 6. start async job status checker and push the result to MS Teams
   const checkerInput: DeployBuildJobCheckerInput = {
     type: CheckerInputType.DEPLOY_BUILD,
     resultKey: deployment.deploymentResultId,

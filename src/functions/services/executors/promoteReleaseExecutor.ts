@@ -10,12 +10,17 @@ import {
   DeployReleaseJobCheckerInput,
 } from "../../api/handlers/statusChecker";
 import { startCheckerExecution } from "../stepFunctionService";
-import { executeOperationCheck, viewOperationCheck } from "../../utils";
+import {
+  executeOperationCheck,
+  prodEnvCheck,
+  viewOperationCheck,
+} from "../../utils";
 import { getConfig } from "../config";
 
 export const executePromoteReleaseCommand = async (
   action: PromoteReleaseAction
 ): Promise<any> => {
+  prodEnvCheck(action.targetEnv);
   const project = await getDeploymentProject(action.service);
   const sourceEnv = await getEnvironment(project.id, action.sourceEnv);
   viewOperationCheck(sourceEnv.operations);

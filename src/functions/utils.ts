@@ -38,10 +38,10 @@ export const fallbackToHTML = (message: string): string => {
 };
 
 export const prodEnvCheck = (env: string): void => {
-  if (isInvalidProdEnv(env)) {
+  if (isProdEnv(env)) {
     throw {
       status: 400,
-      message: "Bamboo-on-teams is disabled for production environment",
+      message: "Operation is not allowed for production environment",
     };
   }
 };
@@ -98,11 +98,7 @@ export const releaseApprovalCheck = async (env: string): Promise<void> => {
   }
 };
 
-export const isInvalidProdEnv = (env: string): boolean => {
-  return !getConfig().enabledForProd && isProdEnv(env);
-};
-
-const isProdEnv = (env: string): boolean => {
+export const isProdEnv = (env: string): boolean => {
   return env.toUpperCase().startsWith("PROD");
 };
 
