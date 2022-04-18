@@ -45,7 +45,7 @@ provider:
     RELEASER_ARN: ${self:custom.aws.stepFunction.releaser.arn}
     STEP_FUNCTIONS_ENDPOINT: https://states.ap-southeast-2.amazonaws.com
     TZ: Pacific/Auckland
-    APPLICATION_CONFIG: ${ssm:/bamboo-on-teams/applicationConfig}
+    APPLICATION_CONFIG: ${ssm:/bamboo-on-teams/applicationConfig~true}
 
 package:
   excludeDevDependencies: false
