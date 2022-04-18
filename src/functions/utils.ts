@@ -47,8 +47,27 @@ export const prodEnvCheck = (env: string): void => {
 };
 
 export const releaseApprovalCheck = async (env: string): Promise<void> => {
+  const releaseApprovalConfig = getConfig().releaseApproval;
+  if (!releaseApprovalConfig) {
+    console.log(
+      "Skip release approval checking as no requirement is configured"
+    );
+    return;
+  }
+
+  if (
+    !releaseApprovalConfig.requiredForEnvs
+      .map((e) => e.toUpperCase())
+      .includes(env.toUpperCase())
+  ) {
+    console.log(
+      `Skip release approval checking as no requirement is configured for environment ${env}`
+    );
+    return;
+  }
+
   const approvalJobResult: Build | undefined = await getLatestBuild(
-    getConfig().releaseApprovalPlanId
+    releaseApprovalConfig.bambooPlanId
   );
   if (!approvalJobResult) {
     throw {

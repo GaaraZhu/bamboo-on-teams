@@ -4,7 +4,10 @@ export interface Config {
   hmacToken: string;
   notificationURL: string;
   enabledForProd: boolean;
-  releaseApprovalPlanId: string;
+  releaseApproval?: {
+    bambooPlanId: string;
+    requiredForEnvs: string[];
+  };
 }
 
 let config: Config;
