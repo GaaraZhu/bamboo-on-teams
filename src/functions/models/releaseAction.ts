@@ -20,7 +20,7 @@ export class ReleaseAction implements Action {
       .usage("[options]")
       .requiredOption(
         "-s, --services <services>",
-        "service names separated by comma without spaces and use semi-collon for different batches, e.g. customers-v1,accounts-v1;transactions-v1",
+        "service names separated by comma without spaces and use semi-collon for sequential batches, e.g. customers-v1,accounts-v1;transactions-v1",
         trim
       )
       .requiredOption(

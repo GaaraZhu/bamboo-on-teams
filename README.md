@@ -272,7 +272,7 @@ Options:
 Usage: release [options]
 Deploy services in sequential batches for releases with dependencies.
 Options:
-  -s, --services <services>  service names separated by comma without spaces and use semi-collon to separate different batches,
+  -s, --services <services>  service names separated by comma without spaces and use semi-collon to separate sequential batches,
                              e.g. customers-v1,accounts-v1;transactions-v1
   -b, --branch <branch>      bamboo branch name, e.g. master
   -e, --env <env>            env name, e.g. dev
