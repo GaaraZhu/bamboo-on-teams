@@ -89,7 +89,8 @@ export const checkJobStatus = async (
               (event as NewBranchBuildJobCheckerInput).branchKey
             );
       if (
-        !["FINISHED", "NOTBUILT"].includes(build?.lifeCycleState?.toUpperCase())
+        !build ||
+        !["FINISHED", "NOTBUILT"].includes(build.lifeCycleState?.toUpperCase())
       ) {
         throw new JobNotFinished();
       }

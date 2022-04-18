@@ -1,8 +1,8 @@
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { ListEnvironmentsAction } from "../../models/listEnvironmentsAction";
 import { axiosGet } from "../axiosService";
-import { isInvalidProdEnv } from "../../utils";
 import { getConfig } from "../config";
+import { isInvalidProdEnv } from "../../utils";
 
 export const executeListEnvironmentsCommand = async (
   action: ListEnvironmentsAction

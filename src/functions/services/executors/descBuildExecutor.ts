@@ -8,7 +8,9 @@ export const executeDescBuildCommand = async (
   return await getBuild(action.build);
 };
 
-export const getLatestBuild = async (branchKey: string): Promise<any> => {
+export const getLatestBuild = async (
+  branchKey: string
+): Promise<Build | undefined> => {
   const url = `https://${
     getConfig().bambooHostUrl
   }/rest/api/latest/result/${branchKey}?max-results=1&expand=results.result`;
@@ -27,7 +29,7 @@ export const getBuild = async (key: string): Promise<Build> => {
   const url = `https://${
     getConfig().bambooHostUrl
   }/rest/api/latest/result/${key}`;
-  const { data } = await axiosGet(`${url}?expand=changes`, {
+  const { data } = await axiosGet(`${url}?expand=changes,variables`, {
     headers: {
       Authorization: `Bearer ${getConfig().bambooAPIToken}`,
     },
@@ -50,6 +52,7 @@ export const getBuild = async (key: string): Promise<Build> => {
       author: c.author,
       commit: c.changesetId,
     })),
+    variables: data.variables.variable,
   };
 };
 
@@ -69,5 +72,9 @@ export interface Build {
   changes: {
     author: string;
     commit: string;
+  }[];
+  variables: {
+    name: string;
+    value: string;
   }[];
 }

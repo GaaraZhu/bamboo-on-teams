@@ -4,6 +4,7 @@ export interface Config {
   hmacToken: string;
   notificationURL: string;
   enabledForProd: boolean;
+  releaseApprovalPlanId: string;
 }
 
 let config: Config;

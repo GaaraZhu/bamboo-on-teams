@@ -1,5 +1,6 @@
 import { InvalidArgumentError } from "commander";
 import { getConfig } from "./services/config";
+import { Build, getLatestBuild } from "./services/executors/descBuildExecutor";
 import { Operations } from "./services/executors/listEnvironmentsExecutor";
 
 export type Class<T> = {
@@ -45,8 +46,45 @@ export const prodEnvCheck = (env: string): void => {
   }
 };
 
+export const releaseApprovalCheck = async (env: string): Promise<void> => {
+  const approvalJobResult: Build | undefined = await getLatestBuild(
+    getConfig().releaseApprovalPlanId
+  );
+  if (!approvalJobResult) {
+    throw {
+      status: 400,
+      message:
+        "Release is not approved due to no approval job has been executed, please check with the release coordinator",
+    };
+  }
+
+  const targetEnvironment = approvalJobResult.variables.find(
+    (v) => v.name == "environment" && v.value.toUpperCase() == env.toUpperCase()
+  );
+  if (!targetEnvironment) {
+    throw {
+      status: 400,
+      message: `Release is not approved due to no approval job has been executed for env ${env}, please check with the release coordinator`,
+    };
+  }
+
+  const approved = approvalJobResult.variables.find(
+    (v) => v.name == "approved" && v.value.toUpperCase() == "TRUE"
+  );
+  if (!approved) {
+    throw {
+      status: 400,
+      message: `Release is not approved for environment ${env}, please check with the release coordinator`,
+    };
+  }
+};
+
 export const isInvalidProdEnv = (env: string): boolean => {
-  return !getConfig().enabledForProd && env.toUpperCase().startsWith("PROD");
+  return !getConfig().enabledForProd && isProdEnv(env);
+};
+
+const isProdEnv = (env: string): boolean => {
+  return env.toUpperCase().startsWith("PROD");
 };
 
 export const executeOperationCheck = (operations: Operations): void => {
