@@ -279,6 +279,8 @@ Options:
   -h, --help                 display help for command
 ```
 
+Note: `release` is the only allowed action for production environment, and it can be secured through a [release control process](https://gaarazhu.github.io/release-control-process-for-chatops-cicd/).
+
 ## Contribution ##
 Your contributions are always welcome!
 
