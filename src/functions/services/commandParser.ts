@@ -13,7 +13,7 @@ export class CommandParser {
     if (!actionName) {
       throw {
         status: 400,
-        message: `Supported commands: ${Object.values(ActionName)}`,
+        message: `Supported commands: ${Object.values(ActionName).join(", ")}`,
       };
     }
 
