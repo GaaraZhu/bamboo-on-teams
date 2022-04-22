@@ -9,7 +9,7 @@ export const handleCommand = async (
 ): Promise<void> => {
   const body: IncomingMessage = request.body;
   console.log(
-    `Action: [${body.text}] triggered by user ${body.from.name} from channel ${body.channelId}`
+    `Action: [${body.text}] triggered by user ${body.from.name}, id ${body.from.id} from channel ${body.channelId}`
   );
   const command = extractCommandFromTeamsMessage(body.text);
   let resultMessage =

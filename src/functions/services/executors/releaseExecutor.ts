@@ -1,6 +1,6 @@
 import { ActionName } from "../../models/actions";
 import { ReleaseAction } from "../../models/releaseAction";
-import { releaseApprovalCheck } from "../../utils";
+import { prodEnvCheck } from "../../utils";
 import {
   ReleaserExecutionInput,
   startReleaserExecution,
@@ -10,8 +10,8 @@ import { listDeploymentProjects } from "./listDeploymentProjectsExecutor";
 export const executeReleaseCommand = async (
   action: ReleaseAction
 ): Promise<any> => {
-  // 1. check release approved or not
-  await releaseApprovalCheck(action.env);
+  // 1. not allowed for Prod environment
+  prodEnvCheck(action.env);
 
   // 2. validate incoming deployment project names
   const projects = await listDeploymentProjects();
