@@ -2,14 +2,15 @@ import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { executeListDeploysCommand } from "../services/executors/listDeploysExecutor";
+import { TeamsUser } from "./teams";
 
 export class ListDeploysAction implements Action {
   readonly actionName = ActionName.LIST_DEPLOYS;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   readonly deploymentProject: string;
   readonly env: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const listDeploysCommand = new Command()
       .name(this.actionName)
       .description("List the deployments in a service environment.")

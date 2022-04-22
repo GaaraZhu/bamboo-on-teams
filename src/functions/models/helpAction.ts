@@ -1,12 +1,13 @@
 import { Command, CommanderError } from "commander";
 import { Action, ActionName } from "./actions";
 import { executeHelpCommand } from "../services/executors/helpExecutor";
+import { TeamsUser } from "./teams";
 
 export class HelpAction implements Action {
   readonly actionName = ActionName.HELP;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
 
-  constructor(triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const helpCommand = new Command()
       .name(this.actionName)
       .description("List bamboo plans.");

@@ -3,9 +3,8 @@ export interface Config {
   bambooAPIToken: string;
   hmacToken: string;
   notificationURL: string;
-  releaseApproval?: {
-    bambooPlanId: string;
-    requiredForEnvs: string[];
+  prod?: {
+    allowedUserIds: string[];
   };
 }
 

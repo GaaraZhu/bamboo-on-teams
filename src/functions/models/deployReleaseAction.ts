@@ -2,15 +2,16 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executeDeployReleaseCommand } from "../services/executors/deployReleaseExecutor";
+import { TeamsUser } from "./teams";
 
 export class DeployReleaseAction implements Action {
   readonly actionName = ActionName.DEPLOY_RELEASE;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   env: string;
   releaseName: string;
   service: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const buildCommand = new Command()
       .name(this.actionName)
       .description("Deploy a release to a service environment.")

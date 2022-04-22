@@ -2,15 +2,16 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executeDeployLatestCommand } from "../services/executors/deployLatestBuildExecutor";
+import { TeamsUser } from "./teams";
 
 export class DeployLatestBuildAction implements Action {
   readonly actionName = ActionName.DEPLOY_LATEST_BUILD;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   service: string;
   branch: string;
   env: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const deployLatestCommand = new Command()
       .name(this.actionName)
       .description(

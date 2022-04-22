@@ -2,13 +2,14 @@ import { Command, CommanderError } from "commander";
 import { Action, ActionName } from "./actions";
 import { executeSearchProjectsCommand } from "../services/executors/searchProjectsExecutor";
 import { trim } from "../utils";
+import { TeamsUser } from "./teams";
 
 export class SearchProjectsAction implements Action {
   readonly actionName = ActionName.SEARCH_PROJECTS;
   readonly deploymentProject: string;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const searchProjectCommand = new Command()
       .name(this.actionName)
       .description("Search deployment projects.")

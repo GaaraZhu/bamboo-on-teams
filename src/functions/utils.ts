@@ -1,10 +1,11 @@
 import { InvalidArgumentError } from "commander";
+import { TeamsUser } from "./models/teams";
 import { getConfig } from "./services/config";
 import { Build, getLatestBuild } from "./services/executors/descBuildExecutor";
 import { Operations } from "./services/executors/listEnvironmentsExecutor";
 
 export type Class<T> = {
-  new (command: string, triggeredBy: string): T;
+  new (command: string, triggeredBy: TeamsUser): T;
 };
 
 export const trim = (value: string | undefined): any => {
@@ -46,54 +47,18 @@ export const prodEnvCheck = (env: string): void => {
   }
 };
 
-export const releaseApprovalCheck = async (env: string): Promise<void> => {
-  const releaseApprovalConfig = getConfig().releaseApproval;
-  if (!releaseApprovalConfig) {
-    console.log(
-      "Skip release approval checking as no requirement is configured"
-    );
-    return;
-  }
-
+export const allowedUserIdCheck = async (
+  currentUser: TeamsUser
+): Promise<void> => {
+  const allowedUserIds = getConfig().prod?.allowedUserIds;
   if (
-    !releaseApprovalConfig.requiredForEnvs
-      .map((e) => e.toUpperCase())
-      .includes(env.toUpperCase())
+    !allowedUserIds?.some(
+      (id) => id.toUpperCase().trim() === currentUser.id.toUpperCase().trim()
+    )
   ) {
-    console.log(
-      `Skip release approval checking as no requirement is configured for environment ${env}`
-    );
-    return;
-  }
-
-  const approvalJobResult: Build | undefined = await getLatestBuild(
-    releaseApprovalConfig.bambooPlanId
-  );
-  if (!approvalJobResult) {
     throw {
       status: 400,
-      message:
-        "Release is not approved due to no approval job has been executed, please check with the release coordinator",
-    };
-  }
-
-  const targetEnvironment = approvalJobResult.variables.find(
-    (v) => v.name == "environment" && v.value.toUpperCase() == env.toUpperCase()
-  );
-  if (!targetEnvironment) {
-    throw {
-      status: 400,
-      message: `Release is not approved due to no approval job has been executed for env ${env}, please check with the release coordinator`,
-    };
-  }
-
-  const approved = approvalJobResult.variables.find(
-    (v) => v.name == "approved" && v.value.toUpperCase() == "TRUE"
-  );
-  if (!approved) {
-    throw {
-      status: 400,
-      message: `Release is not approved for environment ${env}, please check with the release coordinator`,
+      message: "Operation is not allowed for current user",
     };
   }
 };

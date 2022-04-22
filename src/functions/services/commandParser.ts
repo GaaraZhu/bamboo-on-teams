@@ -4,11 +4,12 @@ import {
   ActionName,
   sanitizeActionName,
 } from "../models/actions";
+import { TeamsUser } from "../models/teams";
 
 export class CommandParser {
   public static build = (): CommandParser => new CommandParser();
 
-  public async parse(command: string, triggeredBy: string): Promise<Action> {
+  public async parse(command: string, triggeredBy: TeamsUser): Promise<Action> {
     const actionName = sanitizeActionName(command.split(" ")[0]);
     if (!actionName) {
       throw {

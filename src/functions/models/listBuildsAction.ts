@@ -2,14 +2,15 @@ import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { executeListBuildsCommand } from "../services/executors/listBuildsExecutor";
+import { TeamsUser } from "./teams";
 
 export class ListBuildsAction implements Action {
   readonly actionName = ActionName.LIST_BUILDS;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   readonly planName: string;
   readonly branchName: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const listBuildsCommand = new Command()
       .name(this.actionName)
       .description("List builds for a service in a branch plan.")

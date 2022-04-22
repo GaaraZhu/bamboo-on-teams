@@ -1,12 +1,13 @@
 import { Command, CommanderError } from "commander";
 import { Action, ActionName } from "./actions";
 import { executeListPlansCommand } from "../services/executors/listPlansExecutor";
+import { TeamsUser } from "./teams";
 
 export class ListPlansAction implements Action {
   readonly actionName = ActionName.LIST_PLANS;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
 
-  constructor(triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const listPlansCommand = new Command()
       .name(this.actionName)
       .description("List bamboo plans.");

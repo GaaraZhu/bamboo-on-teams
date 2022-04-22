@@ -11,6 +11,7 @@ import {
   NewBranchBuildJobCheckerInput,
 } from "../api/handlers/statusChecker";
 import { v4 as uuidv4 } from "uuid";
+import { TeamsUser } from "../models/teams";
 
 const getStepFunctionsClient = async (): Promise<StepFunctions> => {
   if (!process.env.STEP_FUNCTIONS_ENDPOINT) {
@@ -76,7 +77,7 @@ export interface SingleCommand {
   service: string;
   branch: string;
   environment?: string;
-  triggeredBy: string;
+  triggeredBy: TeamsUser;
 }
 
 export const startBatcherExecution = async (

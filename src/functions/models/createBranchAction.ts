@@ -2,14 +2,15 @@ import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { executeCreateBranchCommand } from "../services/executors/createPlanBranchExecutor";
+import { TeamsUser } from "./teams";
 
 export class CreateBranchAction implements Action {
   readonly actionName = ActionName.CREATE_BRANCH;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   readonly planName: string;
   readonly vscBranch: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const createBranchCommand = new Command()
       .name(this.actionName)
       .description("Create branch for a plan.")

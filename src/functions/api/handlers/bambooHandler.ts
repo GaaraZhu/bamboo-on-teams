@@ -1,5 +1,6 @@
 import { Request, Response } from "lambda-api";
 import { ActionName } from "../../models/actions";
+import { IncomingMessage } from "../../models/teams";
 import { CommandParser } from "../../services/commandParser";
 import { extractCommandFromTeamsMessage, fallbackToHTML } from "../../utils";
 
@@ -15,7 +16,7 @@ export const handleCommand = async (
   let resultMessage =
     "Job has been triggered, please wait for the result notification.";
   try {
-    const action = await CommandParser.build().parse(command, body.from.name);
+    const action = await CommandParser.build().parse(command, body.from);
     const result = await action.process();
 
     if (ActionName.CREATE_BRANCH === action.actionName) {
@@ -55,12 +56,3 @@ export const handleCommand = async (
   );
   response.status(200).json(responseMsg);
 };
-
-interface IncomingMessage {
-  channelId: string;
-  from: {
-    id: string;
-    name: string;
-  };
-  text: string;
-}

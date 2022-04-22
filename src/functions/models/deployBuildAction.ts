@@ -2,15 +2,16 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executeDeployBuildCommand } from "../services/executors/deployBuildExecutor";
+import { TeamsUser } from "./teams";
 
 export class DeployBuildAction implements Action {
   readonly actionName = ActionName.DEPLOY_BUILD;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   service: string;
   env: string;
   buildKey: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const deployBuildCommand = new Command()
       .name(this.actionName)
       .description("Deploy a service build to an environment.")

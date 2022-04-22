@@ -2,14 +2,15 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executeBatchBuildCommand } from "../services/executors/batchBuildExecutor";
+import { TeamsUser } from "./teams";
 
 export class BatchBuildAction implements Action {
   readonly actionName = ActionName.BATCH_BUILD;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   services: string[];
   branch: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const batchBuildCommand = new Command()
       .name(this.actionName)
       .description("Trigger branch build in batches for services.")

@@ -1,4 +1,5 @@
 import { InvalidArgumentError } from "commander";
+import { TeamsUser } from "../../models/teams";
 import { getConfig } from "../../services/config";
 import {
   Build,
@@ -36,7 +37,7 @@ export interface NewBranchBuildJobCheckerInput {
   branchName: string;
   branchKey: string;
   service: string;
-  triggeredBy: string;
+  triggeredBy: TeamsUser;
 }
 
 export interface BuildJobCheckerInput {
@@ -46,7 +47,7 @@ export interface BuildJobCheckerInput {
   service: string;
   branch: string;
   buildNumber: string;
-  triggeredBy: string;
+  triggeredBy: TeamsUser;
 }
 
 export interface DeployBuildJobCheckerInput {
@@ -57,7 +58,7 @@ export interface DeployBuildJobCheckerInput {
   branch: string;
   buildNumber: string;
   environment: string;
-  triggeredBy: string;
+  triggeredBy: TeamsUser;
 }
 
 export interface DeployReleaseJobCheckerInput {
@@ -67,7 +68,7 @@ export interface DeployReleaseJobCheckerInput {
   service: string;
   release: string;
   environment: string;
-  triggeredBy: string;
+  triggeredBy: TeamsUser;
 }
 
 export const checkJobStatus = async (

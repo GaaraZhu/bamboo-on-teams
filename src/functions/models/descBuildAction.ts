@@ -2,13 +2,14 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executeDescBuildCommand } from "../services/executors/descBuildExecutor";
+import { TeamsUser } from "./teams";
 
 export class DescBuildAction implements Action {
   readonly actionName = ActionName.DESC_BUILD;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   build: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const lastBuildCommand = new Command()
       .name(this.actionName)
       .description("Describe a build.")

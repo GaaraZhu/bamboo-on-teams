@@ -2,14 +2,15 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executeBuildCommand } from "../services/executors/buildExecutor";
+import { TeamsUser } from "./teams";
 
 export class BuildAction implements Action {
   readonly actionName = ActionName.BUILD;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   service: string;
   branch: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const buildCommand = new Command()
       .name(this.actionName)
       .description("Trigger branch build for service.")

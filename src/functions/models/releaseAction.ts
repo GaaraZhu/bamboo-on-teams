@@ -3,15 +3,16 @@ import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executeBatchBuildCommand } from "../services/executors/batchBuildExecutor";
 import { executeReleaseCommand } from "../services/executors/releaseExecutor";
+import { TeamsUser } from "./teams";
 
 export class ReleaseAction implements Action {
   readonly actionName = ActionName.RELEASE;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   services: string[][];
   branch: string;
   env: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const releaseAction = new Command()
       .name(this.actionName)
       .description("Release services in sequential batches.")

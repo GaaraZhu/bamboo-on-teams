@@ -20,6 +20,7 @@ import { SearchProjectsAction } from "./searchProjectsAction";
 import { BatchDeployAction } from "./batchDeployAction";
 import { BatchBuildAction } from "./batchBuildAction";
 import { ReleaseAction } from "./releaseAction";
+import { TeamsUser } from "./teams";
 
 export enum ActionName {
   HELP = "help",
@@ -61,7 +62,7 @@ export enum JobType {
 
 export interface Action {
   actionName: ActionName;
-  triggeredBy: string;
+  triggeredBy: TeamsUser;
   process(): Promise<any>;
 }
 
@@ -109,6 +110,7 @@ export const actionGroupLookup: Record<JobType, ActionName[]> = {
     ActionName.DEPLOY_RELEASE,
     ActionName.DEPLOY_BUILD,
     ActionName.BATCH_DEPLOY,
+    ActionName.RELEASE,
     ActionName.PROMOTE_RELEASE,
   ],
   [JobType.OTHERS]: [ActionName.HELP],

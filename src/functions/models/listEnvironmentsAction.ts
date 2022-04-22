@@ -2,13 +2,14 @@ import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { executeListEnvironmentsCommand } from "../services/executors/listEnvironmentsExecutor";
+import { TeamsUser } from "./teams";
 
 export class ListEnvironmentsAction implements Action {
   readonly actionName = ActionName.LIST_ENVS;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   readonly deploymentProject: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const listEnvsCommand = new Command()
       .name(this.actionName)
       .description("List available environments for a service.")

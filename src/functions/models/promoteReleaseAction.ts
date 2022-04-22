@@ -2,15 +2,16 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { executePromoteReleaseCommand } from "../services/executors/promoteReleaseExecutor";
+import { TeamsUser } from "./teams";
 
 export class PromoteReleaseAction implements Action {
   readonly actionName = ActionName.PROMOTE_RELEASE;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   service: string;
   sourceEnv: string;
   targetEnv: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const promoteReleaseCommand = new Command()
       .name(this.actionName)
       .usage("[options]")

@@ -2,14 +2,15 @@ import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { Action, ActionName } from "./actions";
 import { executeListReleasesCommand } from "../services/executors/listReleasesExecutor";
+import { TeamsUser } from "./teams";
 
 export class ListReleasesAction implements Action {
   readonly actionName = ActionName.LIST_RELEASES;
-  readonly triggeredBy: string;
+  readonly triggeredBy: TeamsUser;
   readonly deploymentProject: string;
   readonly planBranch: string;
 
-  constructor(command: string, triggeredBy: string) {
+  constructor(command: string, triggeredBy: TeamsUser) {
     const listBranchesCommand = new Command()
       .name(this.actionName)
       .description("List the releases created from a service branch.")
