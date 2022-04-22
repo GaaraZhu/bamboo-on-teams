@@ -14,9 +14,7 @@ export class ReleaseAction implements Action {
   constructor(command: string, triggeredBy: string) {
     const releaseAction = new Command()
       .name(this.actionName)
-      .description(
-        "Release services in sequential batches."
-      )
+      .description("Release services in sequential batches.")
       .usage("[options]")
       .requiredOption(
         "-s, --services <services>",

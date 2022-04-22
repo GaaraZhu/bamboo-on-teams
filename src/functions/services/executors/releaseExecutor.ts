@@ -15,17 +15,21 @@ export const executeReleaseCommand = async (
 
   // 2. validate incoming deployment project names
   const projects = await listDeploymentProjects();
+  const unknownServices: string[] = [];
   action.services.flat().forEach((service) => {
     const project = projects.find(
       (p: any) => p.name.toUpperCase() === service.toUpperCase()
     );
     if (!project) {
-      throw {
-        status: 400,
-        message: `Unknown project provided ${service}, please use "search-projects" command to search the project first`,
-      };
+      unknownServices.push(service);
     }
   });
+  if (unknownServices.length > 0) {
+    throw {
+      status: 400,
+      message: `Unknown project(s) provided ${unknownServices}, please use "search-projects" command to search the project first`,
+    };
+  }
 
   // 3. start releaser step function
   const input: ReleaserExecutionInput = {

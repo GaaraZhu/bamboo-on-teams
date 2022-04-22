@@ -15,17 +15,21 @@ export const executeBatchDeployCommand = async (
   const projects = await listDeploymentProjects();
 
   // validate incoming deployment project names
+  const unknownServices: string[] = [];
   action.services.forEach((service) => {
     const project = projects.find(
       (p: any) => p.name.toUpperCase() === service.toUpperCase()
     );
     if (!project) {
-      throw {
-        status: 400,
-        message: `Unknown project provided ${service}, please use "search-projects" command to search the project first`,
-      };
+      unknownServices.push(service);
     }
   });
+  if (unknownServices.length > 0) {
+    throw {
+      status: 400,
+      message: `Unknown project(s) provided ${unknownServices}, please use "search-projects" command to search the project first`,
+    };
+  }
 
   // start batcher step function for batch deploy
   const input: BatcherExecutionInput = {
