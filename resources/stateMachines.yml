@@ -101,6 +101,11 @@ Releaser:
         Type: Map
         ItemsPath: $.batches
         MaxConcurrency: 1
+        Catch:
+          - ErrorEquals:
+              - States.ALL
+            ResultPath: $.error
+            Next: NotifyRelease
         Next: NotifyRelease
         Iterator:
           StartAt: ExecuteSingleBatch
@@ -118,11 +123,6 @@ Releaser:
                     Resource:
                       Fn::GetAtt: [executeSingleFunc, Arn]
                     ResultPath: $.triggerResult
-                    Catch:
-                      - ErrorEquals:
-                          - States.ALL
-                        ResultPath: $.error
-                        Next: NotifySingle
                     Next: DelayTheChecking
 
                   DelayTheChecking:
