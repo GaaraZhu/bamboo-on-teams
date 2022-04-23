@@ -1,3 +1,4 @@
+import { TeamsUser } from "../models/teams";
 import { axiosPost } from "./axiosService";
 import { getConfig } from "./config";
 import { Deploy } from "./executors/listDeploysExecutor";
@@ -6,7 +7,7 @@ export const sendBuildNotification = async (
   service: string,
   branch: string,
   status: string,
-  triggeredBy: string,
+  triggeredBy: TeamsUser,
   jobUrl?: string,
   errorMessage?: string
 ): Promise<void> => {
@@ -46,7 +47,7 @@ export const sendBuildNotification = async (
         "summary": "${title}",
         "sections": [{
             "activityTitle": "${title}",
-            "activitySubtitle": "triggered by ${triggeredBy}",
+            "activitySubtitle": "triggered by ${triggeredBy.name}",
             "activityImage": "https://static.thenounproject.com/png/2714806-200.png",
             "facts": [${sectionFacts}],
             "markdown": true
@@ -64,7 +65,7 @@ export const sendDeployBuildNotification = async (
   service: string,
   environment: string,
   deploymentState: string,
-  triggeredBy: string,
+  triggeredBy: TeamsUser,
   jobUrl?: string,
   errorMessage?: string
 ): Promise<void> => {
@@ -103,7 +104,7 @@ export const sendDeployBuildNotification = async (
         "summary": "${title}",
         "sections": [{
             "activityTitle": "${title}",
-            "activitySubtitle": "triggered by ${triggeredBy}",
+            "activitySubtitle": "triggered by ${triggeredBy.name}",
             "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg",
             "facts": [${sectionFacts}],
             "markdown": true
@@ -124,7 +125,7 @@ export interface BatchNotificationInput {
   }[];
   branch: string;
   environment?: string;
-  triggeredBy: string;
+  triggeredBy: TeamsUser;
 }
 
 export const sendAllBuildsNotification = async (
@@ -142,7 +143,7 @@ export const sendAllBuildsNotification = async (
         "summary": "Bamboo batch build job finished",
         "sections": [{
             "activityTitle": "Bamboo batch build job finished",
-            "activitySubtitle": "triggered by ${input.triggeredBy}",
+            "activitySubtitle": "triggered by ${input.triggeredBy.name}",
             "activityImage": "https://static.thenounproject.com/png/2714806-200.png",
             "facts": [${sectionFacts}],
             "markdown": true
@@ -173,7 +174,7 @@ export const sendAllDeploysNotification = async (
         "summary": "${title}",
         "sections": [{
             "activityTitle": "${title}",
-            "activitySubtitle": "triggered by ${input.triggeredBy}",
+            "activitySubtitle": "triggered by ${input.triggeredBy.name}",
             "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg",
             "facts": [${sectionFacts}],
             "markdown": true
@@ -210,7 +211,7 @@ export const sendDeployReleaseNotification = async (
   deploy: Deploy,
   service: string,
   environment: string,
-  triggeredBy: string,
+  triggeredBy: TeamsUser,
   jobUrl: string
 ): Promise<void> => {
   const isSucceed = deploy.deploymentState.toUpperCase() === "SUCCESS";
@@ -224,7 +225,7 @@ export const sendDeployReleaseNotification = async (
         "summary": "${title}",
         "sections": [{
             "activityTitle": "${title}",
-            "activitySubtitle": "triggered by ${triggeredBy}",
+            "activitySubtitle": "triggered by ${triggeredBy.name}",
             "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg&usqp=CAU",
             "facts": [{
                 "name": "Service",
