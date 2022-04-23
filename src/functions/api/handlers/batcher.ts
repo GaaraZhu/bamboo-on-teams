@@ -43,7 +43,7 @@ export const executeSingle = async (event: any, context: any): Promise<any> => {
       return await executeBuildCommand(buildAction, true);
     }
   } catch (err: any) {
-    console.log("executeSingle: JSON.stringify(err)");
+    console.log(`executeSingle: ${JSON.stringify(err)}`);
     throw err.message;
   }
 };
