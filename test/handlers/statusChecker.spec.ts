@@ -4,11 +4,15 @@ import {
   getJobPageUrl,
 } from "../../src/functions/api/handlers/statusChecker";
 import axios from "axios";
+import { TeamsUser } from "../../src/functions/models/teams";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 /* eslint-disable */process.env.APPLICATION_CONFIG = '{"bambooHostUrl": "test.co.nz"}';
-
+const user: TeamsUser = {
+  id: "1sdjckoli12",
+  name: "james",
+}
 describe("statusChecker", () => {
   describe("getJobPageUrl", () => {
     const testCases = [
@@ -61,7 +65,7 @@ describe("statusChecker", () => {
             service: "customers-v1",
             branch: "master",
             buildNumber: "4",
-            triggeredBy: "james",
+            triggeredBy: user,
           },
           jobDetails: {
             key: "API1-4",
@@ -89,7 +93,7 @@ describe("statusChecker", () => {
             service: "customers-v1",
             branch: "master",
             buildNumber: "4",
-            triggeredBy: "james",
+            triggeredBy: user,
           },
           jobDetails: {
             key: "API1-4",
@@ -108,7 +112,7 @@ describe("statusChecker", () => {
             service: "customers-v1",
             branch: "master",
             buildNumber: "4",
-            triggeredBy: "james",
+            triggeredBy: user,
           },
           jobDetails: {
             key: "API1-4",
@@ -137,7 +141,7 @@ describe("statusChecker", () => {
             branch: "master",
             buildNumber: "4",
             environment: "test",
-            triggeredBy: "james",
+            triggeredBy: user,
           },
           jobDetails: {
             key: "123",
@@ -160,7 +164,7 @@ describe("statusChecker", () => {
             branch: "master",
             buildNumber: "4",
             environment: "test",
-            triggeredBy: "james",
+            triggeredBy: user,
           },
           jobDetails: {
             key: "123",
@@ -179,7 +183,7 @@ describe("statusChecker", () => {
             service: "customers-v1",
             release: "1.0.0",
             environment: "test",
-            triggeredBy: "james",
+            triggeredBy: user,
           },
           jobDetails: {
             key: "123",
@@ -201,7 +205,7 @@ describe("statusChecker", () => {
             service: "customers-v1",
             release: "1.0.0",
             environment: "test",
-            triggeredBy: "james",
+            triggeredBy: user,
           },
           jobDetails: {
             key: "123",

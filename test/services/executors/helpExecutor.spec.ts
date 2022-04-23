@@ -3,6 +3,13 @@ import { executeHelpCommand } from "../../../src/functions/services/executors/he
 
 describe("helpExecutor", () => {
   it("help text", async () => {
-    console.log(await executeHelpCommand(new HelpAction("james")));
+    console.log(
+      await executeHelpCommand(
+        new HelpAction("help", {
+          id: "1sdjckoli12",
+          name: "james",
+        })
+      )
+    );
   });
 });

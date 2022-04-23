@@ -1,7 +1,12 @@
 import { CheckerInputType } from "../../src/functions/api/handlers/statusChecker";
+import { TeamsUser } from "../../src/functions/models/teams";
 import { getCheckerInput } from "../../src/functions/services/stepFunctionService";
 
 process.env.STATUS_CHECKER_ARN = "test-arn";
+const user: TeamsUser = {
+  id: "1sdjckoli12",
+  name: "james",
+};
 
 describe("stepFunctions", () => {
   const buildInput = {
@@ -11,7 +16,7 @@ describe("stepFunctions", () => {
     service: "customers-v1",
     branch: "master",
     buildNumber: "4",
-    triggeredBy: "james",
+    triggeredBy: user,
   };
   const deployBuildInput = {
     type: CheckerInputType.DEPLOY_BUILD,
@@ -21,7 +26,7 @@ describe("stepFunctions", () => {
     branch: "master",
     buildNumber: "4",
     environment: "test",
-    triggeredBy: "james",
+    triggeredBy: user,
   };
   const deployReleaseInput = {
     type: CheckerInputType.DEPLOY_RELEASE,
@@ -30,7 +35,7 @@ describe("stepFunctions", () => {
     service: "customers-v1",
     release: "1.0.0",
     environment: "test",
-    triggeredBy: "james",
+    triggeredBy: user,
   };
   const testCases = [
     {

@@ -1,30 +1,36 @@
 import { ActionName } from "../../src/functions/models/actions";
+import { TeamsUser } from "../../src/functions/models/teams";
 import { CommandParser } from "../../src/functions/services/commandParser";
+
+const user: TeamsUser = {
+  id: "1sdjckoli12",
+  name: "james",
+};
 
 describe("parseCommand", () => {
   const testCases = [
     {
       input: {
         command: "build -s customers-v1 -b master",
-        triggeredBy: "james",
+        triggeredBy: user,
       },
       action: {
         actionName: ActionName.BUILD,
         service: "customers-v1",
         branch: "master",
-        triggeredBy: "james",
+        triggeredBy: user,
       },
     },
     {
       input: {
         command: "build -s customers-v1 -b master",
-        triggeredBy: "james",
+        triggeredBy: user,
       },
       action: {
         actionName: ActionName.BUILD,
         service: "customers-v1",
         branch: "master",
-        triggeredBy: "james",
+        triggeredBy: user,
       },
     },
   ];

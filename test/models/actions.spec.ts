@@ -14,7 +14,14 @@ import { DeployLatestBuildAction } from "../../src/functions/models/deployLatest
 import { DeployReleaseAction } from "../../src/functions/models/deployReleaseAction";
 import { DeployBuildAction } from "../../src/functions/models/deployBuildAction";
 import { PromoteReleaseAction } from "../../src/functions/models/promoteReleaseAction";
+import { BatchDeployAction } from "../../src/functions/models/batchDeployAction";
+import { TeamsUser } from "../../src/functions/models/teams";
 import { ReleaseAction } from "../../src/functions/models/releaseAction";
+
+const user: TeamsUser = {
+  id: "1sdjckoli12",
+  name: "james",
+};
 
 describe("actions", () => {
   describe("BuildAction", () => {
@@ -35,7 +42,7 @@ Options:
           actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -44,7 +51,7 @@ Options:
           actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -53,7 +60,7 @@ Options:
           actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -62,7 +69,7 @@ Options:
           actionName: ActionName.BUILD,
           service: "customer-service",
           branch: "master",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -97,7 +104,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new BuildAction(testCase.command, "james");
+          const actualAction = new BuildAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -108,9 +115,9 @@ Options:
 
   describe("ListPlansAction", () => {
     it("create list plans action correctly", async () => {
-      expect(new ListPlansAction("james")).toEqual({
+      expect(new ListPlansAction("list-plans", user)).toEqual({
         actionName: ActionName.LIST_PLANS,
-        triggeredBy: "james",
+        triggeredBy: user,
       });
     });
   });
@@ -130,7 +137,7 @@ Options:
         expectedAction: {
           actionName: ActionName.LIST_BRANCHES,
           planName: "customers-v1",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -138,7 +145,7 @@ Options:
         expectedAction: {
           actionName: ActionName.LIST_BRANCHES,
           planName: "customers-v1",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -173,10 +180,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ListBranchesAction(
-            testCase.command,
-            "james"
-          );
+          const actualAction = new ListBranchesAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -202,7 +206,7 @@ Options:
           actionName: ActionName.LIST_BUILDS,
           planName: "customers-v1",
           branchName: "release-1.0.0",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -211,7 +215,7 @@ Options:
           actionName: ActionName.LIST_BUILDS,
           planName: "customers-v1",
           branchName: "release-1.0.0",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -246,7 +250,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ListBuildsAction(testCase.command, "james");
+          const actualAction = new ListBuildsAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -270,7 +274,7 @@ Options:
         expectedAction: {
           actionName: ActionName.DESC_BUILD,
           build: "API-CJI-2",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -278,7 +282,7 @@ Options:
         expectedAction: {
           actionName: ActionName.DESC_BUILD,
           build: "API-CJI-2",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -286,7 +290,7 @@ Options:
         expectedAction: {
           actionName: ActionName.DESC_BUILD,
           build: "API-CJI-2",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -314,7 +318,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new DescBuildAction(testCase.command, "james");
+          const actualAction = new DescBuildAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -340,7 +344,7 @@ Options:
           actionName: ActionName.CREATE_BRANCH,
           planName: "customers-v1",
           vscBranch: "dev",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -349,7 +353,7 @@ Options:
           actionName: ActionName.CREATE_BRANCH,
           planName: "customers-v1",
           vscBranch: "dev",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -377,10 +381,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new CreateBranchAction(
-            testCase.command,
-            "james"
-          );
+          const actualAction = new CreateBranchAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -391,9 +392,9 @@ Options:
 
   describe("ListProjectsAction", () => {
     it("create list projects action correctly", async () => {
-      expect(new ListDeploymentProjectsAction("james")).toEqual({
+      expect(new ListDeploymentProjectsAction("list-projects", user)).toEqual({
         actionName: ActionName.LIST_DEPLOY_PROJECTS,
-        triggeredBy: "james",
+        triggeredBy: user,
       });
     });
   });
@@ -413,7 +414,7 @@ Options:
         expectedAction: {
           actionName: ActionName.LIST_ENVS,
           deploymentProject: "customers-v1",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -421,7 +422,7 @@ Options:
         expectedAction: {
           actionName: ActionName.LIST_ENVS,
           deploymentProject: "customers-v1",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -451,7 +452,7 @@ Options:
         try {
           const actualAction = new ListEnvironmentsAction(
             testCase.command,
-            "james"
+            user
           );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
@@ -478,7 +479,7 @@ Options:
           actionName: ActionName.LIST_RELEASES,
           deploymentProject: "customers-v1",
           planBranch: "master",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -487,7 +488,7 @@ Options:
           actionName: ActionName.LIST_RELEASES,
           deploymentProject: "customers-v1",
           planBranch: "master",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -515,10 +516,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ListReleasesAction(
-            testCase.command,
-            "james"
-          );
+          const actualAction = new ListReleasesAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -544,7 +542,7 @@ Options:
           actionName: ActionName.LIST_DEPLOYS,
           deploymentProject: "customers-v1",
           env: "test",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -553,7 +551,7 @@ Options:
           actionName: ActionName.LIST_DEPLOYS,
           deploymentProject: "customers-v1",
           env: "test",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -581,7 +579,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ListDeploysAction(testCase.command, "james");
+          const actualAction = new ListDeploysAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -609,7 +607,7 @@ Options:
           deploymentProject: "customers-v1",
           buildKey: "API-3",
           releaseName: "v1.0.0",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -619,7 +617,7 @@ Options:
           deploymentProject: "customers-v1",
           buildKey: "API-3",
           releaseName: "v1.0.0",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -647,10 +645,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new CreateReleaseAction(
-            testCase.command,
-            "james"
-          );
+          const actualAction = new CreateReleaseAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -678,7 +673,7 @@ Options:
           service: "customers-v1",
           branch: "master",
           env: "test",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -688,7 +683,7 @@ Options:
           service: "customers-v1",
           branch: "master",
           env: "test",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -711,7 +706,7 @@ Options:
         try {
           const actualAction = new DeployLatestBuildAction(
             testCase.command,
-            "james"
+            user
           );
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
@@ -742,7 +737,7 @@ Options:
           services: [["customers-v1", "accounts-v1"], ["transactions-v1"]],
           branch: "master",
           env: "test",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
         error: undefined,
       },
@@ -758,7 +753,7 @@ Options:
           ],
           branch: "master",
           env: "test",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
         error: undefined,
       },
@@ -769,7 +764,7 @@ Options:
           services: [["customers-v1", "accounts-v1"]],
           branch: "master",
           env: "test",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
         error: undefined,
       },
@@ -777,7 +772,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new ReleaseAction(testCase.command, "james");
+          const actualAction = new ReleaseAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -805,7 +800,7 @@ Options:
           service: "customers-v1",
           env: "test",
           releaseName: "v1.0.0",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -815,7 +810,7 @@ Options:
           service: "customers-v1",
           env: "test",
           releaseName: "v1.0.0",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -836,10 +831,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new DeployReleaseAction(
-            testCase.command,
-            "james"
-          );
+          const actualAction = new DeployReleaseAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -867,7 +859,7 @@ Options:
           service: "customers-v1",
           env: "test",
           buildKey: "API-3",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -877,7 +869,7 @@ Options:
           service: "customers-v1",
           env: "test",
           buildKey: "API-3",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -898,7 +890,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new DeployBuildAction(testCase.command, "james");
+          const actualAction = new DeployBuildAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
@@ -926,7 +918,7 @@ Options:
           service: "customers-v1",
           sourceEnv: "test",
           targetEnv: "uat",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -936,7 +928,7 @@ Options:
           service: "customers-v1",
           sourceEnv: "test",
           targetEnv: "uat",
-          triggeredBy: "james",
+          triggeredBy: user,
         },
       },
       {
@@ -957,10 +949,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new PromoteReleaseAction(
-            testCase.command,
-            "james"
-          );
+          const actualAction = new PromoteReleaseAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);
