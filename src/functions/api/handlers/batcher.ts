@@ -20,6 +20,7 @@ import {
   sendAllDeploysNotification,
   sendBuildNotification,
   sendDeployBuildNotification,
+  sendReleaseFailedNotification,
 } from "../../services/notificationService";
 import { SingleCommand } from "../../services/stepFunctionService";
 import { getJobPageUrl, JobNotFinished } from "./statusChecker";
@@ -80,6 +81,7 @@ export const notifySingle = async (event: any, context: any): Promise<any> => {
     try {
       errorMessage = JSON.parse(event.error?.Cause)?.errorMessage;
     } catch (err: any) {
+      errorMessage = event.error?.Cause;
       console.log(`failed to parse error cause: ${event.error?.Cause}`);
     }
     if (event.environment) {
@@ -157,6 +159,21 @@ export const notifyAll = async (event: any, context: any): Promise<any> => {
 
 export const notifyRelease = async (event: any, context: any): Promise<any> => {
   console.log(`notifyRelease: ${JSON.stringify(event)}`);
+  if (event.error?.Cause) {
+    let errorMessage = undefined;
+    try {
+      errorMessage = JSON.parse(event.error?.Cause)?.errorMessage;
+    } catch (err: any) {
+      errorMessage = event.error?.Cause;
+      console.log(`failed to parse error cause: ${event.error?.Cause}`);
+    }
+    await sendReleaseFailedNotification(
+      errorMessage,
+      event.batches[0].commands[0].triggeredBy
+    );
+    return;
+  }
+
   const firstCommand: SingleCommand = event[0][0];
   const input: BatchNotificationInput = {
     services: event.flat().map((c: any) => ({

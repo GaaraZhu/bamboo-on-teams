@@ -207,6 +207,36 @@ const generateSectionFacts = (input: BatchNotificationInput): string => {
   return sectionFacts.substring(0, sectionFacts.length - 1);
 };
 
+export const sendReleaseFailedNotification = async (
+  errorMessage: string,
+  triggeredBy: TeamsUser
+): Promise<void> => {
+  const title =
+    "Bamboo release job finished with status: <span style='color:red;'>FAILED</span>";
+  const notification = `{
+        "@type": "MessageCard",
+        "@context": "http://schema.org/extensions",
+        "themeColor": "0076D7",
+        "summary": "${title}",
+        "sections": [{
+            "activityTitle": "${title}",
+            "activitySubtitle": "triggered by ${triggeredBy.name}",
+            "activityImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCOVOR5MOpUL9zfdnwsdduHKAEWtmwFG5PNpt5r442D6QMbVjmjm25n8_f_uRhl0kFWLg",
+            "facts": [{
+              "name": "error",
+              "value": "${errorMessage}"
+          }],
+            "markdown": true
+        }]
+    }`;
+  const url = getConfig().notificationURL;
+  await axiosPost(url, notification, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 export const sendDeployReleaseNotification = async (
   deploy: Deploy,
   service: string,
