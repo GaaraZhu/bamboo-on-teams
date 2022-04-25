@@ -46,32 +46,65 @@ describe("utils", () => {
     const testCases = [
       {
         env: "prod",
-        config: '{"prod": {"enabled": true}}',
+        config: '{"prod": {"enabled": true, "allowedUserIds": ["user123", "user234"]}}',
+        currentUser: {
+          id: "user123",
+          name: "jerry",
+        },
         errorMessage: undefined,
       },
       {
         env: "prod",
+        config: '{"prod": {"enabled": true, "allowedUserIds": ["user234"]}}',
+        currentUser: {
+          id: "user123",
+          name: "jerry",
+        },
+        errorMessage: "Current user is not allowed to perform this action in Production environment.",
+      },
+      {
+        env: "prod",
         config: '{"prod": {"enabled": false}}',
-        errorMessage: "Operation is not allowed for production environment",
+        currentUser: {
+          id: "user123",
+          name: "jerry",
+        },
+        errorMessage: "Production environment is disabled.",
       },
       {
         env: "prod",
         config: "{}",
-        errorMessage: "Operation is not allowed for production environment",
+        currentUser: {
+          id: "user123",
+          name: "jerry",
+        },
+        errorMessage: "Production environment is disabled.",
       },
       {
         env: "test",
-        config: '{"prod": {"enabled": true}}',
+        config: '{"prod": {"enabled": true, "allowedUserIds": []}}',
+        currentUser: {
+          id: "user123",
+          name: "jerry",
+        },
         errorMessage: undefined,
       },
       {
         env: "test",
         config: '{"prod": {"enabled": false}}',
+        currentUser: {
+          id: "user123",
+          name: "jerry",
+        },
         errorMessage: undefined,
       },
       {
         env: "test",
         config: "{}",
+        currentUser: {
+          id: "user123",
+          name: "jerry",
+        },
         errorMessage: undefined,
       },
     ];
@@ -80,7 +113,7 @@ describe("utils", () => {
       it(`test case: ${JSON.stringify(testCase)}`, async () => {
         process.env.APPLICATION_CONFIG = testCase.config;
         try {
-          expect(prodEnvCheck(testCase.env));
+          expect(prodEnvCheck(testCase.env, testCase.currentUser));
         } catch (err: any) {
           expect(err.message).toEqual(testCase.errorMessage);
         }

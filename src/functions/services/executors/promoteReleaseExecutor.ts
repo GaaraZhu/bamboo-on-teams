@@ -11,7 +11,7 @@ export const executePromoteReleaseCommand = async (
   action: PromoteReleaseAction
 ): Promise<any> => {
   // 1. Prod environment availablity check
-  prodEnvCheck(action.targetEnv);
+  prodEnvCheck(action.targetEnv, action.triggeredBy);
 
   // 2. validate incoming deployment project names
   const projects = await listDeploymentProjects();

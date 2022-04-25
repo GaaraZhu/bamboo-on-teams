@@ -18,7 +18,7 @@ export const executeDeployBuildCommand = async (
   action: DeployBuildAction
 ): Promise<any> => {
   // 1. check prod environment availability
-  prodEnvCheck(action.env);
+  prodEnvCheck(action.env, action.triggeredBy);
 
   // 2. get the build
   const build = await getBuild(action.buildKey);

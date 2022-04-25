@@ -1,7 +1,6 @@
 import { InvalidArgumentError } from "commander";
 import { TeamsUser } from "./models/teams";
 import { getConfig } from "./services/config";
-import { Build, getLatestBuild } from "./services/executors/descBuildExecutor";
 import { Operations } from "./services/executors/listEnvironmentsExecutor";
 
 export type Class<T> = {
@@ -38,27 +37,26 @@ export const fallbackToHTML = (message: string): string => {
   return result;
 };
 
-export const prodEnvCheck = (env: string): void => {
-  if (isProdEnv(env) && !getConfig().prod?.enabled) {
+export const prodEnvCheck = (env: string, currentUser: TeamsUser): void => {
+  if (!isProdEnv(env)) {
+    return;
+  }
+
+  if (!getConfig().prod?.enabled) {
     throw {
       status: 400,
-      message: "Operation is not allowed for production environment",
+      message: "Production environment is disabled.",
     };
   }
-};
 
-export const allowedUserIdCheck = async (
-  currentUser: TeamsUser
-): Promise<void> => {
-  const allowedUserIds = getConfig().prod?.allowedUserIds;
   if (
-    !allowedUserIds?.some(
-      (id) => id.toUpperCase().trim() === currentUser.id.toUpperCase().trim()
+    !getConfig().prod?.allowedUserIds.some(
+      (userId) => userId.toUpperCase() === currentUser.id.toUpperCase()
     )
   ) {
     throw {
       status: 400,
-      message: "Operation is not allowed for current user",
+      message: "Current user is not allowed to perform this action.",
     };
   }
 };

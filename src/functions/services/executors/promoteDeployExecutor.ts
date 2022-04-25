@@ -21,7 +21,7 @@ export const executePromoteDeployCommand = async (
   action: PromoteDeployAction,
   isBatch = false
 ): Promise<any> => {
-  prodEnvCheck(action.targetEnv);
+  prodEnvCheck(action.targetEnv, action.triggeredBy);
   const project = await getDeploymentProject(action.service);
   const sourceEnv = await getEnvironment(project.id, action.sourceEnv);
   viewOperationCheck(sourceEnv.operations);

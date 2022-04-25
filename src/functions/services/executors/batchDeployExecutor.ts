@@ -10,7 +10,7 @@ import { prodEnvCheck } from "../../utils";
 export const executeBatchDeployCommand = async (
   action: BatchDeployAction
 ): Promise<any> => {
-  prodEnvCheck(action.env);
+  prodEnvCheck(action.env, action.triggeredBy);
 
   const projects = await listDeploymentProjects();
 

@@ -2,7 +2,6 @@ import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { ListEnvironmentsAction } from "../../models/listEnvironmentsAction";
 import { axiosGet } from "../axiosService";
 import { getConfig } from "../config";
-import { isProdEnv } from "../../utils";
 
 export const executeListEnvironmentsCommand = async (
   action: ListEnvironmentsAction
@@ -49,7 +48,7 @@ const listEnvironments = async (projectId: string): Promise<Env[]> => {
   });
 
   return data.environments
-    .filter((e: any) => e.configurationState === "TASKED" && !isProdEnv(e.name))
+    .filter((e: any) => e.configurationState === "TASKED")
     .map((e: any) => ({
       id: e.id,
       name: e.name,

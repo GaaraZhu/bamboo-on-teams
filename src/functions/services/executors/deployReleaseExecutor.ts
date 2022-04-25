@@ -14,7 +14,7 @@ import { getConfig } from "../config";
 export const executeDeployReleaseCommand = async (
   action: DeployReleaseAction
 ): Promise<any> => {
-  prodEnvCheck(action.env);
+  prodEnvCheck(action.env, action.triggeredBy);
 
   const project = await getDeploymentProject(action.service);
   const env = await getEnvironment(project.id, action.env);

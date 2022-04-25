@@ -21,7 +21,7 @@ export const executeDeployLatestCommand = async (
   isBatch = false
 ): Promise<any> => {
   // 1. check environment availability
-  prodEnvCheck(action.env);
+  prodEnvCheck(action.env, action.triggeredBy);
 
   // 2. get the deployment project by name
   const project = await getDeploymentProject(action.service);
