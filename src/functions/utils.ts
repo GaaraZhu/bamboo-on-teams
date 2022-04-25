@@ -39,7 +39,7 @@ export const fallbackToHTML = (message: string): string => {
 };
 
 export const prodEnvCheck = (env: string): void => {
-  if (isProdEnv(env)) {
+  if (isProdEnv(env) && (!getConfig().prod?.enabled)) {
     throw {
       status: 400,
       message: "Operation is not allowed for production environment",

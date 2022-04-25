@@ -1,6 +1,7 @@
 import {
   extractCommandFromTeamsMessage,
   fallbackToHTML,
+  prodEnvCheck,
   trim,
 } from "../src/functions/utils";
 
@@ -33,6 +34,52 @@ describe("utils", () => {
       it("Input: " + testCase.input, async () => {
         try {
           expect(trim(testCase.input)).toEqual(testCase.output);
+        } catch (err: any) {
+          expect(err.message).toEqual(testCase.errorMessage);
+        }
+      });
+    });
+  });
+
+  describe("prodEnvCheck", () => {
+    const testCases = [
+      {
+        env: "prod",
+        config: '{"prod": {"enabled": true}}',
+        errorMessage: undefined,
+      },
+      {
+        env: "prod",
+        config: '{"prod": {"enabled": false}}',
+        errorMessage: "Operation is not allowed for production environment",
+      },
+      {
+        env: "prod",
+        config: '{}',
+        errorMessage: "Operation is not allowed for production environment",
+      },
+      {
+        env: "test",
+        config: '{"prod": {"enabled": true}}',
+        errorMessage: undefined,
+      },
+      {
+        env: "test",
+        config: '{"prod": {"enabled": false}}',
+        errorMessage: undefined,
+      },
+      {
+        env: "test",
+        config: '{}',
+        errorMessage: undefined,
+      },
+    ];
+
+    testCases.forEach((testCase) => {
+      it(`test case: ${JSON.stringify(testCase)}`, async () => {
+        process.env.APPLICATION_CONFIG = testCase.config;
+        try {
+          expect(prodEnvCheck(testCase.env));
         } catch (err: any) {
           expect(err.message).toEqual(testCase.errorMessage);
         }

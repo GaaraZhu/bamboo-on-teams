@@ -4,6 +4,7 @@ export interface Config {
   hmacToken: string;
   notificationURL: string;
   prod?: {
+    enabled: boolean;
     allowedUserIds: string[];
   };
 }
