@@ -15,7 +15,7 @@ export class PromoteReleaseAction implements Action {
     const promoteReleaseAction = new Command()
       .name(this.actionName)
       .description(
-        "Promote the deployment from one environment to another in sequential batches."
+        "Promote the release deployments from one environment to another in sequential batches."
       )
       .usage("[options]")
       .requiredOption(

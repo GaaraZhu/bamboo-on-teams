@@ -899,7 +899,7 @@ Options:
     });
   });
 
-  describe("PromoteReleaseAction", () => {
+  describe("PromoteDeployAction", () => {
     const helpMessage = `Usage: promote-deploy [options]
 
 Promote the deployment from one environment to another.

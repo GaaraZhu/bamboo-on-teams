@@ -279,6 +279,17 @@ Options:
   -h, --help                 display help for command
 ```
 
+### promote-release ###
+```
+Usage: promote-release [options]
+Promote the release deployments from one environment to another in sequential batches.
+Options:
+  -s, --services <services>      sequential service name batches separated by semi-collon and with comma to separate service names in each batch, e.g. customers-v1,accounts-v1;transactions-v1
+  -se, --source-env <sourceEnv>  source environment name, e.g. dev
+  -te, --target-env <targetEnv>  target environment name, e.g. test
+  -h, --help                     display help for command
+```
+
 ## Contribution ##
 Your contributions are always welcome!
 
