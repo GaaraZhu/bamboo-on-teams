@@ -51,7 +51,6 @@ package:
   excludeDevDependencies: false
   patterns:
     - '!node_modules/**'
-  individually: true
 
 resources:
   Resources:
