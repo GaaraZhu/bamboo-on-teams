@@ -33,6 +33,7 @@ export const handleCommand = async (
         ActionName.BATCH_DEPLOY,
         ActionName.BATCH_BUILD,
         ActionName.PROMOTE_DEPLOY,
+        ActionName.PROMOTE_RELEASE,
         ActionName.RELEASE,
       ].includes(action.actionName)
     ) {

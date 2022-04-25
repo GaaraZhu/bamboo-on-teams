@@ -41,6 +41,7 @@ describe("utils", () => {
     });
   });
 
+  /* eslint-disable */
   describe("prodEnvCheck", () => {
     const testCases = [
       {
@@ -55,7 +56,7 @@ describe("utils", () => {
       },
       {
         env: "prod",
-        config: '{}',
+        config: "{}",
         errorMessage: "Operation is not allowed for production environment",
       },
       {
@@ -70,7 +71,7 @@ describe("utils", () => {
       },
       {
         env: "test",
-        config: '{}',
+        config: "{}",
         errorMessage: undefined,
       },
     ];

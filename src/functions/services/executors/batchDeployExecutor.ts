@@ -38,7 +38,10 @@ export const executeBatchDeployCommand = async (
       service: service,
       branch: action.branch,
       environment: action.env,
-      triggeredBy: action.triggeredBy,
+      triggeredBy: {
+        id: action.triggeredBy.id,
+        name: action.triggeredBy.name,
+      },
     })),
   };
   await startBatcherExecution(input);

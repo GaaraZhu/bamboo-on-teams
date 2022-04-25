@@ -2,23 +2,25 @@ import { Action, ActionName } from "./actions";
 import { Command, CommanderError } from "commander";
 import { trim } from "../utils";
 import { TeamsUser } from "./teams";
-import { executePromoteDeployCommand } from "../services/executors/promoteDeployExecutor";
+import { executePromoteReleaseCommand } from "../services/executors/promoteReleaseExecutor";
 
-export class PromoteDeployAction implements Action {
-  readonly actionName = ActionName.PROMOTE_DEPLOY;
+export class PromoteReleaseAction implements Action {
+  readonly actionName = ActionName.PROMOTE_RELEASE;
   readonly triggeredBy: TeamsUser;
-  service: string;
+  services: string[][];
   sourceEnv: string;
   targetEnv: string;
 
   constructor(command: string, triggeredBy: TeamsUser) {
-    const promoteDeployCommand = new Command()
+    const promoteReleaseAction = new Command()
       .name(this.actionName)
+      .description(
+        "Promote the deployment from one environment to another in sequential batches."
+      )
       .usage("[options]")
-      .description("Promote the deployment from one environment to another.")
       .requiredOption(
-        "-s, --service <service>",
-        "service name, e.g. customers-v1",
+        "-s, --services <services>",
+        "sequential service name batches separated by semi-collon and with comma to separate service names in each batch, e.g. customers-v1,accounts-v1;transactions-v1",
         trim
       )
       .requiredOption(
@@ -31,26 +33,27 @@ export class PromoteDeployAction implements Action {
         "target environment name, e.g. test",
         trim
       );
-    promoteDeployCommand.exitOverride((_: CommanderError) => {
+    promoteReleaseAction.exitOverride((_: CommanderError) => {
       throw {
         status: 400,
-        message: promoteDeployCommand.helpInformation(),
+        message: promoteReleaseAction.helpInformation(),
       };
     }); //to avoid process.exit
 
     // The default expectation is that the arguments are from node and have the application as argv[0]
     // and the script being run in argv[1], with user parameters after that.
     const commandInput = [".", ...command.split(" ")];
-    promoteDeployCommand.parse(commandInput);
-    const options = promoteDeployCommand.opts();
-
-    this.service = options.service;
-    this.sourceEnv = options.sourceEnv;
-    this.targetEnv = options.targetEnv;
+    promoteReleaseAction.parse(commandInput);
+    this.services = promoteReleaseAction
+      .opts()
+      .services.split(";")
+      ?.map((s: string) => s.split(","));
+    this.sourceEnv = promoteReleaseAction.opts().sourceEnv;
+    this.targetEnv = promoteReleaseAction.opts().targetEnv;
     this.triggeredBy = triggeredBy;
   }
 
   async process(): Promise<any> {
-    return await executePromoteDeployCommand(this);
+    return await executePromoteReleaseCommand(this);
   }
 }

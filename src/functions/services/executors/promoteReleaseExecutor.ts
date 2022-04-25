@@ -1,84 +1,50 @@
-import { getEnvironment } from "./listEnvironmentsExecutor";
-import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
-import { PromoteDeployAction } from "../../models/promoteDeployAction";
-import { listDeploys } from "./listDeploysExecutor";
-import { deployRelease } from "./deployReleaseExecutor";
-import { axiosPost } from "../axiosService";
-import { DeployResult } from "./deployLatestBuildExecutor";
+import { ActionName } from "../../models/actions";
+import { PromoteReleaseAction } from "../../models/promoteReleaseAction";
+import { prodEnvCheck } from "../../utils";
 import {
-  CheckerInputType,
-  DeployReleaseJobCheckerInput,
-} from "../../api/handlers/statusChecker";
-import { startCheckerExecution } from "../stepFunctionService";
-import {
-  executeOperationCheck,
-  prodEnvCheck,
-  viewOperationCheck,
-} from "../../utils";
-import { getConfig } from "../config";
+  ReleaserExecutionInput,
+  startReleaserExecution,
+} from "../stepFunctionService";
+import { listDeploymentProjects } from "./listDeploymentProjectsExecutor";
 
-export const executePromoteDeployCommand = async (
-  action: PromoteDeployAction
+export const executePromoteReleaseCommand = async (
+  action: PromoteReleaseAction
 ): Promise<any> => {
+  // 1. Prod environment availablity check
   prodEnvCheck(action.targetEnv);
-  const project = await getDeploymentProject(action.service);
-  const sourceEnv = await getEnvironment(project.id, action.sourceEnv);
-  viewOperationCheck(sourceEnv.operations);
-  const lastSuccessDeploy = (await listDeploys(sourceEnv.id))?.find(
-    (d: any) => d.deploymentState === "SUCCESS"
-  );
-  if (!lastSuccessDeploy || !lastSuccessDeploy.release?.id) {
+
+  // 2. validate incoming deployment project names
+  const projects = await listDeploymentProjects();
+  const unknownServices: string[] = [];
+  action.services.flat().forEach((service) => {
+    const project = projects.find(
+      (p: any) => p.name.toUpperCase() === service.toUpperCase()
+    );
+    if (!project) {
+      unknownServices.push(service);
+    }
+  });
+  if (unknownServices.length > 0) {
     throw {
       status: 400,
-      message: `No success deployment in environment ${action.sourceEnv} to promote`,
+      message: `Unknown project(s) provided ${unknownServices}, please use "search-projects" command to search the project first`,
     };
   }
-  const targetEnv = await getEnvironment(project.id, action.targetEnv);
-  executeOperationCheck(targetEnv.operations);
-  const deployment = await deployRelease(
-    targetEnv.id,
-    lastSuccessDeploy.release.id
-  );
-  const deployResult: DeployResult = {
-    service: action.service,
-    environment: action.targetEnv,
-    build: {
-      release: lastSuccessDeploy.release.name,
-    },
-    deployment: {
-      id: deployment.deploymentResultId,
-      link: deployment.link.href,
-    },
+
+  // 3. start releaser step function
+  const input: ReleaserExecutionInput = {
+    batches: action.services.map((services: string[]) => ({
+      commands: services.map((service) => ({
+        command: `${ActionName.PROMOTE_DEPLOY} -s ${service} -se ${action.sourceEnv} -te ${action.targetEnv}`,
+        service: service,
+        sourceEnv: action.sourceEnv,
+        targetEnv: action.targetEnv,
+        triggeredBy: {
+          id: action.triggeredBy.id,
+          name: action.triggeredBy.name,
+        },
+      })),
+    })),
   };
-
-  // start async job status checker and push the result to MS Teams
-  const checkerInput: DeployReleaseJobCheckerInput = {
-    type: CheckerInputType.DEPLOY_RELEASE,
-    resultKey: deployment.deploymentResultId,
-    resultUrl: deployment.link.href,
-    service: action.service,
-    release: lastSuccessDeploy.release.name,
-    environment: action.targetEnv,
-    triggeredBy: action.triggeredBy,
-  };
-  await startCheckerExecution(deployment.deploymentResultId, checkerInput);
-
-  return deployResult;
-};
-
-export const deploy = async (
-  envId: string,
-  releaseId: string
-): Promise<any> => {
-  const url = `https://${
-    getConfig().bambooHostUrl
-  }/rest/api/latest/queue/deployment/?environmentId=${envId}&versionId=${releaseId}`;
-  const { data } = await axiosPost(url, undefined, {
-    headers: {
-      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  return data;
+  await startReleaserExecution(input);
 };

@@ -21,6 +21,7 @@ import { BatchDeployAction } from "./batchDeployAction";
 import { BatchBuildAction } from "./batchBuildAction";
 import { ReleaseAction } from "./releaseAction";
 import { TeamsUser } from "./teams";
+import { PromoteReleaseAction } from "./promoteReleaseAction";
 
 export enum ActionName {
   HELP = "help",
@@ -40,6 +41,7 @@ export enum ActionName {
   LIST_ENVS = "list-envs",
   LIST_DEPLOYS = "list-deploys",
   PROMOTE_DEPLOY = "promote-deploy",
+  PROMOTE_RELEASE = "promote-release",
   CREATE_BRANCH = "create-branch",
   RELEASE = "release",
   SEARCH_PLANS = "search-plans",
@@ -85,6 +87,7 @@ export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.LIST_PLANS]: ListPlansAction,
   [ActionName.LIST_RELEASES]: ListReleasesAction,
   [ActionName.PROMOTE_DEPLOY]: PromoteDeployAction,
+  [ActionName.PROMOTE_RELEASE]: PromoteReleaseAction,
   [ActionName.CREATE_BRANCH]: CreateBranchAction,
   [ActionName.SEARCH_PLANS]: SearchPlansAction,
   [ActionName.SEARCH_PROJECTS]: SearchProjectsAction,
@@ -112,6 +115,7 @@ export const actionGroupLookup: Record<JobType, ActionName[]> = {
     ActionName.BATCH_DEPLOY,
     ActionName.RELEASE,
     ActionName.PROMOTE_DEPLOY,
+    ActionName.PROMOTE_RELEASE,
   ],
   [JobType.OTHERS]: [ActionName.HELP],
 };

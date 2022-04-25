@@ -72,11 +72,31 @@ export interface BatcherExecutionInput {
   commands: SingleCommand[]; // wrap the command in a JSON object so that the stepfunction Map state can pass the result through `ResultPath`
 }
 
-export interface SingleCommand {
+export type SingleCommand =
+  | BuildCommand
+  | DeployLatestCommand
+  | PromoteDeployCommand;
+
+export interface BuildCommand {
   command: string;
   service: string;
   branch: string;
-  environment?: string;
+  triggeredBy: TeamsUser;
+}
+
+export interface DeployLatestCommand {
+  command: string;
+  service: string;
+  branch: string;
+  environment: string;
+  triggeredBy: TeamsUser;
+}
+
+export interface PromoteDeployCommand {
+  command: string;
+  service: string;
+  sourceEnv: string;
+  targetEnv: string;
   triggeredBy: TeamsUser;
 }
 

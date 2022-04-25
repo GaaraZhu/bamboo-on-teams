@@ -1,5 +1,6 @@
 import { BuildAction } from "../../models/buildAction";
 import { DeployLatestBuildAction } from "../../models/deployLatestBuildAction";
+import { PromoteDeployAction } from "../../models/promoteDeployAction";
 import { CommandParser } from "../../services/commandParser";
 import {
   BuildResult,
@@ -14,6 +15,7 @@ import {
   Deploy,
   getDeploy,
 } from "../../services/executors/listDeploysExecutor";
+import { executePromoteDeployCommand } from "../../services/executors/promoteDeployExecutor";
 import {
   BatchNotificationInput,
   sendAllBuildsNotification,
@@ -22,21 +24,34 @@ import {
   sendDeployBuildNotification,
   sendReleaseFailedNotification,
 } from "../../services/notificationService";
-import { SingleCommand } from "../../services/stepFunctionService";
+import {
+  BuildCommand,
+  DeployLatestCommand,
+  PromoteDeployCommand,
+  SingleCommand,
+} from "../../services/stepFunctionService";
 import { getJobPageUrl, JobNotFinished } from "./statusChecker";
 
+// execute single task for batch-build, batch-deploy, release or promote-release actions
 export const executeSingle = async (event: any, context: any): Promise<any> => {
   console.log(`executeSingle: ${JSON.stringify(event)}`);
   try {
-    if (event.environment) {
-      // batch deploy operation
+    if (event.targetEnv) {
+      // promote-deploy operation
+      const promoteDeployAction = (await CommandParser.build().parse(
+        event.command,
+        event.triggeredBy
+      )) as PromoteDeployAction;
+      return await executePromoteDeployCommand(promoteDeployAction, true);
+    } else if (event.environment) {
+      // deploy-latest operation
       const deployAction = (await CommandParser.build().parse(
         event.command,
         event.triggeredBy
       )) as DeployLatestBuildAction;
       return await executeDeployLatestCommand(deployAction, true);
     } else {
-      // batch build operation
+      // build operation
       const buildAction = (await CommandParser.build().parse(
         event.command,
         event.triggeredBy
@@ -51,8 +66,8 @@ export const executeSingle = async (event: any, context: any): Promise<any> => {
 
 export const checkSingle = async (event: any, context: any): Promise<any> => {
   console.log(`checkSingle: ${JSON.stringify(event)}`);
-  if (event.environment) {
-    // batch deploy operation
+  if (event.environment || event.targetEnv) {
+    // deploy or promote-deploy operation
     const result: DeployResult = event.triggerResult;
     const deploy = await getDeploy(result.deployment.id);
     if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
@@ -60,7 +75,7 @@ export const checkSingle = async (event: any, context: any): Promise<any> => {
     }
     return deploy;
   } else {
-    // batch build operation
+    // build operation
     const result: BuildResult = event.triggerResult;
     const build = await getBuild(result.buildResultKey);
     if (
@@ -75,7 +90,6 @@ export const checkSingle = async (event: any, context: any): Promise<any> => {
 export const notifySingle = async (event: any, context: any): Promise<any> => {
   console.log(`notifySingle: ${JSON.stringify(event)}`);
   // failure notification
-  const singleDeployCommand = event as SingleCommand;
   if (event.error?.Cause) {
     let errorMessage = undefined;
     try {
@@ -84,23 +98,25 @@ export const notifySingle = async (event: any, context: any): Promise<any> => {
       errorMessage = event.error?.Cause;
       console.log(`failed to parse error cause: ${event.error?.Cause}`);
     }
-    if (event.environment) {
-      // batch deploy operation
+
+    if (event.targetEnv || event.environment) {
+      // promote release operation or batch deploy or release operation
       await sendDeployBuildNotification(
-        singleDeployCommand.service,
-        singleDeployCommand.environment!,
+        event.service,
+        event.targetEnv || event.environment,
         "FAILED",
-        singleDeployCommand.triggeredBy,
+        event.triggeredBy,
         undefined,
         errorMessage
       );
     } else {
       // batch build operation
+      const singleBuildCommand = event as BuildCommand;
       await sendBuildNotification(
-        singleDeployCommand.service,
-        singleDeployCommand.branch,
+        singleBuildCommand.service,
+        singleBuildCommand.branch,
         "FAILED",
-        singleDeployCommand.triggeredBy,
+        singleBuildCommand.triggeredBy,
         undefined,
         errorMessage
       );
@@ -109,15 +125,15 @@ export const notifySingle = async (event: any, context: any): Promise<any> => {
   }
 
   // execution result notification
-  if (event.environment) {
-    // batch deploy operation
+  if (event.targetEnv || event.environment) {
+    // promote release operation
     const result: DeployResult = event.triggerResult;
     const deploy: Deploy = event.target;
     await sendDeployBuildNotification(
-      singleDeployCommand.service,
-      singleDeployCommand.environment!,
+      event.service,
+      event.targetEnv || event.environment,
       deploy.deploymentState,
-      singleDeployCommand.triggeredBy,
+      event.triggeredBy,
       getJobPageUrl(result.deployment.id, false)
     );
   } else {
@@ -125,18 +141,19 @@ export const notifySingle = async (event: any, context: any): Promise<any> => {
     const result: BuildResult = event.triggerResult;
     const build: Build = event.target;
     await sendBuildNotification(
-      singleDeployCommand.service,
-      singleDeployCommand.branch,
+      event.service,
+      event.branch,
       build.buildState,
-      singleDeployCommand.triggeredBy,
+      event.triggeredBy,
       getJobPageUrl(result.buildResultKey, true)
     );
   }
 };
 
+// final notification for batch-build or batch-deploy actions
 export const notifyAll = async (event: any, context: any): Promise<any> => {
   console.log(`notifyAll: ${JSON.stringify(event)}`);
-  const firstCommand: SingleCommand = event[0];
+  const firstCommand = event[0]; // BuildCommand or DeployLatestCommand
   const input: BatchNotificationInput = {
     services: event.map((c: any) => ({
       service: c.service,
@@ -157,6 +174,7 @@ export const notifyAll = async (event: any, context: any): Promise<any> => {
   }
 };
 
+// final notification for release or promote-release actions
 export const notifyRelease = async (event: any, context: any): Promise<any> => {
   console.log(`notifyRelease: ${JSON.stringify(event)}`);
   if (event.error?.Cause) {
@@ -174,18 +192,15 @@ export const notifyRelease = async (event: any, context: any): Promise<any> => {
     return;
   }
 
-  const firstCommand: SingleCommand = event[0][0];
+  const firstCommand = event[0][0]; // DeployLatestCommand or PromoteDeployCommand
   const input: BatchNotificationInput = {
     services: event.flat().map((c: any) => ({
       service: c.service,
-      status: c.error
-        ? "FAILED"
-        : c.target?.buildState || c.target?.deploymentState || "NOT-STARTED",
+      status: c.error ? "FAILED" : c.target?.deploymentState || "NOT-STARTED",
     })),
     branch: firstCommand.branch,
-    environment: firstCommand.environment,
+    environment: firstCommand.targetEnv || firstCommand.environment,
     triggeredBy: firstCommand.triggeredBy,
   };
-  // batch deploy operation
   await sendAllDeploysNotification(input, "Bamboo release job finished");
 };

@@ -34,7 +34,10 @@ export const executeBatchBuildCommand = async (
       command: `${ActionName.BUILD} -s ${service} -b ${action.branch}`,
       service: service,
       branch: action.branch,
-      triggeredBy: action.triggeredBy,
+      triggeredBy: {
+        id: action.triggeredBy.id,
+        name: action.triggeredBy.name,
+      },
     })),
   };
   await startBatcherExecution(input);

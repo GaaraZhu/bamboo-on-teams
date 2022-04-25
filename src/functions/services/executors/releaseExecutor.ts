@@ -10,7 +10,7 @@ import { listDeploymentProjects } from "./listDeploymentProjectsExecutor";
 export const executeReleaseCommand = async (
   action: ReleaseAction
 ): Promise<any> => {
-  // 1. not allowed for Prod environment
+  // 1. Prod environment availablity check
   prodEnvCheck(action.env);
 
   // 2. validate incoming deployment project names
@@ -39,7 +39,10 @@ export const executeReleaseCommand = async (
         service: service,
         branch: action.branch,
         environment: action.env,
-        triggeredBy: action.triggeredBy,
+        triggeredBy: {
+          id: action.triggeredBy.id,
+          name: action.triggeredBy.name,
+        },
       })),
     })),
   };
