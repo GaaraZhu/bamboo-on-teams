@@ -92,7 +92,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * deploy-latest
 * deploy-release
 * deploy-build
-* promote-release
+* promote-deployment
 * batch-deploy
 * release
 
@@ -245,10 +245,10 @@ Options:
   -b, --build-key <buildKey>  bamboo build key, e.g. API-CPV1-30
   -h, --help                  display help for command
 ```
-### promote-release ###
+### promote-deploy ###
 ```
-Usage: promote-release [options]
-Promote the release from one environment to another.
+Usage: promote-deploy [options]
+Promote the deployment from one environment to another.
 Options:
   -s, --service <service>        service name, e.g. customers-v1
   -se, --source-env <sourceEnv>  source environment name, e.g. dev

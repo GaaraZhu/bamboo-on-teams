@@ -13,7 +13,7 @@ import { CreateReleaseAction } from "../../src/functions/models/createReleaseAct
 import { DeployLatestBuildAction } from "../../src/functions/models/deployLatestBuildAction";
 import { DeployReleaseAction } from "../../src/functions/models/deployReleaseAction";
 import { DeployBuildAction } from "../../src/functions/models/deployBuildAction";
-import { PromoteReleaseAction } from "../../src/functions/models/promoteReleaseAction";
+import { PromoteDeployAction } from "../../src/functions/models/promoteDeployAction";
 import { BatchDeployAction } from "../../src/functions/models/batchDeployAction";
 import { TeamsUser } from "../../src/functions/models/teams";
 import { ReleaseAction } from "../../src/functions/models/releaseAction";
@@ -900,9 +900,9 @@ Options:
   });
 
   describe("PromoteReleaseAction", () => {
-    const helpMessage = `Usage: promote-release [options]
+    const helpMessage = `Usage: promote-deploy [options]
 
-Promote the release from one environment to another.
+Promote the deployment from one environment to another.
 
 Options:
   -s, --service <service>        service name, e.g. customers-v1
@@ -912,9 +912,9 @@ Options:
 `;
     const testCases = [
       {
-        command: "promote-release -s customers-v1 -se test -te uat",
+        command: "promote-deploy -s customers-v1 -se test -te uat",
         expectedAction: {
-          actionName: ActionName.PROMOTE_RELEASE,
+          actionName: ActionName.PROMOTE_DEPLOY,
           service: "customers-v1",
           sourceEnv: "test",
           targetEnv: "uat",
@@ -922,9 +922,9 @@ Options:
         },
       },
       {
-        command: "promote-release -scustomers-v1 -se test -te uat",
+        command: "promote-deploy -scustomers-v1 -se test -te uat",
         expectedAction: {
-          actionName: ActionName.PROMOTE_RELEASE,
+          actionName: ActionName.PROMOTE_DEPLOY,
           service: "customers-v1",
           sourceEnv: "test",
           targetEnv: "uat",
@@ -932,14 +932,14 @@ Options:
         },
       },
       {
-        command: "promote-release -s customers-v1",
+        command: "promote-deploy -s customers-v1",
         error: {
           status: 400,
           message: helpMessage,
         },
       },
       {
-        command: "promote-release",
+        command: "promote-deploy",
         error: {
           status: 400,
           message: helpMessage,
@@ -949,7 +949,7 @@ Options:
     testCases.forEach((testCase) => {
       it(testCase.command, async () => {
         try {
-          const actualAction = new PromoteReleaseAction(testCase.command, user);
+          const actualAction = new PromoteDeployAction(testCase.command, user);
           expect(actualAction).toEqual(testCase.expectedAction);
         } catch (err) {
           expect(err).toEqual(testCase.error);

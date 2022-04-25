@@ -1,6 +1,6 @@
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
-import { PromoteReleaseAction } from "../../models/promoteReleaseAction";
+import { PromoteDeployAction } from "../../models/promoteDeployAction";
 import { listDeploys } from "./listDeploysExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { axiosPost } from "../axiosService";
@@ -17,8 +17,8 @@ import {
 } from "../../utils";
 import { getConfig } from "../config";
 
-export const executePromoteReleaseCommand = async (
-  action: PromoteReleaseAction
+export const executePromoteDeployCommand = async (
+  action: PromoteDeployAction
 ): Promise<any> => {
   prodEnvCheck(action.targetEnv);
   const project = await getDeploymentProject(action.service);
