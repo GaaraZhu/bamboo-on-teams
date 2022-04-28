@@ -165,7 +165,7 @@ export const sendAllDeploysNotification = async (
     return;
   }
 
-  const title = messageTitle || "Bamboo batch deploy job finished";
+  const title = `${messageTitle || "Bamboo batch deploy job finished"} in ${input.environment}`;
   const sectionFacts = generateSectionFacts(input);
   const notification = `{
         "@type": "MessageCard",
