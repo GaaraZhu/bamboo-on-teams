@@ -26,9 +26,6 @@ import {
 } from "../../services/notificationService";
 import {
   BuildCommand,
-  DeployLatestCommand,
-  PromoteDeployCommand,
-  SingleCommand,
 } from "../../services/stepFunctionService";
 import { getJobPageUrl, JobNotFinished } from "./statusChecker";
 
@@ -60,7 +57,7 @@ export const executeSingle = async (event: any, context: any): Promise<any> => {
     }
   } catch (err: any) {
     console.log(`executeSingle: ${JSON.stringify(err)}`);
-    throw err.message;
+    throw `${event.service}: ${err.message}`;
   }
 };
 
