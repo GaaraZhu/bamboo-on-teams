@@ -342,7 +342,7 @@ Options:
         command: "create-branch -s customers-v1 -b dev",
         expectedAction: {
           actionName: ActionName.CREATE_BRANCH,
-          planName: "customers-v1",
+          service: "customers-v1",
           vcsBranch: "dev",
           triggeredBy: user,
         },
@@ -351,7 +351,7 @@ Options:
         command: "create-branch -scustomers-v1 -b dev",
         expectedAction: {
           actionName: ActionName.CREATE_BRANCH,
-          planName: "customers-v1",
+          service: "customers-v1",
           vcsBranch: "dev",
           triggeredBy: user,
         },

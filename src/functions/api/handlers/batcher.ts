@@ -122,13 +122,12 @@ export const notifySingle = async (event: any, context: any): Promise<any> => {
         errorMessage
       );
     } else {
-      // batch build operation
-      const singleBuildCommand = event as BuildCommand;
+      // batch build/create-branch operation
       await sendBuildNotification(
-        singleBuildCommand.service,
-        singleBuildCommand.branch,
+        event.service,
+        event.branch || event.target.branch.name,
         "FAILED",
-        singleBuildCommand.triggeredBy,
+        event.triggeredBy,
         undefined,
         errorMessage
       );
@@ -149,15 +148,15 @@ export const notifySingle = async (event: any, context: any): Promise<any> => {
       getJobPageUrl(result.deployment.id, false)
     );
   } else {
-    // batch build operation
+    // batch build/create-branch operation
     const result: BuildResult = event.triggerResult;
     const build: Build = event.target;
     await sendBuildNotification(
       event.service,
-      event.branch,
+      event.branch || event.target.branch.name,
       build.buildState,
       event.triggeredBy,
-      getJobPageUrl(result.buildResultKey, true)
+      getJobPageUrl(build.key, true)
     );
   }
 };
