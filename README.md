@@ -80,7 +80,6 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * desc-build
 * create-branch
 * build
-* batch-build
 
 ### Deploy commands ###
 * list-projects
@@ -92,9 +91,16 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * deploy-latest
 * deploy-release
 * deploy-build
-* promote-deployment
+* promote-deploy
+
+### Batch commands
+* batch-create-branch
+* batch-build
 * batch-deploy
+
+### Release commands
 * release
+* promote-release
 
 ### Other commands ###
 * help
@@ -155,16 +161,6 @@ Options:
   -s, --service <service>  service name, e.g. customers-v1
   -b, --branch <branch>    bamboo branch name, e.g. master
   -h, --help               display help for command
-```
-### batch-build ###
-```
-Usage: batch-build [options]
-Trigger branch build in batches for services.
-Options:
-  -s, --services <services>  service names separated by comma without spaces,
-                             e.g. customers-v1,accounts-v1
-  -b, --branch <branch>      bamboo branch name, e.g. master
-  -h, --help                 display help for command
 ```
 ### list-projects ###
 ```
@@ -255,10 +251,30 @@ Options:
   -te, --target-env <targetEnv>  target environment name, e.g. test
   -h, --help                     display help for command
 ```
+### batch-create-branch ###
+```
+Usage: batch-create-branch [options]
+Batch create branch plans.
+Options:
+  -s, --services <services>              service names separated by comma without spaces,
+                                         e.g. customers-v1,accounts-v1
+  -b, --b, --vcs-branch <vcsBranch>      vcsBranch name, e.g. master
+  -h, --help                             display help for command
+```
+### batch-build ###
+```
+Usage: batch-build [options]
+Batch build services.
+Options:
+  -s, --services <services>  service names separated by comma without spaces,
+                             e.g. customers-v1,accounts-v1
+  -b, --branch <branch>      bamboo branch name, e.g. master
+  -h, --help                 display help for command
+```
 ### batch-deploy ###
 ```
 Usage: batch-deploy [options]
-Deploy services in batch with the latest build in a branch to an environment.
+Batch deploy services.
 Options:
   -s, --services <services>  service names separated by comma without spaces,
                              e.g. customers-v1,accounts-v1
@@ -266,7 +282,6 @@ Options:
   -e, --env <env>            env name, e.g. dev
   -h, --help                 display help for command
 ```
-
 ### release ###
 ```
 Usage: release [options]
@@ -278,7 +293,6 @@ Options:
   -e, --env <env>            env name, e.g. dev
   -h, --help                 display help for command
 ```
-
 ### promote-release ###
 ```
 Usage: promote-release [options]
