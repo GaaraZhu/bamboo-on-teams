@@ -13,7 +13,7 @@ export class BatchBuildAction implements Action {
   constructor(command: string, triggeredBy: TeamsUser) {
     const batchBuildCommand = new Command()
       .name(this.actionName)
-      .description("Trigger branch build in batches for services.")
+      .description("Batch build services.")
       .usage("[options]")
       .requiredOption(
         "-s, --services <services>",

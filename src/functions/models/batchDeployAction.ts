@@ -15,7 +15,7 @@ export class BatchDeployAction implements Action {
     const batchDeployCommand = new Command()
       .name(this.actionName)
       .description(
-        "Deploy services in batches with the latest build in a branch to an environment."
+        "Batch deploy services."
       )
       .usage("[options]")
       .requiredOption(
