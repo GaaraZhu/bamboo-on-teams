@@ -9,29 +9,33 @@ import { startCheckerExecution } from "../stepFunctionService";
 import { getConfig } from "../config";
 
 export const executeCreateBranchCommand = async (
-  action: CreateBranchAction
+  action: CreateBranchAction,
+  isBatch = false
 ): Promise<any> => {
-  const plan = await getPlan(action.planName);
-  const vscBranches = await getAllBranches(plan.key);
-  const vscBranch: string = vscBranches.find(
-    (b: any) => b.toUpperCase() === action.vscBranch.toUpperCase()
+  const plan = await getPlan(action.service);
+  const vcsBranches = await getAllBranches(plan.key);
+  const vcsBranch: string = vcsBranches.find(
+    (b: any) => b.toUpperCase() === action.vcsBranch.toUpperCase()
   );
-  if (!vscBranch) {
+  if (!vcsBranch) {
     throw Error(
-      `Unknown vsc branch provided ${action.vscBranch}, available branches: ${vscBranches}`
+      `Unknown vsc branch provided ${action.vcsBranch}, available branches: ${vcsBranches}`
     );
   }
-  const branchData = await createPlanBranch(plan.key, vscBranch);
+  const branchData = await createPlanBranch(plan.key, vcsBranch);
 
   // start async job status checker and push the result to MS Teams
-  const checkerInput: NewBranchBuildJobCheckerInput = {
-    type: CheckerInputType.NEW_BRANCH_BUILD,
-    branchKey: branchData.key,
-    branchName: branchData.shortName,
-    service: action.planName,
-    triggeredBy: action.triggeredBy,
-  };
-  await startCheckerExecution(checkerInput.branchKey, checkerInput);
+  // NOTE: batch job has its own status checking logic for final notification push
+  if (!isBatch) {
+    const checkerInput: NewBranchBuildJobCheckerInput = {
+      type: CheckerInputType.NEW_BRANCH_BUILD,
+      branchKey: branchData.key,
+      branchName: branchData.shortName,
+      service: action.service,
+      triggeredBy: action.triggeredBy,
+    };
+    await startCheckerExecution(checkerInput.branchKey, checkerInput);
+  }
 
   return branchData;
 };
@@ -51,14 +55,14 @@ const getAllBranches = async (planKey: string): Promise<any> => {
 
 const createPlanBranch = async (
   planKey: string,
-  vscBranch: string
+  vcsBranch: string
 ): Promise<any> => {
   const url = `https://${
     getConfig().bambooHostUrl
-  }/rest/api/latest/plan/${planKey}/branch/${vscBranch.replace(
+  }/rest/api/latest/plan/${planKey}/branch/${vcsBranch.replace(
     /\//g,
     "-"
-  )}?vcsBranch=${vscBranch}`;
+  )}?vcsBranch=${vcsBranch}`;
   const { data } = await axiosPut(url, undefined, {
     headers: {
       Authorization: `Bearer ${getConfig().bambooAPIToken}`,

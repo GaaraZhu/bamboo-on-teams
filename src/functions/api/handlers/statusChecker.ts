@@ -89,12 +89,7 @@ export const checkJobStatus = async (
           : await getLatestBuild(
               (event as NewBranchBuildJobCheckerInput).branchKey
             );
-      if (
-        !build ||
-        !["FINISHED", "NOTBUILT"].includes(build.lifeCycleState?.toUpperCase())
-      ) {
-        throw new JobNotFinished();
-      }
+      checkBuildStatus(build);
       return build;
     }
 
@@ -103,14 +98,27 @@ export const checkJobStatus = async (
       const deploy = await getDeploy(
         (event as DeployBuildJobCheckerInput).resultKey
       ); // both structs has the resultKey property
-      if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
-        throw new JobNotFinished();
-      }
+      checkDeployStatus(deploy);
       return deploy;
     }
 
     default:
       return undefined;
+  }
+};
+
+export const checkBuildStatus = (build: Build | undefined): void => {
+  if (
+    !build || // for cases where a build has not been triggered yet after the new branch plan is created
+    !["FINISHED", "NOTBUILT"].includes(build?.lifeCycleState?.toUpperCase())
+  ) {
+    throw new JobNotFinished();
+  }
+};
+
+export const checkDeployStatus = (deploy: Deploy): void => {
+  if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
+    throw new JobNotFinished();
   }
 };
 

@@ -343,7 +343,7 @@ Options:
         expectedAction: {
           actionName: ActionName.CREATE_BRANCH,
           planName: "customers-v1",
-          vscBranch: "dev",
+          vcsBranch: "dev",
           triggeredBy: user,
         },
       },
@@ -352,7 +352,7 @@ Options:
         expectedAction: {
           actionName: ActionName.CREATE_BRANCH,
           planName: "customers-v1",
-          vscBranch: "dev",
+          vcsBranch: "dev",
           triggeredBy: user,
         },
       },

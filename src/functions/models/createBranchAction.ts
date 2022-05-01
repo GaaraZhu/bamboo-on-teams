@@ -7,8 +7,8 @@ import { TeamsUser } from "./teams";
 export class CreateBranchAction implements Action {
   readonly actionName = ActionName.CREATE_BRANCH;
   readonly triggeredBy: TeamsUser;
-  readonly planName: string;
-  readonly vscBranch: string;
+  readonly service: string;
+  readonly vcsBranch: string;
 
   constructor(command: string, triggeredBy: TeamsUser) {
     const createBranchCommand = new Command()
@@ -34,8 +34,8 @@ export class CreateBranchAction implements Action {
 
     const commandInput = [".", ...command.split(" ")];
     createBranchCommand.parse(commandInput);
-    this.planName = createBranchCommand.opts().service!;
-    this.vscBranch = createBranchCommand.opts().vcsBranch!;
+    this.service = createBranchCommand.opts().service!;
+    this.vcsBranch = createBranchCommand.opts().vcsBranch!;
     this.triggeredBy = triggeredBy;
   }
 

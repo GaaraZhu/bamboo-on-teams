@@ -129,20 +129,22 @@ export interface BatchNotificationInput {
 }
 
 export const sendAllBuildsNotification = async (
-  input: BatchNotificationInput
+  input: BatchNotificationInput,
+  messageTitle?: string
 ): Promise<void> => {
   if (input.services.length == 0) {
     return;
   }
 
+  const title = `${messageTitle || "Bamboo batch deploy job finished"}`;
   const sectionFacts = generateSectionFacts(input);
   const notification = `{
         "@type": "MessageCard",
         "@context": "http://schema.org/extensions",
         "themeColor": "0076D7",
-        "summary": "Bamboo batch build job finished",
+        "summary": "${title}",
         "sections": [{
-            "activityTitle": "Bamboo batch build job finished",
+            "activityTitle": "${title}",
             "activitySubtitle": "triggered by ${input.triggeredBy.name}",
             "activityImage": "https://static.thenounproject.com/png/2714806-200.png",
             "facts": [${sectionFacts}],
@@ -165,7 +167,9 @@ export const sendAllDeploysNotification = async (
     return;
   }
 
-  const title = `${messageTitle || "Bamboo batch deploy job finished"} in ${input.environment}`;
+  const title = `${messageTitle || "Bamboo batch deploy job finished"} in ${
+    input.environment
+  }`;
   const sectionFacts = generateSectionFacts(input);
   const notification = `{
         "@type": "MessageCard",
@@ -209,10 +213,10 @@ const generateSectionFacts = (input: BatchNotificationInput): string => {
 
 export const sendReleaseFailedNotification = async (
   errorMessage: string,
+  environment: string,
   triggeredBy: TeamsUser
 ): Promise<void> => {
-  const title =
-    "Bamboo release job finished with status: <span style='color:red;'>FAILED</span>";
+  const title = `Bamboo release job <span style='color:red;'>FAILED</span> in ${environment}`;
   const notification = `{
         "@type": "MessageCard",
         "@context": "http://schema.org/extensions",

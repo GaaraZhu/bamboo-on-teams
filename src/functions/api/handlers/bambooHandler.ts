@@ -32,6 +32,7 @@ export const handleCommand = async (
         ActionName.DEPLOY_RELEASE,
         ActionName.BATCH_DEPLOY,
         ActionName.BATCH_BUILD,
+        ActionName.BATCH_CREATE_BRANCH,
         ActionName.PROMOTE_DEPLOY,
         ActionName.PROMOTE_RELEASE,
         ActionName.RELEASE,

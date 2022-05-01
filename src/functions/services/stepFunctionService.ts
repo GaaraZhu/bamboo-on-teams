@@ -12,6 +12,7 @@ import {
 } from "../api/handlers/statusChecker";
 import { v4 as uuidv4 } from "uuid";
 import { TeamsUser } from "../models/teams";
+import { ActionName } from "../models/actions";
 
 const getStepFunctionsClient = async (): Promise<StepFunctions> => {
   if (!process.env.STEP_FUNCTIONS_ENDPOINT) {
@@ -73,9 +74,17 @@ export interface BatcherExecutionInput {
 }
 
 export type SingleCommand =
+  | CreateBranchCommand
   | BuildCommand
   | DeployLatestCommand
   | PromoteDeployCommand;
+
+export interface CreateBranchCommand {
+  command: string;
+  service: string;
+  vcsBranch: string;
+  triggeredBy: TeamsUser;
+}
 
 export interface BuildCommand {
   command: string;

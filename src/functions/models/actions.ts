@@ -22,6 +22,7 @@ import { BatchBuildAction } from "./batchBuildAction";
 import { ReleaseAction } from "./releaseAction";
 import { TeamsUser } from "./teams";
 import { PromoteReleaseAction } from "./promoteReleaseAction";
+import { BatchCreateBranchAction } from "./batchCreateBranchAction";
 
 export enum ActionName {
   HELP = "help",
@@ -43,6 +44,7 @@ export enum ActionName {
   PROMOTE_DEPLOY = "promote-deploy",
   PROMOTE_RELEASE = "promote-release",
   CREATE_BRANCH = "create-branch",
+  BATCH_CREATE_BRANCH = "batch-create-branch",
   RELEASE = "release",
   SEARCH_PLANS = "search-plans",
   SEARCH_PROJECTS = "search-projects",
@@ -89,6 +91,7 @@ export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.PROMOTE_DEPLOY]: PromoteDeployAction,
   [ActionName.PROMOTE_RELEASE]: PromoteReleaseAction,
   [ActionName.CREATE_BRANCH]: CreateBranchAction,
+  [ActionName.BATCH_CREATE_BRANCH]: BatchCreateBranchAction,
   [ActionName.SEARCH_PLANS]: SearchPlansAction,
   [ActionName.SEARCH_PROJECTS]: SearchProjectsAction,
 };

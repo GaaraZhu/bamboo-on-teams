@@ -1,4 +1,5 @@
 import { BuildAction } from "../../models/buildAction";
+import { CreateBranchAction } from "../../models/createBranchAction";
 import { DeployLatestBuildAction } from "../../models/deployLatestBuildAction";
 import { PromoteDeployAction } from "../../models/promoteDeployAction";
 import { CommandParser } from "../../services/commandParser";
@@ -6,11 +7,16 @@ import {
   BuildResult,
   executeBuildCommand,
 } from "../../services/executors/buildExecutor";
+import { executeCreateBranchCommand } from "../../services/executors/createPlanBranchExecutor";
 import {
   DeployResult,
   executeDeployLatestCommand,
 } from "../../services/executors/deployLatestBuildExecutor";
-import { Build, getBuild } from "../../services/executors/descBuildExecutor";
+import {
+  Build,
+  getBuild,
+  getLatestBuild,
+} from "../../services/executors/descBuildExecutor";
 import {
   Deploy,
   getDeploy,
@@ -24,10 +30,13 @@ import {
   sendDeployBuildNotification,
   sendReleaseFailedNotification,
 } from "../../services/notificationService";
+import { BuildCommand } from "../../services/stepFunctionService";
 import {
-  BuildCommand,
-} from "../../services/stepFunctionService";
-import { getJobPageUrl, JobNotFinished } from "./statusChecker";
+  checkBuildStatus,
+  checkDeployStatus,
+  getJobPageUrl,
+  JobNotFinished,
+} from "./statusChecker";
 
 // execute single task for batch-build, batch-deploy, release or promote-release actions
 export const executeSingle = async (event: any, context: any): Promise<any> => {
@@ -47,6 +56,13 @@ export const executeSingle = async (event: any, context: any): Promise<any> => {
         event.triggeredBy
       )) as DeployLatestBuildAction;
       return await executeDeployLatestCommand(deployAction, true);
+    } else if (event.vcsBranch) {
+      // create branch operation
+      const createBranchAction = (await CommandParser.build().parse(
+        event.command,
+        event.triggeredBy
+      )) as CreateBranchAction;
+      return await executeCreateBranchCommand(createBranchAction, true);
     } else {
       // build operation
       const buildAction = (await CommandParser.build().parse(
@@ -63,23 +79,22 @@ export const executeSingle = async (event: any, context: any): Promise<any> => {
 
 export const checkSingle = async (event: any, context: any): Promise<any> => {
   console.log(`checkSingle: ${JSON.stringify(event)}`);
-  if (event.environment || event.targetEnv) {
+  if (event.vcsBranch) {
+    // create branch operation
+    const build = await getLatestBuild(event.triggerResult.key);
+    checkBuildStatus(build);
+    return build;
+  } else if (event.environment || event.targetEnv) {
     // deploy or promote-deploy operation
     const result: DeployResult = event.triggerResult;
     const deploy = await getDeploy(result.deployment.id);
-    if ("FINISHED" !== deploy.lifeCycleState.toUpperCase()) {
-      throw new JobNotFinished();
-    }
+    checkDeployStatus(deploy);
     return deploy;
   } else {
     // build operation
     const result: BuildResult = event.triggerResult;
     const build = await getBuild(result.buildResultKey);
-    if (
-      !["FINISHED", "NOTBUILT"].includes(build?.lifeCycleState?.toUpperCase())
-    ) {
-      throw new JobNotFinished();
-    }
+    checkBuildStatus(build);
     return build;
   }
 };
@@ -165,6 +180,12 @@ export const notifyAll = async (event: any, context: any): Promise<any> => {
   if (firstCommand.environment) {
     // batch deploy operation
     await sendAllDeploysNotification(input);
+  } else if (firstCommand.vcsBranch) {
+    // batch create branch operation
+    await sendAllBuildsNotification(
+      input,
+      "Bamboo batch create branch job finished"
+    );
   } else {
     // batch build operation
     await sendAllBuildsNotification(input);
@@ -184,6 +205,7 @@ export const notifyRelease = async (event: any, context: any): Promise<any> => {
     }
     await sendReleaseFailedNotification(
       errorMessage,
+      event.batches[0].commands[0].environment,
       event.batches[0].commands[0].triggeredBy
     );
     return;
