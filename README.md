@@ -97,8 +97,6 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * batch-create-branch
 * batch-build
 * batch-deploy
-
-### Release commands
 * release
 * promote-release
 
