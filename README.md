@@ -4,16 +4,19 @@
 
 A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
-## Blogpost
-[Chat the Ops up](https://gaarazhu.github.io/chat-the-ops-up/)
-
 ## Features
 * Bamboo interaction - interact with Bamboo in Microsoft Teams with wide range of [commands](https://github.com/GaaraZhu/bamboo-on-teams#available-commands).
 * Result notification - receive notification in Microsoft Teams for Bamboo jobs.
 * Hanging detection - detect hanging Bamboo jobs and alert in Microsoft Teams.
 
+## Blogpost
+[Chat the Ops up](https://gaarazhu.github.io/chat-the-ops-up/)
+
 ## Demo
 [![Demo](https://img.youtube.com/vi/JR8zbS7uKuA/0.jpg)](https://youtu.be/JR8zbS7uKuA)
+
+## Learn by example!
+[Cheatsheet](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/Cheatsheet.md)
 
 ## How it works
 ### Bamboo interaction
