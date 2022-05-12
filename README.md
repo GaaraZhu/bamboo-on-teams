@@ -28,14 +28,14 @@ Bamboo-on-teams stepfunction pulls job status from Bamboo and pushes to Teams ch
  ![Result notification & hanging detection](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/statusCheckerSeq.svg)
 
 ## Setup ##
-1. Create an [incoming webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) in Teams to received job notification and
+1. Create an [incoming webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) in Teams to receive job notification and
 copy the URL out as the `notificationURL` parameter value.
 
 2. Create an [outgoing webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-outgoing-webhook?tabs=urljsonpayload%2Cdotnet) in Teams to point to the Bamboo-on-Teams service URL, and copy the HMAC token out as the `teamsHMACSharedToken` parameter value.
 
 3. Create a [personal access token](https://confluence.atlassian.com/bamboo/personal-access-tokens-976779873.html) for the dedicated bamboo-on-teams bamboo account, and copy it out as the `bambooAPIToken` parameter value.
 
-4. Configure required parameters in SSM
+4. Configure required parameters in parameter store
 ```
 ## Infrastructure configuration ##
 # ID of the AWS account in which the stack is going to be created
