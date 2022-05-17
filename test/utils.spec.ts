@@ -129,12 +129,12 @@ describe("utils", () => {
       },
       {
         command:
-          "<at>Bamboo-on-teams</at>&nbsp; build -s core-customers-v1 -b master ",
+          "<at>Bamboo</at>&nbsp; build -s core-customers-v1 -b master ",
         expected: "build -s core-customers-v1 -b master",
       },
       {
         command:
-          "<at>Bamboo-bot</at>&nbsp;&nbsp;build -s core-customers-v1 -b master ",
+          "<at>Bamboo</at>&nbsp;&nbsp;build -s core-customers-v1 -b master ",
         expected: "build -s core-customers-v1 -b master",
       },
       {
@@ -154,6 +154,11 @@ describe("utils", () => {
         command:
           "<at>Bamboo</at>&nbsp; &nbsp;build -s core-customers-v1&nbsp; -b master ",
         expected: "build -s core-customers-v1  -b master",
+      },
+      {
+        command:`<div itemprop="copy-paste-block">
+        <div style="font-size:14px"><at>Bamboo</at> batch-deploy -s&nbsp;<at>Layered-Apis-Common-V1&nbsp;</at>-b release-broadband-r3-mvp -e test1`,
+        expected: "batch-deploy -s Layered-Apis-Common-V1 -b release-broadband-r3-mvp -e test1",
       },
     ];
 

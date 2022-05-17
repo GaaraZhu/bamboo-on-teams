@@ -21,8 +21,7 @@ export const isEmpty = (value: string | undefined): boolean => {
 };
 
 export const extractCommandFromTeamsMessage = (message: string): string => {
-  return message
-    .split("</at>")[1]
+  return message.split("<at>Bamboo</at>")[1]
     .split("&nbsp;")
     .join(" ")
     .replace(/<\/?[^>]+(>|$)/g, "")
