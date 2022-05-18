@@ -113,7 +113,7 @@ Releaser:
             ExecuteSingleBatch:
               Type: Map
               ItemsPath: $.commands
-              MaxConcurrency: 4
+              MaxConcurrency: 3
               End: true
               Iterator:
                 StartAt: ExecuteSingle
