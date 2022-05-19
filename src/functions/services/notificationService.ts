@@ -136,7 +136,7 @@ export const sendAllBuildsNotification = async (
     return;
   }
 
-  const title = `${messageTitle || "Bamboo batch deploy job finished"}`;
+  const title = `${messageTitle || "Bamboo batch build job finished"}`;
   const sectionFacts = generateSectionFacts(input);
   const notification = `{
         "@type": "MessageCard",
@@ -199,7 +199,7 @@ const generateSectionFacts = (input: BatchNotificationInput): string => {
       service.status.toUpperCase()
     );
     const status = `<span style=${isSucceed ? "color:green;" : "color:red;"}>${
-      service.status
+      service.status.toUpperCase()
     }</span>`;
     sectionFacts =
       sectionFacts +
