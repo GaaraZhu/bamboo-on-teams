@@ -23,7 +23,7 @@ for services:
 @Bamboo batch-create-branch -s customers-v1,accounts-v1,cards-v1,banks-v1 -b feature/API-129
 ```
 
-## trigger branch build
+## Trigger branch build
 \
 Trigger branch build from a branch plan **feature-API-129** for service **customers-v1**:
 ```
@@ -45,7 +45,7 @@ Search Bamboo deployment projects with keyword **accounts** in the name:
 @Bamboo search-projects -s accounts
 ```
 
-## deploy branch build
+## Deploy branch build
 \
 Deploy latest build from a branch plan **feature-API-129** to environment **test1** for service **customers-v1**:
 ```
@@ -60,7 +60,7 @@ for services **without** dependencies:
 @Bamboo batch-deploy -s customers-v1,accounts-v1,cards-v1,banks-v1 -b feature-API-129 -e test1
 ```
 
-## release services
+## Release services
 \
 Release with the latest build from a branch plan **feature-API-129** to environment **test1** for service **customers-v1**:
 ```
@@ -75,7 +75,7 @@ for services **with/without** dependencies:
 @Bamboo release -s customers-v1,accounts-v1;cards-v1;banks-v1 -b feature-API-129 -e test1
 ```
 
-## promote release
+## Promote release
 \
 Promote the release from **test1** to **uat** with the same builds for services with/without dependencies:
 * customers-v1
