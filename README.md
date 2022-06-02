@@ -12,11 +12,11 @@ A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 ## Blogpost
 [Chat the Ops up](https://gaarazhu.github.io/chat-the-ops-up/)
 
-## Demo
-[![Demo](https://img.youtube.com/vi/JR8zbS7uKuA/0.jpg)](https://youtu.be/JR8zbS7uKuA)
-
 ## Learn by example!
 [Cheatsheet](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/Cheatsheet.md)
+
+## Demo
+[![Demo](https://img.youtube.com/vi/JR8zbS7uKuA/0.jpg)](https://youtu.be/JR8zbS7uKuA)
 
 ## How it works
 ### Bamboo interaction
