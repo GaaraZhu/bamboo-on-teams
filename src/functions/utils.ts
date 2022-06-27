@@ -25,6 +25,7 @@ export const extractCommandFromTeamsMessage = (message: string): string => {
     .split("&nbsp;")
     .join(" ")
     .replace(/<\/?[^>]+(>|$)/g, "")
+    .replace(/ +(?= )/g,'')
     .trim();
 };
 

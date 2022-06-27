@@ -153,12 +153,16 @@ describe("utils", () => {
       {
         command:
           "<at>Bamboo</at>&nbsp; &nbsp;build -s core-customers-v1&nbsp; -b master ",
-        expected: "build -s core-customers-v1  -b master",
+        expected: "build -s core-customers-v1 -b master",
       },
       {
         command:`<div itemprop="copy-paste-block">
         <div style="font-size:14px"><at>Bamboo</at> batch-deploy -s&nbsp;<at>Layered-Apis-Common-V1&nbsp;</at>-b release-broadband-r3-mvp -e test1`,
         expected: "batch-deploy -s Layered-Apis-Common-V1 -b release-broadband-r3-mvp -e test1",
+      },
+      {
+        command:`<at>Bamboo</at>&nbsp;deploy-latest -s digital-river-service -b develop -e&nbsp; test3`,
+        expected: "deploy-latest -s digital-river-service -b develop -e test3",
       },
     ];
 
