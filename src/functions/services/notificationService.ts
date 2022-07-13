@@ -284,7 +284,7 @@ export const sendDeployReleaseNotification = async (
 
 export const sendHangingStatusNotification = async (
   service: string,
-  triggered: string,
+  triggeredBy: TeamsUser,
   jobUrl: string
 ): Promise<void> => {
   const notification = `{
@@ -294,7 +294,7 @@ export const sendHangingStatusNotification = async (
         "summary": "Bamboo job is hanging!!!",
         "sections": [{
             "activityTitle": "Bamboo job is hanging!!!",
-            "activitySubtitle": "triggered by ${triggered}",
+            "activitySubtitle": "triggered by ${triggeredBy.name}",
             "activityImage": "https://i.dlpng.com/static/png/6687341_preview.png",
             "facts": [{
                 "name": "Service",
