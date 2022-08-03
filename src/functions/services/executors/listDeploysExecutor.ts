@@ -39,7 +39,7 @@ export interface Deploy {
 export const listDeploys = async (environmentId: string): Promise<any> => {
   const url = `https://${
     getConfig().bambooHostUrl
-  }/rest/api/latest/deploy/environment/${environmentId}/results`;
+  }/rest/api/latest/deploy/environment/${environmentId}/results?max-results=3`;
   const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${getConfig().bambooAPIToken}`,
@@ -47,16 +47,12 @@ export const listDeploys = async (environmentId: string): Promise<any> => {
   });
 
   return data.results?.map((r: any) => ({
-    release: {
-      id: r.deploymentVersion?.id,
-      name: r.deploymentVersion?.name,
-    },
+    release: r.deploymentVersion?.name,
     deploymentState: r.deploymentState,
     lifeCycleState: r.lifeCycleState,
     startedDate: r.startedDate ? new Date(r.startedDate).toLocaleString() : "",
     finishedDate: r.finishedDate
       ? new Date(r.finishedDate).toLocaleString()
       : "",
-    agent: r.agent.name,
   }));
 };

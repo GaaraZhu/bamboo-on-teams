@@ -528,7 +528,7 @@ Options:
   describe("ListDeploysAction", () => {
     const helpMessage = `Usage: list-deploys [options]
 
-List the deployments in a service environment.
+List the top three deployments in a service environment.
 
 Options:
   -s, --service <service>  service name, e.g. customers-v1

@@ -147,7 +147,7 @@ Options:
 ```
 ### create-branch ###
 ```
-Usage: create-branch [options
+Usage: create-branch [options]
 Create branch for a plan.
 Options:
   -s, --service <service>       service name, e.g. customers-v1
@@ -196,7 +196,7 @@ Options:
 ### list-deploys ###
 ```
 Usage: list-deploys [options]
-List the deployments in a service environment.
+List the top three deployments in a service environment.
 Options:
   -s, --service <service>  service name, e.g. customers-v1
   -e, --env <env>          env name, e.g. dev
