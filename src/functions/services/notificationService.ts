@@ -40,6 +40,14 @@ export const sendBuildNotification = async (
         "value": "${errorMessage}"
       }`;
   }
+  if (isSucceed) {
+    sectionFacts =
+      sectionFacts +
+      `, {
+        "name": "DeployCommand",
+        "value": "deploy-latest -s ${service} -b ${branch} -e ENV"
+      }`;
+  }
   const notification = `{
         "@type": "MessageCard",
         "@context": "http://schema.org/extensions",
