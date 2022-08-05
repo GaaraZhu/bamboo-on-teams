@@ -67,7 +67,7 @@ export const prodEnvCheck = (env: string, currentUser: TeamsUser): void => {
 };
 
 export const isProdEnv = (env: string): boolean => {
-  return env.toUpperCase().startsWith("PROD");
+  return env.trim().toUpperCase().startsWith("PROD");
 };
 
 export const executeOperationCheck = (operations: Operations): void => {

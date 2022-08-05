@@ -60,6 +60,7 @@ Sample application configuration:
     "notificationURL": "https://test.webhook.office.com/webhookb2/85dcasdfaf@864e4889-04a2-416e-9f88-ca5ce1c6c1b7/IncomingWebhook/9db3asdfaa369/be873347-c615-4984-ad7a-f7952283551e",
     "prod": {
          "enabled": true,
+         "bambooAPIToken": "asdfaf2q2k1las0F998S",
          "allowedUserIds": ["23:13asdfaPD4UQ_-MvLgDLhHg1cUED"]
     }
 }

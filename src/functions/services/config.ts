@@ -5,6 +5,7 @@ export interface Config {
   notificationURL: string;
   prod?: {
     enabled: boolean;
+    bambooAPIToken: string;
     allowedUserIds: string[];
   };
 }

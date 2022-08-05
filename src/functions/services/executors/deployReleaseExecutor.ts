@@ -2,7 +2,7 @@ import { DeployReleaseAction } from "../../models/deployReleaseAction";
 import { Env, getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getRelease } from "./listReleasesExecutor";
-import { executeOperationCheck, prodEnvCheck } from "../../utils";
+import { executeOperationCheck, isProdEnv, prodEnvCheck } from "../../utils";
 import { axiosPost } from "../axiosService";
 import {
   CheckerInputType,
@@ -44,9 +44,19 @@ export const deployRelease = async (
   const url = `https://${
     getConfig().bambooHostUrl
   }/rest/api/latest/queue/deployment/?environmentId=${env.id}&versionId=${releaseId}`;
+  let token = getConfig().bambooAPIToken;
+  if (isProdEnv(env.name)) {
+    if (!getConfig().prod?.bambooAPIToken) {
+      throw {
+        status: 500,
+        message: `Missing Bamboo API token for Production environment ${env.name}`,
+      };
+    }
+    token = getConfig().prod?.bambooAPIToken!;
+  }
   const { data } = await axiosPost(url, undefined, {
     headers: {
-      Authorization: `Bearer ${getConfig().bambooAPIToken}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   });
