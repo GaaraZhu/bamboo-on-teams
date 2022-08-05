@@ -37,7 +37,7 @@ export const executePromoteDeployCommand = async (
   const targetEnv = await getEnvironment(project.id, action.targetEnv);
   executeOperationCheck(targetEnv.operations);
   const deployment = await deployRelease(
-    targetEnv.id,
+    targetEnv,
     lastSuccessDeploy.release.id
   );
   const deployResult: DeployResult = {

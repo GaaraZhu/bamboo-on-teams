@@ -1,5 +1,5 @@
 import { DeployReleaseAction } from "../../models/deployReleaseAction";
-import { getEnvironment } from "./listEnvironmentsExecutor";
+import { Env, getEnvironment } from "./listEnvironmentsExecutor";
 import { getDeploymentProject } from "./listDeploymentProjectsExecutor";
 import { getRelease } from "./listReleasesExecutor";
 import { executeOperationCheck, prodEnvCheck } from "../../utils";
@@ -20,7 +20,7 @@ export const executeDeployReleaseCommand = async (
   const env = await getEnvironment(project.id, action.env);
   executeOperationCheck(env.operations);
   const release = await getRelease(project.id, action.releaseName);
-  const deployment = await deployRelease(env.id, release.id);
+  const deployment = await deployRelease(env, release.id);
 
   // start async job status checker and push the result to MS Teams
   const checkerInput: DeployReleaseJobCheckerInput = {
@@ -38,12 +38,12 @@ export const executeDeployReleaseCommand = async (
 };
 
 export const deployRelease = async (
-  envId: string,
+  env: Env,
   releaseId: string
 ): Promise<any> => {
   const url = `https://${
     getConfig().bambooHostUrl
-  }/rest/api/latest/queue/deployment/?environmentId=${envId}&versionId=${releaseId}`;
+  }/rest/api/latest/queue/deployment/?environmentId=${env.id}&versionId=${releaseId}`;
   const { data } = await axiosPost(url, undefined, {
     headers: {
       Authorization: `Bearer ${getConfig().bambooAPIToken}`,
