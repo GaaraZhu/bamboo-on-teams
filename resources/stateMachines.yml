@@ -5,7 +5,7 @@ StatusChecker:
     States:
       DelayTheChecking:
         Type: Wait
-        Seconds: 150
+        Seconds: 120
         Next: CheckStatus
 
       CheckStatus:
@@ -59,7 +59,7 @@ Batcher:
 
             DelayTheChecking:
               Type: Wait
-              Seconds: 180
+              Seconds: 120
               Next: CheckSingle
 
             CheckSingle:
