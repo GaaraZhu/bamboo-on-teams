@@ -30,11 +30,11 @@ Bamboo-on-teams stepfunction pulls job status from Bamboo and pushes to Teams ch
 
 ## Setup ##
 1. Create an [incoming webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) in Teams to receive job notification and
-copy the URL out as the `notificationURL` parameter value.
+copy the URL out as the `notificationURL` value in application configuration.
 
-2. Create an [outgoing webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-outgoing-webhook?tabs=urljsonpayload%2Cdotnet) with name `Bamboo` in Teams channel to point to the Bamboo-on-Teams service URL, and copy the HMAC token out as the `teamsHMACSharedToken` parameter value.
+2. Create an [outgoing webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-outgoing-webhook?tabs=urljsonpayload%2Cdotnet) with name `Bamboo` in Teams channel to point to the Bamboo-on-Teams service URL, and copy the HMAC token out as the `hmacToken` value in application configuration.
 
-3. Create a [personal access token](https://confluence.atlassian.com/bamboo/personal-access-tokens-976779873.html) for the dedicated bamboo-on-teams bamboo account, and copy it out as the `bambooAPIToken` parameter value.
+3. Create a [personal access token](https://confluence.atlassian.com/bamboo/personal-access-tokens-976779873.html) for the dedicated bamboo-on-teams bamboo account, and copy it out as the `bambooAPIToken` value in application configuration.
 
 4. Configure required parameters in parameter store
 ```
@@ -45,7 +45,7 @@ copy the URL out as the `notificationURL` parameter value.
 # Custom deployment bucket
 /bamboo-on-teams/deploymentBucket
 
-# VPC configuration to access the private bamboo REST API(Optional if Bamboo Rest API is public available)
+# VPC configuration to access the private bamboo REST API (Required if Bamboo Rest API is hosted in a private VPC)
 /bamboo-on-teams/securityGroupId
 /bamboo-on-teams/subnetId
 
