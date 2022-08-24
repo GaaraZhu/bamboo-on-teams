@@ -128,6 +128,7 @@ plugins:
   - serverless-step-functions
   - serverless-plugin-common-excludes
   - serverless-plugin-include-dependencies
+  - serverless-prune-plugin
 
 stepFunctions:
   stateMachines: ${file(resources/stateMachines.yml)}
@@ -147,6 +148,10 @@ custom:
       statusChecker:
         name: ${self:service}-status-checker-${self:provider.stage}
         arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.statusChecker.name}
+
+  prune:
+    automatic: true
+    number: 3
 
   serverless-offline:
     noPrependStageInUrl: true
