@@ -16,9 +16,7 @@ export const getPlan = async (planName: string): Promise<any> => {
   if (!plan) {
     throw {
       status: 400,
-      message: `Unknown plan provided ${planName}, available plans: ${plans.map(
-        (p: any) => p.name
-      )}`,
+      message: `Unknown plan provided ${planName}, please use search-plans command to find it first and make sure the plan is enabled`,
     };
   }
 

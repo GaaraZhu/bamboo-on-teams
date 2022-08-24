@@ -18,9 +18,7 @@ export const getDeploymentProject = async (
   if (!project) {
     throw {
       status: 400,
-      message: `Unknown project provided ${projectName}, available plans: ${projects.map(
-        (p: any) => p.name
-      )}`,
+      message: `Unknown project provided ${projectName}, please use search-projects command to find it first`,
     };
   }
 
