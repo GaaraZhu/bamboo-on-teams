@@ -161,8 +161,8 @@ describe("utils", () => {
         expected: "batch-deploy -s Layered-Apis-Common-V1 -b release-broadband-r3-mvp -e test1",
       },
       {
-        command:`<at>Bamboo</at>&nbsp;deploy-latest -s digital-river-service -b develop -e&nbsp; test3`,
-        expected: "deploy-latest -s digital-river-service -b develop -e test3",
+        command:`<at>Bamboo</at>&nbsp;deploy -s digital-river-service -b develop -e&nbsp; test3`,
+        expected: "deploy -s digital-river-service -b develop -e test3",
       },
     ];
 

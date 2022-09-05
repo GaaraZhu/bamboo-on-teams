@@ -45,7 +45,7 @@ export const sendBuildNotification = async (
       sectionFacts +
       `, {
         "name": "DeployCommand",
-        "value": "deploy-latest -s ${service} -b ${branch} -e ENV"
+        "value": "deploy -s ${service} -b ${branch} -e ENV"
       }`;
   } else {
     sectionFacts =

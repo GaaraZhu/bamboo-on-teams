@@ -655,7 +655,7 @@ Options:
   });
 
   describe("DeployLatestAction", () => {
-    const helpMessage = `Usage: deploy-latest [options]
+    const helpMessage = `Usage: deploy [options]
 
 Deploy the service with the latest build in a branch to an environment.
 
@@ -667,9 +667,9 @@ Options:
 `;
     const testCases = [
       {
-        command: "deploy-latest -s customers-v1 -b master -e test",
+        command: "deploy -s customers-v1 -b master -e test",
         expectedAction: {
-          actionName: ActionName.DEPLOY_LATEST_BUILD,
+          actionName: ActionName.DEPLOY,
           service: "customers-v1",
           branch: "master",
           env: "test",
@@ -677,9 +677,9 @@ Options:
         },
       },
       {
-        command: "deploy-latest -s customers-v1 -b master -e test",
+        command: "deploy -s customers-v1 -b master -e test",
         expectedAction: {
-          actionName: ActionName.DEPLOY_LATEST_BUILD,
+          actionName: ActionName.DEPLOY,
           service: "customers-v1",
           branch: "master",
           env: "test",
@@ -687,14 +687,14 @@ Options:
         },
       },
       {
-        command: "deploy-latest -s customers-v1 -b -e test",
+        command: "deploy -s customers-v1 -b -e test",
         error: {
           status: 400,
           message: helpMessage,
         },
       },
       {
-        command: "deploy-latest",
+        command: "deploy",
         error: {
           status: 400,
           message: helpMessage,

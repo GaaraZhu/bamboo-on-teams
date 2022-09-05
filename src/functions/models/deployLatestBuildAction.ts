@@ -5,7 +5,7 @@ import { executeDeployLatestCommand } from "../services/executors/deployLatestBu
 import { TeamsUser } from "./teams";
 
 export class DeployLatestBuildAction implements Action {
-  readonly actionName = ActionName.DEPLOY_LATEST_BUILD;
+  readonly actionName = ActionName.DEPLOY;
   readonly triggeredBy: TeamsUser;
   service: string;
   branch: string;

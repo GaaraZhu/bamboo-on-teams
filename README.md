@@ -93,7 +93,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * list-releases
 * list-deploys
 * create-release
-* deploy-latest
+* deploy
 * deploy-release
 * deploy-build
 * promote-deploy
@@ -214,9 +214,9 @@ Options:
   -r, --release <release>  release name, e.g. v1.0.0
   -h, --help               display help for command
 ```
-### deploy-latest ###
+### deploy ###
 ```
-Usage: deploy-latest [options]
+Usage: deploy [options]
 Deploy the service with the latest build in a branch to an environment.
 Options:
   -s, --service <service>  service name, e.g. customers-v1

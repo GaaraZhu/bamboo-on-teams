@@ -48,7 +48,7 @@ export const executeSingle = async (event: any, context: any): Promise<any> => {
       )) as PromoteDeployAction;
       return await executePromoteDeployCommand(promoteDeployAction, true);
     } else if (event.environment) {
-      // deploy-latest operation
+      // deploy operation
       const deployAction = (await CommandParser.build().parse(
         event.command,
         event.triggeredBy

@@ -28,7 +28,7 @@ export const handleCommand = async (
       ![
         ActionName.BUILD,
         ActionName.DEPLOY_BUILD,
-        ActionName.DEPLOY_LATEST_BUILD,
+        ActionName.DEPLOY,
         ActionName.DEPLOY_RELEASE,
         ActionName.BATCH_DEPLOY,
         ActionName.BATCH_BUILD,

@@ -49,7 +49,7 @@ Search Bamboo deployment projects with keyword **accounts** in the name:
 \
 Deploy latest build from a branch plan **feature-API-129** to environment **test1** for service **customers-v1**:
 ```
-@Bamboo deploy-latest -s customers-v1 -b feature-API-129 -e test1
+@Bamboo deploy -s customers-v1 -b feature-API-129 -e test1
 ```
 for services **without** dependencies:
 * customers-v1
