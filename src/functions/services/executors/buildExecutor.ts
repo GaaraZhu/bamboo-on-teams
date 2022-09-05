@@ -7,6 +7,7 @@ import {
 } from "../../api/handlers/statusChecker";
 import { startCheckerExecution } from "../stepFunctionService";
 import { getConfig } from "../config";
+import { BuildResult, getRunningBuild } from "./listBuildsExecutor";
 
 export const executeBuildCommand = async (
   action: BuildAction,
@@ -36,9 +37,24 @@ const build = async (
   branchName: string
 ): Promise<BuildResult> => {
   const branch = await getBranch(planName, branchName);
-  const url = `https://${getConfig().bambooHostUrl}/rest/api/latest/queue/${
-    branch.key
-  }`;
+  try {
+    return await buildBranch(branch.key);
+  } catch (err: any) {
+    if (err.status === 400) { // most of the cases it fails due to maximum concurrent builds reached
+      const runningBuild = await getRunningBuild(branch.key) as BuildResult;
+      if (runningBuild) {
+        return runningBuild;
+      }
+    }
+
+    throw err;
+  }
+};
+
+const buildBranch = async (
+  branchKey: string,
+): Promise<BuildResult> => {
+  const url = `https://${getConfig().bambooHostUrl}/rest/api/latest/queue/${branchKey}`;
   const { data } = await axiosPost(url, undefined, {
     headers: {
       Authorization: `Bearer ${getConfig().bambooAPIToken}`,
@@ -47,14 +63,3 @@ const build = async (
 
   return data;
 };
-
-export interface BuildResult {
-  planKey: string;
-  buildNumber: string;
-  buildResultKey: string;
-  triggerReason: string;
-  link: {
-    href: string;
-    rel: string;
-  };
-}

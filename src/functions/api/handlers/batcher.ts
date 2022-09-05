@@ -3,10 +3,7 @@ import { CreateBranchAction } from "../../models/createBranchAction";
 import { DeployLatestBuildAction } from "../../models/deployLatestBuildAction";
 import { PromoteDeployAction } from "../../models/promoteDeployAction";
 import { CommandParser } from "../../services/commandParser";
-import {
-  BuildResult,
-  executeBuildCommand,
-} from "../../services/executors/buildExecutor";
+import { executeBuildCommand } from "../../services/executors/buildExecutor";
 import { executeCreateBranchCommand } from "../../services/executors/createPlanBranchExecutor";
 import {
   DeployResult,
@@ -17,6 +14,7 @@ import {
   getBuild,
   getLatestBuild,
 } from "../../services/executors/descBuildExecutor";
+import { BuildResult } from "../../services/executors/listBuildsExecutor";
 import {
   Deploy,
   getDeploy,
