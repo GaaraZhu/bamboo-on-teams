@@ -43,10 +43,18 @@ const axiosProcess = async (
     response = await process(url, payload, config);
   } catch (err: any) {
     // axios error handling
-    console.log(`Failed to call ${url} due to ${JSON.stringify(err)}`);
+    let message = err.response?.data?.message;
+    if (!message) {
+      if (err.response?.data?.errors) {
+        message = JSON.stringify(err.response?.data?.errors);
+      } else {
+        message = err.message;
+      }
+    }
+    console.log(`Failed to call ${url} due to ${message}`);
     throw {
       status: err.response?.status,
-      message: err.response?.data?.message || err.message,
+      message,
     };
   }
 
