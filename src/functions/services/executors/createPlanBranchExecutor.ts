@@ -19,7 +19,7 @@ export const executeCreateBranchCommand = async (
   );
   if (!vcsBranch) {
     throw Error(
-      `Unknown vsc branch provided ${action.vcsBranch}, available branches: ${vcsBranches}`
+      `Unknown vcs branch provided ${action.vcsBranch}`
     );
   }
   const branchData = await createPlanBranch(plan.key, vcsBranch);
