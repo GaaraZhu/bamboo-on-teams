@@ -94,6 +94,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * list-deploys
 * create-release
 * deploy
+* build-and-deploy
 * deploy-release
 * deploy-build
 * promote-deploy
