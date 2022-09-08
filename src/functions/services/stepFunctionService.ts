@@ -110,11 +110,12 @@ export interface PromoteDeployCommand {
 }
 
 export const startBatcherExecution = async (
-  input: BatcherExecutionInput
+  input: BatcherExecutionInput,
+  arn: string = process.env.BATCHER_ARN!
 ): Promise<void> => {
   const name = uuidv4();
   const executionInput = {
-    stateMachineArn: process.env.BATCHER_ARN!,
+    stateMachineArn: arn,
     name: name,
     input: JSON.stringify(input),
     traceHeader: name,

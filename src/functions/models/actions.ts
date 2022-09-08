@@ -23,6 +23,7 @@ import { ReleaseAction } from "./releaseAction";
 import { TeamsUser } from "./teams";
 import { PromoteReleaseAction } from "./promoteReleaseAction";
 import { BatchCreateBranchAction } from "./batchCreateBranchAction";
+import { BuildAndDeployAction } from "./buildAndDeployAction";
 
 export enum ActionName {
   HELP = "help",
@@ -32,6 +33,7 @@ export enum ActionName {
   LIST_BRANCHES = "list-branches",
   LIST_BUILDS = "list-builds",
   DESC_BUILD = "desc-build",
+  BUILD_AND_DEPLOY = "build-and-deploy",
   DEPLOY_BUILD = "deploy-build",
   DEPLOY_RELEASE = "deploy-release",
   DEPLOY = "deploy",
@@ -73,6 +75,7 @@ export interface Action {
 export const actionLookup: Record<ActionName, Class<Action>> = {
   [ActionName.HELP]: HelpAction,
   [ActionName.BUILD]: BuildAction,
+  [ActionName.BUILD_AND_DEPLOY]: BuildAndDeployAction,
   [ActionName.BATCH_BUILD]: BatchBuildAction,
   [ActionName.CREATE_RELEASE]: CreateReleaseAction,
   [ActionName.DEPLOY]: DeployLatestBuildAction,
@@ -112,6 +115,7 @@ export const actionGroupLookup: Record<JobType, ActionName[]> = {
     ActionName.LIST_RELEASES,
     ActionName.LIST_DEPLOYS,
     ActionName.CREATE_RELEASE,
+    ActionName.BUILD_AND_DEPLOY,
     ActionName.DEPLOY,
     ActionName.DEPLOY_RELEASE,
     ActionName.DEPLOY_BUILD,

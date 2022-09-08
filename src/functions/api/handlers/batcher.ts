@@ -1,3 +1,4 @@
+import { ActionName } from "../../models/actions";
 import { BuildAction } from "../../models/buildAction";
 import { CreateBranchAction } from "../../models/createBranchAction";
 import { DeployLatestBuildAction } from "../../models/deployLatestBuildAction";
@@ -24,10 +25,12 @@ import {
   BatchNotificationInput,
   sendAllBuildsNotification,
   sendAllDeploysNotification,
+  sendBuildAndDeployNotification,
   sendBuildNotification,
   sendDeployBuildNotification,
   sendReleaseFailedNotification,
 } from "../../services/notificationService";
+import { BuildCommand } from "../../services/stepFunctionService";
 import {
   checkBuildStatus,
   checkDeployStatus,
@@ -157,9 +160,35 @@ export const notifySingle = async (event: any, context: any): Promise<any> => {
   }
 };
 
-// final notification for batch-build or batch-deploy actions
-export const notifyAll = async (event: any, context: any): Promise<any> => {
+// final notification for build-and-deploy, batch-build or batch-deploy actions
+export const notifyAll = async (event: any, context: any): Promise<void> => {
   console.log(`notifyAll: ${JSON.stringify(event)}`);
+  // build and deploy operation
+  if (
+    event.length === 2 &&
+    event[0].command.toLowerCase().trim().startsWith(ActionName.BUILD) &&
+    event[1].command.toLowerCase().trim().startsWith(ActionName.DEPLOY)
+  ) {
+    console.log("notifyAll for buld and deploy opeartion");
+    const buildCommand = event[0];
+    const deployCommand = event[1];
+    const isBuildSuccess = ["SUCCESS", "SUCCESSFUL"].includes(
+      buildCommand.target?.buildState?.toUpperCase()
+    );
+    await sendBuildAndDeployNotification({
+      service: buildCommand.service,
+      branch: buildCommand.branch,
+      environment: deployCommand.environment,
+      buildStatus: buildCommand.target.buildState || "FAILED",
+      deployStatue: isBuildSuccess
+        ? deployCommand.target?.deploymentState || "FAILED"
+        : "NOT-STARTED",
+      triggeredBy: buildCommand.triggeredBy,
+    });
+    return;
+  }
+
+  // batch operation
   const firstCommand = event[0]; // BuildCommand or DeployLatestCommand
   const input: BatchNotificationInput = {
     services: event.map((c: any) => ({

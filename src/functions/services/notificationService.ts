@@ -12,9 +12,10 @@ export const sendBuildNotification = async (
   errorMessage?: string
 ): Promise<void> => {
   const isSucceed = status.toUpperCase() === "SUCCESSFUL" && !errorMessage;
+  const statusText = isSucceed ? "SUCCESS" : status.toUpperCase();
   const title = `Bamboo build job finished with status: <span style=${
     isSucceed ? "color:green;" : "color:red;"
-  }>${status}</span>`;
+  }>${statusText}</span>`;
   let sectionFacts = `
       {
           "name": "Service",
@@ -133,6 +134,58 @@ export const sendDeployBuildNotification = async (
   });
 };
 
+export interface BuildAndDeployNotificationInput {
+  service: string;
+  branch: string;
+  environment: string;
+  buildStatus: string;
+  deployStatue: string;
+  triggeredBy: TeamsUser;
+}
+
+export const sendBuildAndDeployNotification = async (
+  input: BuildAndDeployNotificationInput
+): Promise<void> => {
+  const title = "Bamboo build and deploy job finished";
+  const buildStatusText = getStatusText(input.buildStatus);
+  const deployStatusText = getStatusText(input.deployStatue);
+  const sectionFacts = `{
+    "name": "Service",
+    "value": "${input.service}"
+  }, {
+    "name": "Branch",
+    "value": "${input.branch}"
+  }, {
+    "name": "Environment",
+    "value": "${input.environment}"
+  }, {
+    "name": "BuildResult",
+    "value": "${buildStatusText}"
+  }, {
+    "name": "DeployResult",
+    "value": "${deployStatusText}"
+  }`;
+  const notification = `{
+        "@type": "MessageCard",
+        "@context": "http://schema.org/extensions",
+        "themeColor": "0076D7",
+        "summary": "${title}",
+        "sections": [{
+            "activityTitle": "${title}",
+            "activitySubtitle": "triggered by ${input.triggeredBy.name}",
+            "activityImage": "https://static.thenounproject.com/png/2714806-200.png",
+            "facts": [${sectionFacts}],
+            "markdown": true
+        }]
+    }`;
+  const url = getConfig().notificationURL;
+  await axiosPost(url, notification, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 export interface BatchNotificationInput {
   services: {
     service: string;
@@ -210,12 +263,7 @@ export const sendAllDeploysNotification = async (
 const generateSectionFacts = (input: BatchNotificationInput): string => {
   let sectionFacts = "";
   input.services.forEach((service) => {
-    const isSucceed = ["SUCCESS", "SUCCESSFUL"].includes(
-      service.status.toUpperCase()
-    );
-    const status = `<span style=${
-      isSucceed ? "color:green;" : "color:red;"
-    }>${service.status.toUpperCase()}</span>`;
+    const status = getStatusText(service.status);
     sectionFacts =
       sectionFacts +
       `{
@@ -224,6 +272,17 @@ const generateSectionFacts = (input: BatchNotificationInput): string => {
       },`;
   });
   return sectionFacts.substring(0, sectionFacts.length - 1);
+};
+
+const getStatusText = (bambooStatus: string): string => {
+  // Bamboo API uses inconsistent states for success build and deploy job
+  const isSucceed = ["SUCCESS", "SUCCESSFUL"].includes(
+    bambooStatus?.toUpperCase()
+  );
+  const status = isSucceed ? "SUCCESS" : bambooStatus.toUpperCase();
+  return `<span style=${
+    isSucceed ? "color:green;" : "color:red;"
+  }>${status}</span>`;
 };
 
 export const sendReleaseFailedNotification = async (

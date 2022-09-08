@@ -27,6 +27,7 @@ export const handleCommand = async (
     } else if (
       ![
         ActionName.BUILD,
+        ActionName.BUILD_AND_DEPLOY,
         ActionName.DEPLOY_BUILD,
         ActionName.DEPLOY,
         ActionName.DEPLOY_RELEASE,
