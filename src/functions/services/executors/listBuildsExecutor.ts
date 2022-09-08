@@ -10,12 +10,19 @@ export const executeListBuildsCommand = async (
   return await listPlanBranchBuilds(branch.key);
 };
 
-export const getRunningBuild = async (branchKey: string): Promise<BuildResult | undefined> => {
+export const getRunningBuild = async (
+  branchKey: string
+): Promise<BuildResult | undefined> => {
   const builds = await listPlanBranchBuilds(branchKey, 1);
-  return builds?.find((r: any) => ["Queued", "InProgress"].includes(r.lifeCycleState));
-}
+  return builds?.find((r: any) =>
+    ["Queued", "InProgress"].includes(r.lifeCycleState)
+  );
+};
 
-export const listPlanBranchBuilds = async (branchKey: string, maxResults: number = 3): Promise<BuildResult[]> => {
+export const listPlanBranchBuilds = async (
+  branchKey: string,
+  maxResults = 3
+): Promise<BuildResult[]> => {
   const url = `https://${
     getConfig().bambooHostUrl
   }/rest/api/latest/result/${branchKey}?includeAllStates=true&max-results=${maxResults}&expand=results.result`;

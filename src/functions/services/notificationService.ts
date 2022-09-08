@@ -213,9 +213,9 @@ const generateSectionFacts = (input: BatchNotificationInput): string => {
     const isSucceed = ["SUCCESS", "SUCCESSFUL"].includes(
       service.status.toUpperCase()
     );
-    const status = `<span style=${isSucceed ? "color:green;" : "color:red;"}>${
-      service.status.toUpperCase()
-    }</span>`;
+    const status = `<span style=${
+      isSucceed ? "color:green;" : "color:red;"
+    }>${service.status.toUpperCase()}</span>`;
     sectionFacts =
       sectionFacts +
       `{

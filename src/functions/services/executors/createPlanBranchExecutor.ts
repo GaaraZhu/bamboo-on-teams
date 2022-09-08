@@ -18,9 +18,7 @@ export const executeCreateBranchCommand = async (
     (b: any) => b.toUpperCase() === action.vcsBranch.toUpperCase()
   );
   if (!vcsBranch) {
-    throw Error(
-      `Unknown vcs branch provided ${action.vcsBranch}`
-    );
+    throw Error(`Unknown vcs branch provided ${action.vcsBranch}`);
   }
   const branchData = await createPlanBranch(plan.key, vcsBranch);
 

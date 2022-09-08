@@ -40,8 +40,9 @@ const build = async (
   try {
     return await buildBranch(branch.key);
   } catch (err: any) {
-    if (err.status === 400) { // most of the cases it fails due to maximum concurrent builds reached
-      const runningBuild = await getRunningBuild(branch.key) as BuildResult;
+    if (err.status === 400) {
+      // most of the cases it fails due to maximum concurrent builds reached
+      const runningBuild = (await getRunningBuild(branch.key)) as BuildResult;
       if (runningBuild) {
         return runningBuild;
       }
@@ -51,10 +52,10 @@ const build = async (
   }
 };
 
-const buildBranch = async (
-  branchKey: string,
-): Promise<BuildResult> => {
-  const url = `https://${getConfig().bambooHostUrl}/rest/api/latest/queue/${branchKey}`;
+const buildBranch = async (branchKey: string): Promise<BuildResult> => {
+  const url = `https://${
+    getConfig().bambooHostUrl
+  }/rest/api/latest/queue/${branchKey}`;
   const { data } = await axiosPost(url, undefined, {
     headers: {
       Authorization: `Bearer ${getConfig().bambooAPIToken}`,

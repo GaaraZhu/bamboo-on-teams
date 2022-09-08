@@ -43,16 +43,19 @@ export const deployRelease = async (
 ): Promise<any> => {
   const url = `https://${
     getConfig().bambooHostUrl
-  }/rest/api/latest/queue/deployment/?environmentId=${env.id}&versionId=${releaseId}`;
+  }/rest/api/latest/queue/deployment/?environmentId=${
+    env.id
+  }&versionId=${releaseId}`;
   let token = getConfig().bambooAPIToken;
   if (isProdEnv(env.name)) {
-    if (!getConfig().prod?.bambooAPIToken) {
+    const prodConfig = getConfig().prod;
+    if (!prodConfig || !prodConfig.bambooAPIToken) {
       throw {
         status: 500,
         message: `Missing Bamboo API token for Production environment ${env.name}`,
       };
     }
-    token = getConfig().prod?.bambooAPIToken!;
+    token = prodConfig.bambooAPIToken;
   }
   const { data } = await axiosPost(url, undefined, {
     headers: {

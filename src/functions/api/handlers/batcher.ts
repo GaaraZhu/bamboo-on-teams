@@ -28,12 +28,10 @@ import {
   sendDeployBuildNotification,
   sendReleaseFailedNotification,
 } from "../../services/notificationService";
-import { BuildCommand } from "../../services/stepFunctionService";
 import {
   checkBuildStatus,
   checkDeployStatus,
   getJobPageUrl,
-  JobNotFinished,
 } from "./statusChecker";
 
 // execute single task for batch-build, batch-deploy, release or promote-release actions

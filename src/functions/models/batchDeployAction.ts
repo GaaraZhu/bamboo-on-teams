@@ -14,9 +14,7 @@ export class BatchDeployAction implements Action {
   constructor(command: string, triggeredBy: TeamsUser) {
     const batchDeployCommand = new Command()
       .name(this.actionName)
-      .description(
-        "Batch deploy services."
-      )
+      .description("Batch deploy services.")
       .usage("[options]")
       .requiredOption(
         "-s, --services <services>",
