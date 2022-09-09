@@ -7,7 +7,7 @@ import { executeBuildAndDeployCommand } from "../services/executors/buildAndDepl
 export class BuildAndDeployAction implements Action {
   readonly actionName = ActionName.BUILD_AND_DEPLOY;
   readonly triggeredBy: TeamsUser;
-  service: string;
+  services: string[];
   branch: string;
   env: string;
 
@@ -19,8 +19,8 @@ export class BuildAndDeployAction implements Action {
       )
       .usage("[options]")
       .requiredOption(
-        "-s, --service <service>",
-        "service name, e.g. customers-v1",
+        "-s, --services <services>",
+        "service names separated by comma without spaces, e.g. customers-v1,accounts-v1",
         trim
       )
       .requiredOption(
@@ -40,7 +40,7 @@ export class BuildAndDeployAction implements Action {
     // and the script being run in argv[1], with user parameters after that.
     const commandInput = [".", ...command.split(" ")];
     buildAndDeployCommand.parse(commandInput);
-    this.service = buildAndDeployCommand.opts().service;
+    this.services = buildAndDeployCommand.opts().services.split(",");
     this.branch = buildAndDeployCommand.opts().branch;
     this.env = buildAndDeployCommand.opts().env;
     this.triggeredBy = triggeredBy;

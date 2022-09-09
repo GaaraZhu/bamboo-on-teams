@@ -8,6 +8,23 @@ export const executeListDeploymentProjectsCommand = async (
   return (await listDeploymentProjects()).map((p: any) => p.name);
 };
 
+export const validateDeploymentProjects = async (
+  projectNames: string[]
+): Promise<any> => {
+  const projects = await listDeploymentProjects();
+  for (const projectName of projectNames) {
+    const project = projects.find(
+      (p: any) => p.name.toUpperCase() === projectName.toUpperCase()
+    );
+    if (!project) {
+      throw {
+        status: 400,
+        message: `Unknown deployment project provided ${projectName}, please use search-projects command to find it first`,
+      };
+    }
+  }
+};
+
 export const getDeploymentProject = async (
   projectName: string
 ): Promise<any> => {

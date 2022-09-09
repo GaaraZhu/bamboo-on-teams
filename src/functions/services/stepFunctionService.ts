@@ -109,8 +109,11 @@ export interface PromoteDeployCommand {
   triggeredBy: TeamsUser;
 }
 
-export const startBatcherExecution = async (
-  input: BatcherExecutionInput,
+export const startExecution = async (
+  input:
+    | BatcherExecutionInput
+    | BatcherExecutionInput[]
+    | ReleaserExecutionInput,
   arn: string = process.env.BATCHER_ARN!
 ): Promise<void> => {
   const name = uuidv4();
@@ -125,29 +128,7 @@ export const startBatcherExecution = async (
     await stepFunctions.startExecution(executionInput).promise();
   if (stepFunctionsResult?.$response?.error) {
     console.log(
-      `Failed to start batcher stepFunction for: ${JSON.stringify(
-        input
-      )} due to ${JSON.stringify(stepFunctionsResult?.$response?.error)}`
-    );
-  }
-};
-
-export const startReleaserExecution = async (
-  input: ReleaserExecutionInput
-): Promise<void> => {
-  const name = uuidv4();
-  const executionInput = {
-    stateMachineArn: process.env.RELEASER_ARN!,
-    name: name,
-    input: JSON.stringify(input),
-    traceHeader: name,
-  };
-  const stepFunctions: StepFunctions = await getStepFunctionsClient();
-  const stepFunctionsResult: PromiseResult<StartExecutionOutput, AWSError> =
-    await stepFunctions.startExecution(executionInput).promise();
-  if (stepFunctionsResult?.$response?.error) {
-    console.log(
-      `Failed to start releaser stepFunction for: ${JSON.stringify(
+      `Failed to start stepFunction for: ${JSON.stringify(
         input
       )} due to ${JSON.stringify(stepFunctionsResult?.$response?.error)}`
     );

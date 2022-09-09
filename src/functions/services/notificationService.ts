@@ -135,11 +135,13 @@ export const sendDeployBuildNotification = async (
 };
 
 export interface BuildAndDeployNotificationInput {
-  service: string;
+  services: {
+    service: string;
+    buildStatus: string;
+    deployStatus: string;
+  }[];
   branch: string;
   environment: string;
-  buildStatus: string;
-  deployStatue: string;
   triggeredBy: TeamsUser;
 }
 
@@ -147,24 +149,14 @@ export const sendBuildAndDeployNotification = async (
   input: BuildAndDeployNotificationInput
 ): Promise<void> => {
   const title = "Bamboo build and deploy job finished";
-  const buildStatusText = getStatusText(input.buildStatus);
-  const deployStatusText = getStatusText(input.deployStatue);
+  const serviceSectionFacts = generateBuildAndDeploySectionFacts(input);
   const sectionFacts = `{
-    "name": "Service",
-    "value": "${input.service}"
-  }, {
     "name": "Branch",
     "value": "${input.branch}"
   }, {
     "name": "Environment",
     "value": "${input.environment}"
-  }, {
-    "name": "BuildResult",
-    "value": "${buildStatusText}"
-  }, {
-    "name": "DeployResult",
-    "value": "${deployStatusText}"
-  }`;
+  }, ${serviceSectionFacts}`;
   const notification = `{
         "@type": "MessageCard",
         "@context": "http://schema.org/extensions",
@@ -269,6 +261,23 @@ const generateSectionFacts = (input: BatchNotificationInput): string => {
       `{
           "name": "${service.service}",
           "value": "${status}"
+      },`;
+  });
+  return sectionFacts.substring(0, sectionFacts.length - 1);
+};
+
+const generateBuildAndDeploySectionFacts = (
+  input: BuildAndDeployNotificationInput
+): string => {
+  let sectionFacts = "";
+  input.services.forEach((service) => {
+    const buildStatus = getStatusText(service.buildStatus);
+    const deployStatus = getStatusText(service.deployStatus);
+    sectionFacts =
+      sectionFacts +
+      `{
+          "name": "${service.service}",
+          "value": "Build: ${buildStatus} Deploy: ${deployStatus}"
       },`;
   });
   return sectionFacts.substring(0, sectionFacts.length - 1);

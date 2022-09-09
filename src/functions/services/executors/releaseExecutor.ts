@@ -1,10 +1,7 @@
 import { ActionName } from "../../models/actions";
 import { ReleaseAction } from "../../models/releaseAction";
 import { prodEnvCheck } from "../../utils";
-import {
-  ReleaserExecutionInput,
-  startReleaserExecution,
-} from "../stepFunctionService";
+import { ReleaserExecutionInput, startExecution } from "../stepFunctionService";
 import { listDeploymentProjects } from "./listDeploymentProjectsExecutor";
 
 export const executeReleaseCommand = async (
@@ -46,5 +43,5 @@ export const executeReleaseCommand = async (
       })),
     })),
   };
-  await startReleaserExecution(input);
+  await startExecution(input, process.env.RELEASER_ARN);
 };

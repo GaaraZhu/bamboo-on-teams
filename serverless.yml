@@ -32,6 +32,7 @@ provider:
       Resource:
         - ${self:custom.aws.stepFunction.statusChecker.arn}
         - ${self:custom.aws.stepFunction.buildAndDeployer.arn}
+        - ${self:custom.aws.stepFunction.batchBuildAndDeployer.arn}
         - ${self:custom.aws.stepFunction.batcher.arn}
         - ${self:custom.aws.stepFunction.releaser.arn}
 
@@ -44,6 +45,7 @@ provider:
     BATH_PATH: bamboo/v1${self:custom.api.urls.prefix}
     STATUS_CHECKER_ARN: ${self:custom.aws.stepFunction.statusChecker.arn}
     BUILD_AND_DEPLOYER_ARN: ${self:custom.aws.stepFunction.buildAndDeployer.arn}
+    BATCH_BUILD_AND_DEPLOYER_ARN: ${self:custom.aws.stepFunction.batchBuildAndDeployer.arn}
     BATCHER_ARN: ${self:custom.aws.stepFunction.batcher.arn}
     RELEASER_ARN: ${self:custom.aws.stepFunction.releaser.arn}
     STEP_FUNCTIONS_ENDPOINT: https://states.ap-southeast-2.amazonaws.com
@@ -150,6 +152,9 @@ custom:
       buildAndDeployer:
         name: ${self:service}-build-and-deployer-${self:provider.stage}
         arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.buildAndDeployer.name}
+      batchBuildAndDeployer:
+        name: ${self:service}-batch-build-and-deployer-${self:provider.stage}
+        arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.batchBuildAndDeployer.name}
       statusChecker:
         name: ${self:service}-status-checker-${self:provider.stage}
         arn: arn:aws:states:${self:provider.region}:${ssm:/bamboo-on-teams/accountId}:stateMachine:${self:custom.aws.stepFunction.statusChecker.name}

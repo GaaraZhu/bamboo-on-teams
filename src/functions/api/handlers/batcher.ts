@@ -163,6 +163,39 @@ export const notifySingle = async (event: any, context: any): Promise<any> => {
 // final notification for build-and-deploy, batch-build or batch-deploy actions
 export const notifyAll = async (event: any, context: any): Promise<void> => {
   console.log(`notifyAll: ${JSON.stringify(event)}`);
+
+  // batch build and deploy operation
+  if (
+    event.length > 1 &&
+    event[0]?.length === 2 &&
+    event[0][0].command?.toLowerCase().trim().startsWith(ActionName.BUILD) &&
+    event[0][1].command?.toLowerCase().trim().startsWith(ActionName.DEPLOY)
+  ) {
+    console.log("notifyAll for batch buld and deploy opeartion");
+
+    const services = event.map((e: any) => {
+      const buildCommand = e[0];
+      const deployCommand = e[1];
+      const isBuildSuccess = ["SUCCESS", "SUCCESSFUL"].includes(
+        buildCommand.target?.buildState?.toUpperCase()
+      );
+      return {
+        service: buildCommand.service,
+        buildStatus: buildCommand.target.buildState || "FAILED",
+        deployStatus: isBuildSuccess
+          ? deployCommand.target?.deploymentState || "FAILED"
+          : "NOT-STARTED",
+      };
+    });
+    await sendBuildAndDeployNotification({
+      services: services,
+      branch: event[0][0].branch,
+      environment: event[0][1].environment,
+      triggeredBy: event[0][0].triggeredBy,
+    });
+    return;
+  }
+
   // build and deploy operation
   if (
     event.length === 2 &&
@@ -176,13 +209,17 @@ export const notifyAll = async (event: any, context: any): Promise<void> => {
       buildCommand.target?.buildState?.toUpperCase()
     );
     await sendBuildAndDeployNotification({
-      service: buildCommand.service,
+      services: [
+        {
+          service: buildCommand.service,
+          buildStatus: buildCommand.target.buildState || "FAILED",
+          deployStatus: isBuildSuccess
+            ? deployCommand.target?.deploymentState || "FAILED"
+            : "NOT-STARTED",
+        },
+      ],
       branch: buildCommand.branch,
       environment: deployCommand.environment,
-      buildStatus: buildCommand.target.buildState || "FAILED",
-      deployStatue: isBuildSuccess
-        ? deployCommand.target?.deploymentState || "FAILED"
-        : "NOT-STARTED",
       triggeredBy: buildCommand.triggeredBy,
     });
     return;

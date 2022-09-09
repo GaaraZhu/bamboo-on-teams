@@ -230,10 +230,10 @@ Options:
 Usage: build-and-deploy [options]
 Build a service from a Bamboo branch and deploy it to an environment.
 Options:
-  -s, --service <service>  service name, e.g. customers-v1
-  -b, --branch <branch>    bamboo branch name, e.g. master
-  -e, --env <env>          env name, e.g. dev
-  -h, --help               display help for command
+  -s, --services <services>  service names separated by comma without spaces, e.g. customers-v1,accounts-v1
+  -b, --branch <branch>      bamboo branch name, e.g. master
+  -e, --env <env>            env name, e.g. dev
+  -h, --help                 display help for command
 ```
 ### deploy-release ###
 ```

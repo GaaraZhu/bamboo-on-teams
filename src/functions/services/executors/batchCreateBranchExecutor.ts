@@ -1,7 +1,4 @@
-import {
-  BatcherExecutionInput,
-  startBatcherExecution,
-} from "../stepFunctionService";
+import { BatcherExecutionInput, startExecution } from "../stepFunctionService";
 import { ActionName } from "../../models/actions";
 import { listPlans } from "./listPlansExecutor";
 import { BatchCreateBranchAction } from "../../models/batchCreateBranchAction";
@@ -40,5 +37,5 @@ export const executeBatchCreateBranchCommand = async (
       },
     })),
   };
-  await startBatcherExecution(input);
+  await startExecution(input);
 };

@@ -1,8 +1,5 @@
 import { BatchDeployAction } from "../../models/batchDeployAction";
-import {
-  BatcherExecutionInput,
-  startBatcherExecution,
-} from "../stepFunctionService";
+import { BatcherExecutionInput, startExecution } from "../stepFunctionService";
 import { listDeploymentProjects } from "./listDeploymentProjectsExecutor";
 import { ActionName } from "../../models/actions";
 import { prodEnvCheck } from "../../utils";
@@ -44,5 +41,5 @@ export const executeBatchDeployCommand = async (
       },
     })),
   };
-  await startBatcherExecution(input);
+  await startExecution(input);
 };
