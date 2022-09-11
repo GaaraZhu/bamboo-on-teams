@@ -1,4 +1,5 @@
 import { ListBranchesAction } from "../../models/listBranchesAction";
+import { vcsBranchToBambooBranch } from "../../utils";
 import { axiosGet } from "../axiosService";
 import { getConfig } from "../config";
 import { getPlan } from "./listPlansExecutor";
@@ -25,7 +26,7 @@ export const getBranchByNameAndPlanKey = async (
 ): Promise<any> => {
   const branches = await listPlanBranches(planKey);
   const branch = branches.find(
-    (b: any) => b.name.toUpperCase() === branchName.toUpperCase()
+    (b: any) => [branchName.toUpperCase(), vcsBranchToBambooBranch(branchName)?.toUpperCase()].includes(b.name.toUpperCase())
   );
   if (!branch) {
     throw {

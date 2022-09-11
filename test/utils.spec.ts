@@ -3,6 +3,7 @@ import {
   fallbackToHTML,
   prodEnvCheck,
   trim,
+  vcsBranchToBambooBranch,
 } from "../src/functions/utils";
 
 describe("utils", () => {
@@ -202,6 +203,33 @@ Options:
       it(testCase.name, async () => {
         expect(fallbackToHTML(testCase.message)).toEqual(testCase.expected);
       });
+    });
+  });
+});
+
+describe("vcsBranchToBambooBranch", () => {
+  const testCases = [
+    {
+      vcsBranch: "release/customer-r1",
+      expectedResult: "release-customer-r1",
+    },
+    {
+      vcsBranch: "feature/DS-1/SDFF-S",
+      expectedResult: "feature-DS-1-SDFF-S",
+    },
+    {
+      vcsBranch: "bugfix/da-dads",
+      expectedResult: "bugfix-da-dads",
+    },
+    {
+      vcsBranch: "master",
+      expectedResult: "master",
+    },
+  ];
+
+  testCases.forEach((testCase) => {
+    it("vcsBranch: " + testCase.vcsBranch, async () => {
+      expect(vcsBranchToBambooBranch(testCase.vcsBranch)).toEqual(testCase.expectedResult);
     });
   });
 });

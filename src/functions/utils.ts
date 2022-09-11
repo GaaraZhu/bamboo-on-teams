@@ -80,6 +80,10 @@ export const executeOperationCheck = (operations: Operations): void => {
   }
 };
 
+export const vcsBranchToBambooBranch = (vscBranch: string): string => {
+  return vscBranch.split("/").join("-");
+}
+
 export const viewOperationCheck = (operations: Operations): void => {
   if (!operations.canView) {
     throw {
