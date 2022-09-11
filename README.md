@@ -137,7 +137,7 @@ Usage: list-builds [options]
 List builds for a service in a branch plan.
 Options:
   -s, --service <service>  service name, e.g. customers-v1
-  -b, --branch <branch>    bamboo branch name, e.g. release-1.0.0
+  -b, --branch <branch>    bamboo or vcs branch name, e.g. release/abc or release-abc
   -h, --help               display help for command
 ```
 ### desc-build ###
@@ -163,7 +163,7 @@ Usage: build [options]
 Trigger a branch build for a service.
 Options:
   -s, --service <service>  service name, e.g. customers-v1
-  -b, --branch <branch>    bamboo branch name, e.g. master
+  -b, --branch <branch>    bamboo or vcs branch name, e.g. release/abc or release-abc
   -h, --help               display help for command
 ```
 ### list-projects ###
@@ -193,7 +193,7 @@ Usage: list-releases [options]
 List the releases created from a service branch.
 Options:
   -s, --service <service>  service name, e.g. customers-v1
-  -b, --branch <branch>    bamboo branch name, e.g. master
+  -b, --branch <branch>    bamboo or vcs branch name, e.g. release/abc or release-abc
   -h, --help               display help for command
 ```
 ### list-deploys ###
@@ -221,7 +221,7 @@ Usage: deploy [options]
 Deploy the service with the latest build in a branch to an environment.
 Options:
   -s, --service <service>  service name, e.g. customers-v1
-  -b, --branch <branch>    bamboo branch name, e.g. master
+  -b, --branch <branch>    bamboo or vcs branch name, e.g. release/abc or release-abc
   -e, --env <env>          env name, e.g. dev
   -h, --help               display help for command
 ```
@@ -230,10 +230,10 @@ Options:
 Usage: build-and-deploy [options]
 Build a service from a Bamboo branch and deploy it to an environment.
 Options:
-  -s, --services <services>  service names separated by comma without spaces, e.g. customers-v1,accounts-v1
-  -b, --branch <branch>      bamboo branch name, e.g. master
-  -e, --env <env>            env name, e.g. dev
-  -h, --help                 display help for command
+  -s, --service <service>  service name, e.g. customers-v1
+  -b, --branch <branch>    bamboo or vcs branch name, e.g. release/abc or release-abc
+  -e, --env <env>          env name, e.g. dev
+  -h, --help               display help for command
 ```
 ### deploy-release ###
 ```
@@ -282,7 +282,7 @@ Batch build services.
 Options:
   -s, --services <services>  service names separated by comma without spaces,
                              e.g. customers-v1,accounts-v1
-  -b, --branch <branch>      bamboo branch name, e.g. master
+  -b, --branch <branch>      bamboo or vcs branch name, e.g. release/abc or release-abc
   -h, --help                 display help for command
 ```
 ### batch-deploy ###
@@ -292,7 +292,7 @@ Batch deploy services.
 Options:
   -s, --services <services>  service names separated by comma without spaces,
                              e.g. customers-v1,accounts-v1
-  -b, --branch <branch>      bamboo branch name, e.g. master
+  -b, --branch <branch>      bamboo or vcs branch name, e.g. release/abc or release-abc
   -e, --env <env>            env name, e.g. dev
   -h, --help                 display help for command
 ```
@@ -303,7 +303,7 @@ Release services in sequential batches.
 Options:
   -s, --services <services>  sequential service name batches separated by semi-collon and with comma to separate service names in each batch,
                              e.g. customers-v1,accounts-v1;transactions-v1
-  -b, --branch <branch>      bamboo branch name, e.g. master
+  -b, --branch <branch>      bamboo or vcs branch name, e.g. release/abc or release-abc
   -e, --env <env>            env name, e.g. dev
   -h, --help                 display help for command
 ```
