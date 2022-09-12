@@ -31,6 +31,7 @@ export const executeReleaseCommand = async (
   // 3. start releaser step function
   const input: ReleaserExecutionInput = {
     batches: action.services.map((services: string[]) => ({
+      actionName: action.actionName,
       commands: services.map((service) => ({
         command: `${ActionName.DEPLOY} -s ${service} -b ${action.branch} -e ${action.env}`,
         service: service,

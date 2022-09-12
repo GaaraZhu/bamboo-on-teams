@@ -70,6 +70,7 @@ export interface ReleaserExecutionInput {
 }
 
 export interface BatcherExecutionInput {
+  actionName: ActionName;
   commands: SingleCommand[]; // wrap the command in a JSON object so that the stepfunction Map state can pass the result through `ResultPath`
 }
 
@@ -108,6 +109,11 @@ export interface PromoteDeployCommand {
   targetEnv: string;
   triggeredBy: TeamsUser;
 }
+
+export type SingleCommandResult = SingleCommand & {
+  target: any, // Bamboo job execution result
+  triggerResult: any, // Bamboo job triggering result
+};
 
 export const startExecution = async (
   input:

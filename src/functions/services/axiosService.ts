@@ -51,7 +51,7 @@ const axiosProcess = async (
         message = err.message;
       }
     }
-    console.log(`Failed to call ${url} due to ${message}`);
+    console.log(`Failed to call ${url} due to ${JSON.stringify(err)}`);
     throw {
       status: err.response?.status,
       message,

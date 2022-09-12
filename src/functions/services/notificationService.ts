@@ -135,14 +135,17 @@ export const sendDeployBuildNotification = async (
 };
 
 export interface BuildAndDeployNotificationInput {
-  services: {
-    service: string;
-    buildStatus: string;
-    deployStatus: string;
-  }[];
+  services: BuildAndDeployServiceResult[];
   branch: string;
   environment: string;
   triggeredBy: TeamsUser;
+}
+
+export interface BuildAndDeployServiceResult {
+  service: string;
+  buildStatus: string;
+  deployStatus: string;
+  errorMessage?: string;
 }
 
 export const sendBuildAndDeployNotification = async (
@@ -273,11 +276,15 @@ const generateBuildAndDeploySectionFacts = (
   input.services.forEach((service) => {
     const buildStatus = getStatusText(service.buildStatus);
     const deployStatus = getStatusText(service.deployStatus);
+    let serviceText = `Build: ${buildStatus} Deploy: ${deployStatus}`;
+    if (service.errorMessage) {
+      serviceText = serviceText + ` Error: ${service.errorMessage}`;
+    }
     sectionFacts =
       sectionFacts +
       `{
           "name": "${service.service}",
-          "value": "Build: ${buildStatus} Deploy: ${deployStatus}"
+          "value": "${serviceText}"
       },`;
   });
   return sectionFacts.substring(0, sectionFacts.length - 1);

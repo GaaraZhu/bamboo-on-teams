@@ -31,6 +31,7 @@ export const executePromoteReleaseCommand = async (
   // 3. start releaser step function
   const input: ReleaserExecutionInput = {
     batches: action.services.map((services: string[]) => ({
+      actionName: action.actionName,
       commands: services.map((service) => ({
         command: `${ActionName.PROMOTE_DEPLOY} -s ${service} -se ${action.sourceEnv} -te ${action.targetEnv}`,
         service: service,

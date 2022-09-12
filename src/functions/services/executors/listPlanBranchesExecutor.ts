@@ -31,9 +31,7 @@ export const getBranchByNameAndPlanKey = async (
   if (!branch) {
     throw {
       status: 400,
-      message: `Unknown branch provided ${branchName} for plan key ${planKey}, available branches: ${branches.map(
-        (b: any) => b.name
-      )}`,
+      message: `Invalid branch: ${branchName}`,
     };
   }
 

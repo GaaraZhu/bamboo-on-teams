@@ -22,41 +22,36 @@ export const executeBuildAndDeployCommand = async (
 
     // check deployment project
     await getDeploymentProject(service);
-
-    // start batcher step function for batch build
-    const input: BatcherExecutionInput = getBuildAndDeployExecutionInput(
-      service,
-      action.branch,
-      action.env,
-      action.triggeredBy
-    );
-    await startExecution(input, process.env.BUILD_AND_DEPLOYER_ARN);
   } else {
-    // check deployment projects
+    // check deployment projects only as branch checking takes more time and is likely to exceed the 5 seconds maximum webhook timeout
     await validateDeploymentProjects(action.services);
-    // start batchBuildAndDeploy step function
-    const input: BatcherExecutionInput[] = [];
-    action.services.forEach((s: string) => {
-      input.push(
-        getBuildAndDeployExecutionInput(
-          s,
-          action.branch,
-          action.env,
-          action.triggeredBy
-        )
-      );
-    });
-    await startExecution(input, process.env.BATCH_BUILD_AND_DEPLOYER_ARN);
   }
+
+  // start BuildAndDeploy step function
+  const input: BatcherExecutionInput[] = [];
+  action.services.forEach((s: string) => {
+    input.push(
+      getBuildAndDeployExecutionInput(
+        s,
+        action.actionName,
+        action.branch,
+        action.env,
+        action.triggeredBy
+      )
+    );
+  });
+  await startExecution(input, process.env.BUILD_AND_DEPLOYER_ARN);
 };
 
 const getBuildAndDeployExecutionInput = (
   service: string,
+  actionName: ActionName,
   branch: string,
   environment: string,
   triggeredBy: TeamsUser
 ): BatcherExecutionInput => {
   return {
+    actionName,
     commands: [
       {
         command: `${ActionName.BUILD} -s ${service} -b ${branch}`,

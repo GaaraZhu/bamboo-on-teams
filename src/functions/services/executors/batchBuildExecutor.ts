@@ -27,6 +27,7 @@ export const executeBatchBuildCommand = async (
 
   // start batcher step function for batch build
   const input: BatcherExecutionInput = {
+    actionName: action.actionName,
     commands: action.services.map((service) => ({
       command: `${ActionName.BUILD} -s ${service} -b ${action.branch}`,
       service: service,
