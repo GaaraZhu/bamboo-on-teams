@@ -51,7 +51,7 @@ const getAllBranches = async (planKey: string): Promise<any> => {
   return data.branches?.branch?.map((b: any) => b.name);
 };
 
-const createPlanBranch = async (
+export const createPlanBranch = async (
   planKey: string,
   vcsBranch: string
 ): Promise<any> => {

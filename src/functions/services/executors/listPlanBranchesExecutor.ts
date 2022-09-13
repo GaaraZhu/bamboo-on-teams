@@ -2,6 +2,7 @@ import { ListBranchesAction } from "../../models/listBranchesAction";
 import { vcsBranchToBambooBranch } from "../../utils";
 import { axiosGet } from "../axiosService";
 import { getConfig } from "../config";
+import { createPlanBranch } from "./createPlanBranchExecutor";
 import { getPlan } from "./listPlansExecutor";
 
 export const executeListBranchesCommand = async (
@@ -24,18 +25,24 @@ export const getBranchByNameAndPlanKey = async (
   planKey: string,
   branchName: string
 ): Promise<any> => {
+  // 1. find bamboo branch plan with incoming branch name (vcs branch or bamboo branch)
   const branches = await listPlanBranches(planKey);
   const branch = branches.find(
     (b: any) => [branchName.toUpperCase(), vcsBranchToBambooBranch(branchName)?.toUpperCase()].includes(b.name.toUpperCase())
   );
-  if (!branch) {
+  if (branch) {
+    return branch;
+  }
+  // 2. try to create bamboo branch with the incoming branch name (vcs branch)
+  try {
+    return await createPlanBranch(planKey, branchName);
+  } catch (err) {
+    console.log(`Failed to create bamboo branch due to ${JSON.stringify(err)}`);
     throw {
       status: 400,
       message: `Invalid branch: ${branchName}`,
     };
   }
-
-  return branch;
 };
 
 const listPlanBranches = async (planKey: string): Promise<any> => {
