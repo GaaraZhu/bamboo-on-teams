@@ -46,7 +46,10 @@ export const listDeploys = async (environmentId: string): Promise<any> => {
   });
 
   return data.results?.map((r: any) => ({
-    release: r.deploymentVersion?.name,
+    release: {
+      id: r.deploymentVersion?.id,
+      name: r.deploymentVersion.name,
+    },
     deploymentState: r.deploymentState,
     lifeCycleState: r.lifeCycleState,
     startedDate: r.startedDate ? new Date(r.startedDate).toLocaleString() : "",
