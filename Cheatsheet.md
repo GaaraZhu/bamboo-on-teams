@@ -1,6 +1,13 @@
 # Bamboo-on-teams Cheatsheet
 Let's say the outgoing webhook is named as `Bamboo` in Teams channel.
 
+## Build and deploy service(s)
+\
+Build service **customers-v1** and **accounts-v1** from VCS branch **feature/API-129** (create bamboo branch plan if not exist) and deploy to environment **test1**:
+```
+@Bamboo build-and-deploy -s customers-v1,accounts-v1 -b feature/API-129 -e test1
+```
+
 ## Search build plan
 \
 Search Bamboo plans with keyword **accounts** in the name:
