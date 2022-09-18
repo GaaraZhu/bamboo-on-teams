@@ -10,6 +10,9 @@ A Serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 * On-demand CI/CD automation - automatically build, test, and deploy with Bamboo in Microsoft Teams.
 * Hanging detection - detect hanging Bamboo jobs and alert in Microsoft Teams.
 
+![build-and-deploy](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/build-and-deploy.png)
+![build-and-deploy-result](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/build-and-deploy-result.png)
+
 ## Blogpost
 [Chat the Ops up](https://gaarazhu.github.io/chat-the-ops-up/)
 
@@ -20,14 +23,8 @@ A Serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 [![Demo](https://img.youtube.com/vi/JR8zbS7uKuA/0.jpg)](https://youtu.be/JR8zbS7uKuA)
 
 ## How it works
-### Bamboo interaction
 User interacts with Bamboo through Teams outgoing webhook and bamboo-on-teams service, and get notifications via Teams incoming webhook.
  ![Bamboo interaction](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/interactionSeq.svg)
-
-### On-demand CI/CD automation
-Bamboo-on-teams ultilises [AWS Step Functions](https://aws.amazon.com/step-functions/?step-functions.sort-by=item.additionalFields.postDateTime&step-functions.sort-order=desc), the advanced workflow service for pipeline automation and ochestration.
-![build-and-deploy](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/build-and-deploy.png)
-![build-and-deploy-result](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/build-and-deploy-result.png)
 
 ## Setup ##
 1. Create an [incoming webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) in Teams to receive job notification and
