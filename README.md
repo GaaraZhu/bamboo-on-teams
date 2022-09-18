@@ -3,11 +3,11 @@
 ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 [![Build Status](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml/badge.svg)](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml)
 
-A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
+A Serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
 ## Features
-* Bamboo interaction - interact with Bamboo in Microsoft Teams with wide range of [commands](https://github.com/GaaraZhu/bamboo-on-teams#available-commands).
-* Result notification - receive notification in Microsoft Teams for Bamboo jobs.
+* Bamboo interaction - interact with Bamboo in Microsoft Teams with wide range of [commands](https://github.com/GaaraZhu/bamboo-on-teams#available-commands), and get Teams notifications afterwards.
+* On-demand CI/CD automation - automatically build, test, and deploy with Bamboo in Microsoft Teams.
 * Hanging detection - detect hanging Bamboo jobs and alert in Microsoft Teams.
 
 ## Blogpost
@@ -21,12 +21,13 @@ A serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
 
 ## How it works
 ### Bamboo interaction
-User interacts with Bamboo through Teams outgoing webhook and bamboo-on-teams service.
+User interacts with Bamboo through Teams outgoing webhook and bamboo-on-teams service, and get notifications via Teams incoming webhook.
  ![Bamboo interaction](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/interactionSeq.svg)
 
-### Result notification & Hanging detection
-Bamboo-on-teams stepfunction pulls job status from Bamboo and pushes to Teams channel through incoming webhook, and a warning message will be sent the same way out if the job is hanging.
- ![Result notification & hanging detection](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/statusCheckerSeq.svg)
+### On-demand CI/CD automation
+Bamboo-on-teams ultilises [AWS Step Functions](https://aws.amazon.com/step-functions/?step-functions.sort-by=item.additionalFields.postDateTime&step-functions.sort-order=desc), the advanced workflow service for pipeline automation and ochestration.
+![build-and-deploy](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/build-and-deploy.png)
+![build-and-deploy-result](https://github.com/GaaraZhu/bamboo-on-teams/blob/main/resources/build-and-deploy-result.png)
 
 ## Setup ##
 1. Create an [incoming webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) in Teams to receive job notification and
@@ -94,12 +95,12 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * list-deploys
 * create-release
 * deploy
-* build-and-deploy
 * deploy-release
 * deploy-build
 * promote-deploy
 
-### Batch commands
+### Pipeline commands
+* build-and-deploy
 * batch-create-branch
 * batch-build
 * batch-deploy
@@ -225,16 +226,6 @@ Options:
   -e, --env <env>          env name, e.g. dev
   -h, --help               display help for command
 ```
-### build-and-deploy ###
-```
-Usage: build-and-deploy [options]
-Build a service from a Bamboo branch and deploy it to an environment.
-Options:
-  -s, --service <service>  service name, e.g. customers-v1
-  -b, --branch <branch>    bamboo or vcs branch name, e.g. release/abc or release-abc
-  -e, --env <env>          env name, e.g. dev
-  -h, --help               display help for command
-```
 ### deploy-release ###
 ```
 Usage: deploy-release [options]
@@ -264,6 +255,16 @@ Options:
   -se, --source-env <sourceEnv>  source environment name, e.g. dev
   -te, --target-env <targetEnv>  target environment name, e.g. test
   -h, --help                     display help for command
+```
+### build-and-deploy ###
+```
+Usage: build-and-deploy [options]
+Build service(s) from a vcs branch (will create Bamboo branch plan automatically if not exist) and deploy to an environment.
+Options:
+  -s, --service <service>  service name, e.g. customers-v1
+  -b, --branch <branch>    bamboo or vcs branch name, e.g. release/abc or release-abc
+  -e, --env <env>          env name, e.g. dev
+  -h, --help               display help for command
 ```
 ### batch-create-branch ###
 ```
