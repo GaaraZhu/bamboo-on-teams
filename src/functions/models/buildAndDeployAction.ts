@@ -15,7 +15,7 @@ export class BuildAndDeployAction implements Action {
     const buildAndDeployCommand = new Command()
       .name(this.actionName)
       .description(
-        "Build a service from a Bamboo branch and deploy it to an environment."
+        "Build service(s) from a vcs branch (will create Bamboo branch plan automatically if not exist) and deploy to an environment."
       )
       .usage("[options]")
       .requiredOption(
