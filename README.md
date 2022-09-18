@@ -258,10 +258,10 @@ Options:
 Usage: build-and-deploy [options]
 Build service(s) from a vcs branch (will create Bamboo branch plan automatically if not exist) and deploy to an environment.
 Options:
-  -s, --service <service>  service name, e.g. customers-v1
-  -b, --branch <branch>    bamboo or vcs branch name, e.g. release/abc or release-abc
-  -e, --env <env>          env name, e.g. dev
-  -h, --help               display help for command
+  -s, --services <services>  service names separated by comma without spaces, e.g. customers-v1,accounts-v1
+  -b, --branch <branch>      bamboo or vcs branch name, e.g. release/abc or release-abc
+  -e, --env <env>            env name, e.g. dev
+  -h, --help                 display help for command
 ```
 ### batch-create-branch ###
 ```
