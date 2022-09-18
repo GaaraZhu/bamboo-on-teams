@@ -3,7 +3,7 @@
 ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 [![Build Status](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml/badge.svg)](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml)
 
-A Serverless ChatOps tool for interacting with Bamboo from Microsoft Teams.
+A Serverless ChatOps tool to interact with Atlassian Bamboo from Microsoft Teams.
 
 ## Features
 * Bamboo interaction - interact with Bamboo in Microsoft Teams with wide range of [commands](https://github.com/GaaraZhu/bamboo-on-teams#available-commands), and get Teams notifications afterwards.
