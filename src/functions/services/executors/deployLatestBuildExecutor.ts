@@ -7,7 +7,7 @@ import {
 import { getEnvironment } from "./listEnvironmentsExecutor";
 import { deployRelease } from "./deployReleaseExecutor";
 import { createRelease } from "./createReleaseExecutor";
-import { executeOperationCheck, prodEnvCheck } from "../../utils";
+import { executeOperationCheck, prodEnvCheck, vcsBranchToBambooBranch } from "../../utils";
 import { axiosGet } from "../axiosService";
 import {
   CheckerInputType,
@@ -46,15 +46,16 @@ export const executeDeployLatestCommand = async (
   }
 
   // 4. get all releases for the service branch
-  const buildReleases = await getBuildReleases(project.id, action.branch);
+  const buildReleases = await getBuildReleases(project.id, branch.key);
   // 5. create a release if not exist for the build
   let targetRelease = buildReleases?.find((r: any) =>
     r.items.find((i: any) => i.planResultKey.key === latestBuild.key)
   );
   if (!targetRelease) {
-    let releaseName = `${action.branch}-1`;
+    const bambooBranchName = vcsBranchToBambooBranch(action.branch);
+    let releaseName = `${bambooBranchName}-1`;
     const releasePrefixedWithBranch = buildReleases?.find((r: any) =>
-      r.name.toUpperCase().startsWith(action.branch.toUpperCase() + "-")
+      r.name.toUpperCase().startsWith(bambooBranchName.toUpperCase() + "-")
     );
     if (releasePrefixedWithBranch) {
       const lastDashIndex = releasePrefixedWithBranch.name.lastIndexOf("-");
@@ -112,11 +113,11 @@ export const executeDeployLatestCommand = async (
 
 export const getBuildReleases = async (
   projectId: string,
-  branchName: string
+  branchKey: string
 ): Promise<any> => {
   const url = `https://${
     getConfig().bambooHostUrl
-  }/rest/api/latest/deploy/project/${projectId}/versions?planBranchName=${branchName}`;
+  }/rest/api/latest/deploy/project/${projectId}/versions?branchKey=${branchKey}`;
   const { data } = await axiosGet(url, {
     headers: {
       Authorization: `Bearer ${getConfig().bambooAPIToken}`,
