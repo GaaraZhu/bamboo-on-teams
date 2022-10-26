@@ -251,7 +251,7 @@ Options:
   -s, --service <service>        service name, e.g. customers-v1
   -se, --source-env <sourceEnv>  source environment name, e.g. dev
   -te, --target-env <targetEnv>  target environment name, e.g. test
-  -h, --help                     display help for command
+  -h,  --help                    display help for command
 ```
 ### build-and-deploy ###
 ```
@@ -313,7 +313,7 @@ Options:
   -s, --services <services>      sequential service name batches separated by semi-collon and with comma to separate service names in each batch, e.g. customers-v1,accounts-v1;transactions-v1
   -se, --source-env <sourceEnv>  source environment name, e.g. dev
   -te, --target-env <targetEnv>  target environment name, e.g. test
-  -h, --help                     display help for command
+  -h,  --help                    display help for command
 ```
 
 ## Contribution ##
