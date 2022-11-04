@@ -124,6 +124,14 @@ BuildAndDeployer:
                     Resource:
                       Fn::GetAtt: [executeSingleFunc, Arn]
                     ResultPath: $.triggerResult
+                    Retry:
+                      - ErrorEquals:
+                          - Lambda.ServiceException
+                          - Lambda.AWSLambdaException
+                          - Lambda.SdkClientException
+                        IntervalSeconds: 10
+                        BackoffRate: 1
+                        MaxAttempts: 3
                     Next: DelayTheChecking
 
                   DelayTheChecking:
@@ -192,6 +200,14 @@ Releaser:
                     Resource:
                       Fn::GetAtt: [executeSingleFunc, Arn]
                     ResultPath: $.triggerResult
+                    Retry:
+                      - ErrorEquals:
+                          - Lambda.ServiceException
+                          - Lambda.AWSLambdaException
+                          - Lambda.SdkClientException
+                        IntervalSeconds: 10
+                        BackoffRate: 1
+                        MaxAttempts: 3
                     Next: DelayTheChecking
 
                   DelayTheChecking:
