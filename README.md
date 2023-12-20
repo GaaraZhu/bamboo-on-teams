@@ -1,7 +1,7 @@
 # Bamboo-on-Teams
 [![Serverless](http://public.serverless.com/badges/v3.svg)](https://www.serverless.com/)
 ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
-[![Build Status](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml/badge.svg)](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml)
+[![Build Status](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml/badge.svg)](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml/badge.svg)
 <a href="?tab=readme-ov-file#contribution">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square">
   </a>
