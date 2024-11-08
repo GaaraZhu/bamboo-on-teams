@@ -1,7 +1,7 @@
 # Bamboo-on-Teams
-[![Serverless](http://public.serverless.com/badges/v3.svg)](https://www.serverless.com/)
-<img src="https://img.shields.io/badge/AWS-%23FF9900.svg?logo=amazon-aws" height="20" width="60" />
 ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
+<img src="https://cdn.icon-icons.com/icons2/2530/PNG/512/aws_button_icon_151904.png" height="20" width="60" />
+<img src="https://user-images.githubusercontent.com/2752551/30404910-d56d9b66-989d-11e7-9208-b720eb28b4f2.png" height="20" width="73" />
 [![Build Status](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml/badge.svg)](https://github.com/GaaraZhu/bamboo-on-teams/actions/workflows/build.yml/badge.svg)
 <a href="?tab=readme-ov-file#contribution">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square">
