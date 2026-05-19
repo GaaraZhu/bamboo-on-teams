@@ -100,7 +100,7 @@ Use "<command> help" for information on a specific command. The synopsis for eac
 * deploy-build
 * promote-deploy
 
-### Pipeline commands
+### Pipeline commands ###
 * build-and-deploy
 * batch-create-branch
 * batch-build
@@ -274,7 +274,7 @@ Batch create branch plans.
 Options:
   -s, --services <services>              service names separated by comma without spaces,
                                          e.g. customers-v1,accounts-v1
-  -b, --b, --vcs-branch <vcsBranch>      vcsBranch name, e.g. master
+  -b, --vcs-branch <vcsBranch>           vcsBranch name, e.g. master
   -h, --help                             display help for command
 ```
 ### batch-build ###
@@ -303,7 +303,7 @@ Options:
 Usage: release [options]
 Release services in sequential batches.
 Options:
-  -s, --services <services>  sequential service name batches separated by semi-collon and with comma to separate service names in each batch,
+  -s, --services <services>  sequential service name batches separated by semicolon and with comma to separate service names in each batch,
                              e.g. customers-v1,accounts-v1;transactions-v1
   -b, --branch <branch>      bamboo or vcs branch name, e.g. release/abc or release-abc
   -e, --env <env>            env name, e.g. dev
@@ -314,7 +314,7 @@ Options:
 Usage: promote-release [options]
 Promote the release deployments from one environment to another in sequential batches.
 Options:
-  -s, --services <services>      sequential service name batches separated by semi-collon and with comma to separate service names in each batch, e.g. customers-v1,accounts-v1;transactions-v1
+  -s, --services <services>      sequential service name batches separated by semicolon and with comma to separate service names in each batch, e.g. customers-v1,accounts-v1;transactions-v1
   -se, --source-env <sourceEnv>  source environment name, e.g. dev
   -te, --target-env <targetEnv>  target environment name, e.g. test
   -h,  --help                    display help for command

@@ -20,7 +20,7 @@ export class PromoteReleaseAction implements Action {
       .usage("[options]")
       .requiredOption(
         "-s, --services <services>",
-        "sequential service name batches separated by semi-collon and with comma to separate service names in each batch, e.g. customers-v1,accounts-v1;transactions-v1",
+        "sequential service name batches separated by semicolon and with comma to separate service names in each batch, e.g. customers-v1,accounts-v1;transactions-v1",
         trim
       )
       .requiredOption(
